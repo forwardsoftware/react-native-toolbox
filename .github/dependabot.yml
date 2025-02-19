@@ -1,16 +1,20 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    versioning-strategy: increase
-    directory: "/"
+  - package-ecosystem: 'devcontainers'
+    directory: '/'
     schedule:
-      interval: "monthly"
-    labels:
-      - "dependencies"
-    open-pull-requests-limit: 100
-    pull-request-branch-name:
-      separator: "-"
+      interval: monthly
+    reviewers:
+      - 'panz3r'
+
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: tuesday
+    reviewers:
+      - 'panz3r'
     ignore:
-      - dependency-name: "fs-extra"
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
+      - dependency-name: 'fs-extra'
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
