@@ -13,25 +13,10 @@ import { join } from 'node:path'
 import sharp from 'sharp'
 import { cyan, green, red } from 'yoctocolors'
 
+import type { ContentJson } from '../types.js'
+
 import { extractAppName } from '../utils/app.utils.js'
 import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
-
-interface ContentJsonImage {
-  filename: string;
-  idiom: string;
-  scale: string;
-  size?: string;
-}
-
-interface ContentJsonInfo {
-  author: string;
-  version: number;
-}
-
-interface ContentJson {
-  images: ContentJsonImage[];
-  info: ContentJsonInfo;
-}
 
 const iOSSplashscreenSizes = [
   {
