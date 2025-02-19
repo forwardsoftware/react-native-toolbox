@@ -8,12 +8,12 @@
 
 import { Args, Command, Flags } from '@oclif/core'
 import Listr from 'listr'
-import { readFileSync } from 'node:fs'
 import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import sharp from 'sharp'
 import { cyan, green, red } from 'yoctocolors'
 
+import { extractAppName } from '../utils/app.utils.js'
 import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
 
 interface ContentJsonImage {
@@ -105,14 +105,7 @@ The base icon file should be at least 1024x1024px.
   static override flags = {
     appName: Flags.string({
       char: 'a',
-      default() {
-        try {
-          const { name } = JSON.parse(readFileSync('./app.json', 'utf8'))
-          return name
-        } catch {
-          return null
-        }
-      },
+      default: extractAppName,
       description: "the appName used to build output assets path. Default is retrieved from 'app.json' file.",
     }),
     help: Flags.help({ char: 'h' }),
