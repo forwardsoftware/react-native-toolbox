@@ -28,9 +28,9 @@ Here are some resources to help you get started with open source contributions:
 
 We use GitHub to host code, to track issues and feature requests, as well as accept pull requests.
 
-### Report bugs using GitHub's [issues](https://github.com/Forward-Software/react-native-toolbox/issues)
+### Report bugs using GitHub's [issues](https://github.com/forwardsoftware/react-native-toolbox/issues)
 
-Report a bug by [opening a new issue](https://github.com/Forward-Software/react-native-toolbox/issues/new/choose)
+Report a bug by [opening a new issue](https://github.com/forwardsoftware/react-native-toolbox/issues/new/choose)
 
 #### Write bug reports with detail, background, and sample code
 
@@ -58,13 +58,13 @@ We actively welcome your pull requests:
 #### Use a consistent Coding Style
 
 This project uses [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) to maintain a unified coding style.
-Before committing your changes remember to run `yarn lint` and check possible warnings and errors.
+Before committing your changes remember to run `pnpm lint` and check possible warnings and errors.
 
-#### Any contributions you make will be under the MIT Software License
+#### Any contributions you make will be under the Mozilla Public License (version 2.0)
 
-In short, when you submit code changes, your submissions are understood to be under the same [MIT License](http://choosealicense.com/licenses/mit/) that covers the project.
+In short, when you submit code changes, your submissions are understood to be under the same [Mozilla Public License Version 2.0](http://choosealicense.com/licenses/mpl-2.0/) that covers the project.
 Feel free to contact the maintainers if that's a concern.
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under its [MIT License](LICENSE).
+By contributing, you agree that your contributions will be licensed under its [Mozilla Public License Version 2.0](LICENSE).

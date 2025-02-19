@@ -1,17 +1,17 @@
-import {expect, test} from '@oclif/test'
+import { runCommand } from '@oclif/test'
+import { expect } from 'chai'
 
 describe('splash', () => {
-  test
-  .stdout()
-  .stderr()
-  .command(['splash'])
-  .exit(2)
-  .it('should fail to run splash when no app.json file exists')
+  it('should fail to run splash when no app.json file exists', async () => {
+    const { error } = await runCommand(['splash'])
 
-  test
-  .stdout()
-  .command(['splash', '--appName', 'test'])
-  .it('runs splash --appName test', ctx => {
-    expect(ctx.stdout).to.contain("Generating splashscreens for 'test' app...")
+    expect(error?.oclif?.exit).to.equal(2)
+  })
+
+
+  it('runs splash --appName test', async () => {
+    const { stdout } = await runCommand(['splash', '--appName', 'test'])
+
+    expect(stdout).to.contain("Generating splashscreens for 'test' app...")
   })
 })

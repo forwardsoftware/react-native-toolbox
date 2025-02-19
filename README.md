@@ -3,7 +3,7 @@ React Native Toolbox
 
 > A set of scripts to simplify React Native development
 
-[![License](https://img.shields.io/npm/l/@forward-software/react-native-toolbox.svg)](https://github.com/Forward-Software/react-native-toolbox/blob/main/LICENSE) [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+[![License](https://img.shields.io/npm/l/@forward-software/react-native-toolbox.svg)](https://github.com/forwardsoftware/react-native-toolbox/blob/main/LICENSE) [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 
 [![Version](https://img.shields.io/npm/v/@forward-software/react-native-toolbox.svg)](https://npmjs.org/package/@forward-software/react-native-toolbox) [![Downloads/week](https://img.shields.io/npm/dw/@forward-software/react-native-toolbox.svg)](https://npmjs.org/package/@forward-software/react-native-toolbox)
 
@@ -38,7 +38,7 @@ manage .env files for react-native-dotenv
 
 ```
 USAGE
-  $ rn-toolbox dotenv [ENVIRONMENTNAME] [-h]
+  $ rn-toolbox dotenv ENVIRONMENTNAME [-h]
 
 ARGUMENTS
   ENVIRONMENTNAME  name of the environment to load .dotenv file for
@@ -48,11 +48,14 @@ FLAGS
 
 DESCRIPTION
   manage .env files for react-native-dotenv
-
   Manage .env files for react-native-dotenv for a specific environment (development, production, etc...)
+
+
+EXAMPLES
+  $ rn-toolbox dotenv
 ```
 
-_See code: [dist/commands/dotenv.ts](https://github.com/forward-software/react-native-toolbox/blob/v3.0.0/dist/commands/dotenv.ts)_
+_See code: [src/commands/dotenv.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/v3.0.0/src/commands/dotenv.ts)_
 
 ## `rn-toolbox help [COMMAND]`
 
@@ -60,10 +63,10 @@ Display help for rn-toolbox.
 
 ```
 USAGE
-  $ rn-toolbox help [COMMAND] [-n]
+  $ rn-toolbox help [COMMAND...] [-n]
 
 ARGUMENTS
-  COMMAND  Command to show help for.
+  COMMAND...  Command to show help for.
 
 FLAGS
   -n, --nested-commands  Include all nested commands in the output.
@@ -72,7 +75,7 @@ DESCRIPTION
   Display help for rn-toolbox.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.12/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.25/src/commands/help.ts)_
 
 ## `rn-toolbox icons [FILE]`
 
@@ -80,7 +83,7 @@ generate app icons
 
 ```
 USAGE
-  $ rn-toolbox icons [FILE] [-h] [-a <value>]
+  $ rn-toolbox icons [FILE] [-a <value>] [-h]
 
 ARGUMENTS
   FILE  [default: ./assets/icon.png] input icon file
@@ -91,13 +94,15 @@ FLAGS
 
 DESCRIPTION
   generate app icons
-
   Generate app icons using FILE as base.
-
   The base icon file should be at least 1024x1024px.
+
+
+EXAMPLES
+  $ rn-toolbox icons
 ```
 
-_See code: [dist/commands/icons.ts](https://github.com/forward-software/react-native-toolbox/blob/v3.0.0/dist/commands/icons.ts)_
+_See code: [src/commands/icons.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/v3.0.0/src/commands/icons.ts)_
 
 ## `rn-toolbox splash [FILE]`
 
@@ -105,7 +110,7 @@ generate app splashscreen for react-native-splash-screen
 
 ```
 USAGE
-  $ rn-toolbox splash [FILE] [-h] [-a <value>]
+  $ rn-toolbox splash [FILE] [-a <value>] [-h]
 
 ARGUMENTS
   FILE  [default: ./assets/splashscreen.png] input splashscreen file
@@ -116,13 +121,15 @@ FLAGS
 
 DESCRIPTION
   generate app splashscreen for react-native-splash-screen
-
   Generate app splashscreen using FILE as base to be used with crazycodeboy/react-native-splash-screen module.
-
   The base splashscreen file should be at least 1242x2208px.
+
+
+EXAMPLES
+  $ rn-toolbox splash
 ```
 
-_See code: [dist/commands/splash.ts](https://github.com/forward-software/react-native-toolbox/blob/v3.0.0/dist/commands/splash.ts)_
+_See code: [src/commands/splash.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/v3.0.0/src/commands/splash.ts)_
 <!-- commandsstop -->
 
 ## License
@@ -131,6 +138,6 @@ Mozilla Public License 2.0
 
 ---
 
-Made with ✨ & ❤️ by [ForWarD Software](https://github.com/Forward-Software) and [contributors](https://github.com/Forward-Software/react-native-toolbox/graphs/contributors)
+Made with ✨ & ❤️ by [ForWarD Software](https://github.com/forwardsoftware) and [contributors](https://github.com/forwardsoftware/react-native-toolbox/graphs/contributors)
 
 If you found this project to be helpful, please consider contacting us to develop your React and React Native projects.

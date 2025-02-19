@@ -6,13 +6,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { existsSync } from 'node:fs'
-import { mkdir } from 'node:fs/promises'
+import { readFileSync } from 'node:fs'
 
-export function checkAssetFile(filePath: string): boolean {
-  return existsSync(filePath)
-}
-
-export async function mkdirp(path: string): Promise<void> {
-  await mkdir(path, { recursive: true })
+export function extractAppName() {
+  try {
+    const { name } = JSON.parse(readFileSync('./app.json', 'utf8'))
+    return name
+  } catch {
+    return null
+  }
 }
