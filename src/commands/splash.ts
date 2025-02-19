@@ -15,58 +15,9 @@ import { cyan, green, red } from 'yoctocolors'
 
 import type { ContentJson } from '../types.js'
 
+import { SPLASHSCREEN_SIZES_ANDROID, SPLASHSCREEN_SIZES_IOS } from '../constants.js'
 import { extractAppName } from '../utils/app.utils.js'
 import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
-
-const iOSSplashscreenSizes = [
-  {
-    height: 480,
-    width: 320,
-  },
-  {
-    density: '2x',
-    height: 1334,
-    width: 750,
-  },
-  {
-    density: '3x',
-    height: 2208,
-    width: 1242,
-  },
-]
-
-const AndroidSplashscreenSizes = [
-  {
-    density: 'ldpi',
-    height: 320,
-    width: 200,
-  },
-  {
-    density: 'mdpi',
-    height: 480,
-    width: 320,
-  },
-  {
-    density: 'hdpi',
-    height: 800,
-    width: 480,
-  },
-  {
-    density: 'xhdpi',
-    height: 1280,
-    width: 720,
-  },
-  {
-    density: 'xxhdpi',
-    height: 1600,
-    width: 960,
-  },
-  {
-    density: 'xxxhdpi',
-    height: 1920,
-    width: 1280,
-  },
-]
 
 export default class Splash extends Command {
   static override args = {
@@ -114,7 +65,7 @@ The base splashscreen file should be at least 1242x2208px.
           },
           {
             task: () => {
-              const iOSSplashscreenTasks = iOSSplashscreenSizes.map(({ density, height, width }) => {
+              const iOSSplashscreenTasks = SPLASHSCREEN_SIZES_IOS.map(({ density, height, width }) => {
                 const filename = this.getIOSAssetNameForDensity(density)
                 const outputFile = join(iOSOutputDirPath, this.getIOSAssetNameForDensity(density))
 
@@ -130,7 +81,7 @@ The base splashscreen file should be at least 1242x2208px.
           },
           {
             task: () => {
-              const images = iOSSplashscreenSizes.map(({ density }) => ({
+              const images = SPLASHSCREEN_SIZES_IOS.map(({ density }) => ({
                 filename: this.getIOSAssetNameForDensity(density),
                 idiom: 'universal',
                 scale: `${density || '1x'}`,
@@ -160,7 +111,7 @@ The base splashscreen file should be at least 1242x2208px.
           },
           {
             task: () => {
-              const androidSplashTasks = AndroidSplashscreenSizes.flatMap(({ density, height, width }) => {
+              const androidSplashTasks = SPLASHSCREEN_SIZES_ANDROID.flatMap(({ density, height, width }) => {
                 const res: Listr.ListrTask[] = []
 
                 const densityFolderPath = join(baseAndroidOutputDirPath, `drawable-${density}`)

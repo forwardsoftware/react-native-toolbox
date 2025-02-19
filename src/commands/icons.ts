@@ -15,61 +15,10 @@ import { cyan, green, red } from 'yoctocolors'
 
 import type { ContentJson } from '../types.js'
 
+import { ICON_SIZES_ANDROID, ICON_SIZES_IOS } from '../constants.js'
 import { MaskType } from '../types.js'
 import { extractAppName } from '../utils/app.utils.js'
 import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
-
-const ICON_SIZES_ANDROID = [
-  {
-    density: 'mdpi',
-    size: 48,
-  },
-  {
-    density: 'hdpi',
-    size: 72,
-  },
-  {
-    density: 'xhdpi',
-    size: 96,
-  },
-  {
-    density: 'xxhdpi',
-    size: 144,
-  },
-  {
-    density: 'xxxhdpi',
-    size: 192,
-  },
-]
-
-const ICON_SIZES_IOS = [
-  {
-    baseSize: 20,
-    name: 'Icon-Notification',
-    scales: [2, 3],
-  },
-  {
-    baseSize: 29,
-    name: 'Icon-Small',
-    scales: [2, 3],
-  },
-  {
-    baseSize: 40,
-    name: 'Icon-Spotlight-40',
-    scales: [2, 3],
-  },
-  {
-    baseSize: 60,
-    name: 'Icon-60',
-    scales: [2, 3],
-  },
-  {
-    baseSize: 1024,
-    idiom: 'ios-marketing',
-    name: 'iTunesArtwork',
-    scales: [1],
-  },
-]
 
 export default class Icons extends Command {
   static override args = {
