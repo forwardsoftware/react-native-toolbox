@@ -15,7 +15,4 @@ export interface ContentJson {
   info: ContentJsonInfo;
 }
 
-export enum MaskType {
-  roundedCorners,
-  circle,
-}
+export type MaskType = "circle" | "roundedCorners";

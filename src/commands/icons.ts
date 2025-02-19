@@ -242,12 +242,12 @@ The base icon file should be at least 1024x1024px.
   }
 
   private generateAndroidIconCircle(inputPath: string, outputPath: string, size: number) {
-    const circleIconMask = this.getMask(MaskType.circle, size)
+    const circleIconMask = this.getMask("circle", size)
     return this.generateAndroidIcon(inputPath, outputPath, size, circleIconMask)
   }
 
   private generateAndroidIconRounded(inputPath: string, outputPath: string, size: number) {
-    const roundedCorners = this.getMask(MaskType.roundedCorners, size)
+    const roundedCorners = this.getMask("roundedCorners", size)
     return this.generateAndroidIcon(inputPath, outputPath, size, roundedCorners)
   }
 
@@ -256,7 +256,7 @@ The base icon file should be at least 1024x1024px.
   }
 
   private getMask(type: MaskType, size: number): Buffer {
-    if (type === MaskType.roundedCorners) {
+    if (type === "roundedCorners") {
       const cornerRadius = Math.floor(size * 0.1) // Calculate 10% corner radius
       return Buffer.from(`<svg><rect x="0" y="0" width="${size}" height="${size}" rx="${cornerRadius}" ry="${cornerRadius}"/></svg>`)
     }
