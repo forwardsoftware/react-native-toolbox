@@ -1,0 +1,40 @@
+name: Build & Test
+
+on:
+  push:
+    branches-ignore: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build & Test
+
+    strategy:
+      matrix:
+        os: ['ubuntu-latest', 'windows-latest']
+        node_version: [lts/-1, lts/*, latest]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node_version }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
+
+      - name: Build CLI
+        run: pnpm run build
+
+      - name: Test CLI commands
+        run: pnpm run test

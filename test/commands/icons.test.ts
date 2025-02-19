@@ -1,17 +1,16 @@
-import {expect, test} from '@oclif/test'
+import { runCommand } from '@oclif/test'
+import { expect } from 'chai'
 
 describe('icons', () => {
-  test
-  .stdout()
-  .stderr()
-  .command(['icons'])
-  .exit(2)
-  .it('should fail to run icons when no app.json file exists')
+  it('should fail to run icons when no app.json file exists', async () => {
+    const { error } = await runCommand(['icons'])
 
-  test
-  .stdout()
-  .command(['icons', '--appName', 'test'])
-  .it('runs icons --appName test', ctx => {
-    expect(ctx.stdout).to.contain("Generating icons for 'test' app...")
+    expect(error?.oclif?.exit).to.equal(2)
+  })
+
+  it('runs icons --appName test', async () => {
+    const { stdout } = await runCommand(['icons', '--appName test'])
+
+    expect(stdout).to.contain("Generating icons for 'test' app...")
   })
 })

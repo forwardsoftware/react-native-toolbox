@@ -3,7 +3,7 @@ React Native Toolbox
 
 > A set of scripts to simplify React Native development
 
-[![License](https://img.shields.io/npm/l/@forward-software/react-native-toolbox.svg)](https://github.com/Forward-Software/react-native-toolbox/blob/main/LICENSE) [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+[![License](https://img.shields.io/npm/l/@forward-software/react-native-toolbox.svg)](https://github.com/forwardsoftware/react-native-toolbox/blob/main/LICENSE) [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 
 [![Version](https://img.shields.io/npm/v/@forward-software/react-native-toolbox.svg)](https://npmjs.org/package/@forward-software/react-native-toolbox) [![Downloads/week](https://img.shields.io/npm/dw/@forward-software/react-native-toolbox.svg)](https://npmjs.org/package/@forward-software/react-native-toolbox)
 
@@ -131,6 +131,6 @@ Mozilla Public License 2.0
 
 ---
 
-Made with ✨ & ❤️ by [ForWarD Software](https://github.com/Forward-Software) and [contributors](https://github.com/Forward-Software/react-native-toolbox/graphs/contributors)
+Made with ✨ & ❤️ by [ForWarD Software](https://github.com/forwardsoftware) and [contributors](https://github.com/forwardsoftware/react-native-toolbox/graphs/contributors)
 
 If you found this project to be helpful, please consider contacting us to develop your React and React Native projects.

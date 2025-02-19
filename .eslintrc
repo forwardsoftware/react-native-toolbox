@@ -1,9 +1,4 @@
 {
-  "extends": [
-    "oclif",
-    "oclif-typescript"
-  ],
-  "rules": {
-    "unicorn/import-style": "warn"
-  }
+  "extends": ["oclif", "oclif-typescript", "prettier"],
+  "ignores": ["/dist"]
 }

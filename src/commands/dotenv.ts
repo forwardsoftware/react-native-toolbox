@@ -1,38 +1,34 @@
 /*
- * Copyright (c) 2020 Mattia Panzeri <mattia.panzeri93@gmail.com>
+ * Copyright (c) 2025 ForWarD Software (https://forwardsoftware.solutions/)
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {Command, Flags} from '@oclif/core'
-import {cyan, red} from 'chalk'
-import * as Listr from 'listr'
-import * as fsp from 'node:fs/promises'
+import { Args, Command, Flags } from '@oclif/core'
+import Listr from 'listr'
+import { copyFile, unlink } from 'node:fs/promises'
+import { cyan, red } from 'yoctocolors'
 
-import {checkAssetFile} from '../utils/file-utils'
+import { checkAssetFile } from '../utils/file-utils.js'
 
 export default class Dotenv extends Command {
-  static description = `manage .env files for react-native-dotenv
+  static override args = {
+    environmentName: Args.string({ description: 'name of the environment to load .dotenv file for', hidden: false, required: true }),
+  }
+  static override description = `manage .env files for react-native-dotenv
 Manage .env files for react-native-dotenv for a specific environment (development, production, etc...)
 `
-
-  static flags = {
-    help: Flags.help({char: 'h'}),
+  static override examples = [
+    '<%= config.bin %> <%= command.id %>',
+  ]
+  static override flags = {
+    help: Flags.help({ char: 'h' }),
   }
 
-  static args = [
-    {
-      name: 'environmentName',
-      description: 'name of the environment to load .dotenv file for',
-      required: true,
-      hidden: false,
-    },
-  ]
-
-  async run(): Promise<void> {
-    const {args} = await this.parse(Dotenv)
+  public async run(): Promise<void> {
+    const { args } = await this.parse(Dotenv)
 
     const sourceEnvFilePath = `./.env.${args.environmentName}`
     const outputEnvFile = './.env'
@@ -46,16 +42,16 @@ Manage .env files for react-native-dotenv for a specific environment (developmen
 
     const workflow = new Listr([
       {
-        title: 'Remove existing .env file',
-        task: async () => {
+        async task() {
           try {
-            await fsp.unlink(outputEnvFile)
-          } catch {}
+            await unlink(outputEnvFile)
+          } catch { }
         },
+        title: 'Remove existing .env file',
       },
       {
+        task: () => copyFile(sourceEnvFilePath, outputEnvFile),
         title: 'Generate .env file',
-        task: () => fsp.copyFile(sourceEnvFilePath, outputEnvFile),
       },
     ])
 
