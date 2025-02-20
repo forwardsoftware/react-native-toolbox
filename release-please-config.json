@@ -3,6 +3,8 @@
   "release-type": "node",
   "always-update": true,
   "packages": {
-    ".": {}
+    ".": {
+      "include-component-in-tag": false
+    }
   }
 }
