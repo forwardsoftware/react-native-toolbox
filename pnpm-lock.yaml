@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@oclif/core':
         specifier: ^4
-        version: 4.2.7
+        version: 4.2.8
       '@oclif/plugin-help':
         specifier: ^6
         version: 6.2.25
@@ -32,7 +32,7 @@ importers:
         version: 0.2.1
       '@oclif/test':
         specifier: ^4
-        version: 4.1.10(@oclif/core@4.2.7)
+        version: 4.1.10(@oclif/core@4.2.8)
       '@types/chai':
         specifier: ^4
         version: 4.3.20
@@ -592,8 +592,8 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@oclif/core@4.2.7':
-    resolution: {integrity: sha512-49wtIlSEw9UyxdSMPjJ2Ookj5e056Qbqr6A+uN7Ea8XCK6b8Q03KciTEpX5t0rfNggvewJc9e3SHY6uWZIkXVw==}
+  '@oclif/core@4.2.8':
+    resolution: {integrity: sha512-OWv4Va6bERxIhrYcnUGzyhGRqktc64lJO6cZ3UwkzJDpfR8ZrbCxRfKRBBah1i8kzUlOAeAXnpbMBMah3skKwA==}
     engines: {node: '>=18.0.0'}
 
   '@oclif/plugin-help@6.2.25':
@@ -1038,6 +1038,10 @@ packages:
 
   ansis@3.15.0:
     resolution: {integrity: sha512-zIcWDJ+Kwqxfdnogx66Gxzr0kVmCcRAdat9nlY2IHsshqTN4fBH6tMeRMPA/2w0rpBayIJvjQAaa2/4RDrNqwg==}
+    engines: {node: '>=14'}
+
+  ansis@3.16.0:
+    resolution: {integrity: sha512-sU7d/tfZiYrsIAXbdL/CNZld5bCkruzwT5KmqmadCJYxuLxHAOBjidxD5+iLmN/6xEfjcQq1l7OpsiCBlc4LzA==}
     engines: {node: '>=14'}
 
   any-observable@0.3.0:
@@ -2610,8 +2614,8 @@ packages:
     resolution: {integrity: sha512-XQBQ3I8W1Cge0Seh+6gjj03LbmRFWuoszgK9ooCpwYIrhhoO80pfq4cUkU5DkknwfOfFteRwlZ56PYOGYyFWdg==}
     engines: {node: '>= 4'}
 
-  reusify@1.0.4:
-    resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
+  reusify@1.1.0:
+    resolution: {integrity: sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
 
   rimraf@6.0.1:
@@ -3924,10 +3928,10 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@oclif/core@4.2.7':
+  '@oclif/core@4.2.8':
     dependencies:
       ansi-escapes: 4.3.2
-      ansis: 3.15.0
+      ansis: 3.16.0
       clean-stack: 3.0.1
       cli-spinners: 2.9.2
       debug: 4.4.0(supports-color@8.1.1)
@@ -3947,21 +3951,21 @@ snapshots:
 
   '@oclif/plugin-help@6.2.25':
     dependencies:
-      '@oclif/core': 4.2.7
+      '@oclif/core': 4.2.8
 
   '@oclif/plugin-not-found@3.2.42(@types/node@18.19.76)':
     dependencies:
       '@inquirer/prompts': 7.3.2(@types/node@18.19.76)
-      '@oclif/core': 4.2.7
-      ansis: 3.15.0
+      '@oclif/core': 4.2.8
+      ansis: 3.16.0
       fast-levenshtein: 3.0.0
     transitivePeerDependencies:
       - '@types/node'
 
   '@oclif/plugin-warn-if-update-available@3.1.33':
     dependencies:
-      '@oclif/core': 4.2.7
-      ansis: 3.15.0
+      '@oclif/core': 4.2.8
+      ansis: 3.16.0
       debug: 4.4.0(supports-color@8.1.1)
       http-call: 5.3.0
       lodash: 4.17.21
@@ -3971,9 +3975,9 @@ snapshots:
 
   '@oclif/prettier-config@0.2.1': {}
 
-  '@oclif/test@4.1.10(@oclif/core@4.2.7)':
+  '@oclif/test@4.1.10(@oclif/core@4.2.8)':
     dependencies:
-      '@oclif/core': 4.2.7
+      '@oclif/core': 4.2.8
       ansis: 3.15.0
       debug: 4.4.0(supports-color@8.1.1)
     transitivePeerDependencies:
@@ -4529,6 +4533,8 @@ snapshots:
 
   ansis@3.15.0: {}
 
+  ansis@3.16.0: {}
+
   any-observable@0.3.0(rxjs@6.6.7):
     optionalDependencies:
       rxjs: 6.6.7
@@ -5056,7 +5062,7 @@ snapshots:
       eslint-config-xo: 0.46.0(eslint@9.20.1)(typescript@5.7.3)
       eslint-config-xo-space: 0.35.0(eslint@9.20.1)
       eslint-import-resolver-typescript: 3.8.2(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.24.1(eslint@9.20.1)(typescript@5.7.3))(eslint@9.20.1))(eslint@9.20.1)
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.24.1(eslint@9.20.1)(typescript@5.7.3))(eslint-import-resolver-typescript@3.8.2(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.24.1(eslint@9.20.1)(typescript@5.7.3))(eslint@9.20.1))(eslint@9.20.1))(eslint@9.20.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.24.1(eslint@9.20.1)(typescript@5.7.3))(eslint-import-resolver-typescript@3.8.2)(eslint@9.20.1)
       eslint-plugin-jsdoc: 50.6.3(eslint@9.20.1)
       eslint-plugin-mocha: 10.5.0(eslint@9.20.1)
       eslint-plugin-n: 17.15.1(eslint@9.20.1)
@@ -5113,7 +5119,7 @@ snapshots:
       stable-hash: 0.0.4
       tinyglobby: 0.2.11
     optionalDependencies:
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.24.1(eslint@9.20.1)(typescript@5.7.3))(eslint-import-resolver-typescript@3.8.2(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.24.1(eslint@9.20.1)(typescript@5.7.3))(eslint@9.20.1))(eslint@9.20.1))(eslint@9.20.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.24.1(eslint@9.20.1)(typescript@5.7.3))(eslint-import-resolver-typescript@3.8.2)(eslint@9.20.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -5141,7 +5147,7 @@ snapshots:
       eslint-utils: 2.1.0
       regexpp: 3.2.0
 
-  eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.24.1(eslint@9.20.1)(typescript@5.7.3))(eslint-import-resolver-typescript@3.8.2(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.24.1(eslint@9.20.1)(typescript@5.7.3))(eslint@9.20.1))(eslint@9.20.1))(eslint@9.20.1):
+  eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.24.1(eslint@9.20.1)(typescript@5.7.3))(eslint-import-resolver-typescript@3.8.2)(eslint@9.20.1):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
@@ -5378,7 +5384,7 @@ snapshots:
 
   fastq@1.19.0:
     dependencies:
-      reusify: 1.0.4
+      reusify: 1.1.0
 
   fdir@6.4.3(picomatch@4.0.2):
     optionalDependencies:
@@ -6093,7 +6099,7 @@ snapshots:
       '@inquirer/confirm': 3.2.0
       '@inquirer/input': 2.3.0
       '@inquirer/select': 2.5.0
-      '@oclif/core': 4.2.7
+      '@oclif/core': 4.2.8
       '@oclif/plugin-help': 6.2.25
       '@oclif/plugin-not-found': 3.2.42(@types/node@18.19.76)
       '@oclif/plugin-warn-if-update-available': 3.1.33
@@ -6317,7 +6323,7 @@ snapshots:
 
   retry@0.13.1: {}
 
-  reusify@1.0.4: {}
+  reusify@1.1.0: {}
 
   rimraf@6.0.1:
     dependencies:
