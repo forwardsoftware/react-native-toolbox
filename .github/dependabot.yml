@@ -14,7 +14,15 @@ updates:
       day: tuesday
     reviewers:
       - 'panz3r'
-    ignore:
-      - dependency-name: 'fs-extra'
-      - dependency-name: '*'
-        update-types: ['version-update:semver-major']
+    groups:
+      oclif:
+        patterns:
+          - '@oclif/*'
+          - 'oclif'
+        exclude-patterns:
+          - '@oclif/prettier-config'
+      eslint:
+        patterns:
+          - '@eslint/*'
+          - 'eslint*'
+          - '@oclif/prettier-config'
