@@ -61,7 +61,7 @@
     "@types/chai": "^5",
     "@types/listr": "^0.14.9",
     "@types/mocha": "^10",
-    "@types/node": "^18",
+    "@types/node": "^22",
     "chai": "^5",
     "eslint": "^9",
     "eslint-config-oclif": "^6",
