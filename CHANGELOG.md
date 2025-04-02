@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.0.3](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.0.2...v4.0.3) (2025-04-02)
+
+
+### Bug Fixes
+
+* bump oclif dependencies ([#105](https://github.com/forwardsoftware/react-native-toolbox/issues/105)) ([d1dc018](https://github.com/forwardsoftware/react-native-toolbox/commit/d1dc0184b2bbbde520764f748f14722e9a395fba))
+* bump oclif dependencies ([#110](https://github.com/forwardsoftware/react-native-toolbox/issues/110)) ([6f7c70d](https://github.com/forwardsoftware/react-native-toolbox/commit/6f7c70d42b7d68557c7966d607194bf855dbab77))
+
 ## [4.0.2](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.0.1...v4.0.2) (2025-03-18)
 
 
