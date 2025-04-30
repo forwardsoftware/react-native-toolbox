@@ -34,22 +34,20 @@ npx @forward-software/react-native-toolbox <command>
 
 ## `rn-toolbox dotenv ENVIRONMENTNAME`
 
-manage .env files for react-native-dotenv
+Manage .env files for react-native-dotenv for a specific environment (development, production, etc...)
 
 ```
 USAGE
   $ rn-toolbox dotenv ENVIRONMENTNAME [-h]
 
 ARGUMENTS
-  ENVIRONMENTNAME  name of the environment to load .dotenv file for
+  ENVIRONMENTNAME  name of the environment to load .dotenv file for.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  manage .env files for react-native-dotenv
   Manage .env files for react-native-dotenv for a specific environment (development, production, etc...)
-
 
 EXAMPLES
   $ rn-toolbox dotenv
@@ -59,7 +57,7 @@ _See code: [src/commands/dotenv.ts](https://github.com/forwardsoftware/react-nat
 
 ## `rn-toolbox icons [FILE]`
 
-generate app icons
+Generate app icons using a file as template.
 
 ```
 USAGE
@@ -73,9 +71,9 @@ FLAGS
   -h, --help             Show CLI help.
 
 DESCRIPTION
-  generate app icons
-  Generate app icons using FILE as base.
-  The base icon file should be at least 1024x1024px.
+  Generate app icons using a file as template.
+
+  The template icon file should be at least 1024x1024px.
 
 
 EXAMPLES
@@ -86,7 +84,7 @@ _See code: [src/commands/icons.ts](https://github.com/forwardsoftware/react-nati
 
 ## `rn-toolbox splash [FILE]`
 
-generate app splashscreen for react-native-splash-screen
+Generate app splashscreens using a file as template.
 
 ```
 USAGE
@@ -100,9 +98,9 @@ FLAGS
   -h, --help             Show CLI help.
 
 DESCRIPTION
-  generate app splashscreen for react-native-splash-screen
-  Generate app splashscreen using FILE as base to be used with crazycodeboy/react-native-splash-screen module.
-  The base splashscreen file should be at least 1242x2208px.
+  Generate app splashscreens using a file as template.
+
+  The template splashscreen file should be at least 1242x2208px.
 
 
 EXAMPLES
