@@ -7,8 +7,7 @@
  */
 
 import { Args, Command, Flags } from '@oclif/core'
-import { cyan, green, red } from 'ansis'
-import Listr from 'listr'
+import { cyan, green, red, yellow } from 'ansis'
 import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import sharp from 'sharp'
@@ -44,107 +43,84 @@ The template splashscreen file should be at least 1242x2208px.
 
     const sourceFilesExists = checkAssetFile(args.file)
     if (!sourceFilesExists) {
-      this.error(`Source file ${cyan(args.file)} not found! ${red('ABORTING')}`)
+      this.error(`${red('✘')} Source file ${cyan(args.file)} not found! ${red('ABORTING')}`)
     }
 
     if (!flags.appName) {
-      this.error(`Failed to retrive ${cyan('appName')} value. Please specify it with the ${green('appName')} flag or check that ${cyan('app.json')} file exists. ${red('ABORTING')}`)
+      this.error(`${red('✘')} Failed to retrive ${cyan('appName')} value. Please specify it with the ${green('appName')} flag or check that ${cyan('app.json')} file exists. ${red('ABORTING')}`)
     }
 
-    this.log(`Generating splashscreens for '${flags.appName}' app...`)
+    this.log(`${yellow('≈')} Generating splashscreens for '${cyan(flags.appName)}' app...`)
 
     const iOSOutputDirPath = `./ios/${flags.appName}/Images.xcassets/Splashscreen.imageset`
     const baseAndroidOutputDirPath = './android/app/src/main/res'
 
-    const workflow = new Listr([
-      {
-        task: () => new Listr([
-          {
-            task: () => mkdirp(iOSOutputDirPath),
-            title: 'Create assets folder',
-          },
-          {
-            task: () => {
-              const iOSSplashscreenTasks = SPLASHSCREEN_SIZES_IOS.map(({ density, height, width }) => {
-                const filename = this.getIOSAssetNameForDensity(density)
-                const outputFile = join(iOSOutputDirPath, this.getIOSAssetNameForDensity(density))
-
-                return {
-                  task: () => this.generateSplashscreen(args.file, outputFile, width, height),
-                  title: `Generate ${filename}...`,
-                }
-              })
-
-              return new Listr(iOSSplashscreenTasks)
-            },
-            title: 'Generate splashscreen',
-          },
-          {
-            task: () => {
-              const images = SPLASHSCREEN_SIZES_IOS.map(({ density }) => ({
-                filename: this.getIOSAssetNameForDensity(density),
-                idiom: 'universal',
-                scale: `${density || '1x'}`,
-              }))
-
-              // Create Contents.json structure
-              const contentJson: ContentJson = {
-                images,
-                info: {
-                  author: 'react-native-toolbox',
-                  version: 1,
-                },
-              }
-
-              return writeFile(join(iOSOutputDirPath, 'Contents.json'), JSON.stringify(contentJson, null, 2))
-            },
-            title: 'Generate splashscreens manifest',
-          },
-        ]),
-        title: '🍎 iOS splashscreens',
-      },
-      {
-        task: () => new Listr([
-          {
-            task: () => mkdirp(baseAndroidOutputDirPath),
-            title: 'Create assets folder',
-          },
-          {
-            task: () => {
-              const androidSplashTasks = SPLASHSCREEN_SIZES_ANDROID.flatMap(({ density, height, width }) => {
-                const res: Listr.ListrTask[] = []
-
-                const densityFolderPath = join(baseAndroidOutputDirPath, `drawable-${density}`)
-                const densityFolderTask: Listr.ListrTask = {
-                  task: () => mkdirp(densityFolderPath),
-                  title: `Create Android '${density}' assets folder`,
-                }
-                res.push(densityFolderTask)
-
-                const outputFile = join(densityFolderPath, 'splashscreen.png')
-                const densitySplashscreenTask: Listr.ListrTask = {
-                  task: () => this.generateSplashscreen(args.file, outputFile, width, height),
-                  title: `Generate ${join(`drawable-${density}`, 'splashscreen.png')}...`,
-                }
-                res.push(densitySplashscreenTask)
-
-                return res
-              })
-
-              return new Listr(androidSplashTasks)
-            },
-            title: 'Generate splashscreens',
-          },
-        ]),
-        title: '🤖 Android splashscreens',
-      },
+    // Run both iOS and Android tasks in parallel
+    await Promise.all([
+      this.generateIOSSplashes(args.file, iOSOutputDirPath),
+      this.generateAndroidSplashes(args.file, baseAndroidOutputDirPath),
     ])
+  }
 
-    try {
-      await workflow.run()
-    } catch (error) {
-      this.error(error as Error)
+  private async generateAndroidSplashes(inputFile: string, baseOutputDir: string) {
+    this.log(`${yellow('≈')} ${cyan('Android')}: Generating splashscreens...`)
+    await mkdirp(baseOutputDir)
+
+    // Generate all Android splashscreens in parallel
+    const androidTasks: Promise<unknown>[] = []
+    for (const { density, height, width } of SPLASHSCREEN_SIZES_ANDROID) {
+      const densityFolderPath = join(baseOutputDir, `drawable-${density}`)
+      const outputFile = join(densityFolderPath, 'splashscreen.png')
+      androidTasks.push(
+        (async () => {
+          await mkdirp(densityFolderPath)
+          this.log(`${yellow('≈')} ${cyan('Android')}: Generating splashscreen for density '${density}'...`)
+          await this.generateSplashscreen(inputFile, outputFile, width, height)
+        })(),
+      )
     }
+
+    await Promise.all(androidTasks)
+
+    this.log(`${green('✔')} ${cyan('Android')}: splashscreens generated.`)
+  }
+
+  private async generateIOSSplashes(inputFile: string, outputDir: string) {
+    this.log(`${yellow('≈')} ${cyan('iOS')}: Generating splashscreens...`)
+    await mkdirp(outputDir)
+
+    // Generate all iOS splashscreens in parallel
+    const iosTasks: Promise<unknown>[] = []
+    for (const { density, height, width } of SPLASHSCREEN_SIZES_IOS) {
+      const filename = this.getIOSAssetNameForDensity(density)
+      const outputFile = join(outputDir, filename)
+      this.log(`${yellow('≈')} ${cyan('iOS')}: Generating splashscreen ${cyan(filename)}...`)
+      iosTasks.push(this.generateSplashscreen(inputFile, outputFile, width, height))
+    }
+
+    await Promise.all(iosTasks)
+
+    // Generate Contents.json
+    const images = SPLASHSCREEN_SIZES_IOS.map(({ density }) => ({
+      filename: this.getIOSAssetNameForDensity(density),
+      idiom: 'universal',
+      scale: `${density || '1x'}`,
+    }))
+
+    const contentJson: ContentJson = {
+      images,
+      info: {
+        author: 'react-native-toolbox',
+        version: 1,
+      },
+    }
+
+    await writeFile(
+      join(outputDir, 'Contents.json'),
+      JSON.stringify(contentJson, null, 2),
+    )
+
+    this.log(`${green('✔')} ${cyan('iOS')}: splashscreens generated.`)
   }
 
   private async generateSplashscreen(inputFilePath: string, outputFilePath: string, width: number, height: number) {
