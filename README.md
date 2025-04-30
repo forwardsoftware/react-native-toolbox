@@ -61,14 +61,15 @@ Generate app icons using a file as template.
 
 ```
 USAGE
-  $ rn-toolbox icons [FILE] [-a <value>] [-h]
+  $ rn-toolbox icons [FILE] [-a <value>] [-h] [-v]
 
 ARGUMENTS
-  FILE  [default: ./assets/icon.png] input icon file
+  FILE  [default: ./assets/icon.png] Input icon file
 
 FLAGS
-  -a, --appName=<value>  the appName used to build output assets path. Default is retrieved from 'app.json' file.
+  -a, --appName=<value>  App name used to build output assets path. Default is retrieved from 'app.json' file.
   -h, --help             Show CLI help.
+  -v, --verbose          Print more detailed log messages.
 
 DESCRIPTION
   Generate app icons using a file as template.
@@ -88,14 +89,15 @@ Generate app splashscreens using a file as template.
 
 ```
 USAGE
-  $ rn-toolbox splash [FILE] [-a <value>] [-h]
+  $ rn-toolbox splash [FILE] [-a <value>] [-h] [-v]
 
 ARGUMENTS
-  FILE  [default: ./assets/splashscreen.png] input splashscreen file
+  FILE  [default: ./assets/splashscreen.png] Input splashscreen file
 
 FLAGS
-  -a, --appName=<value>  the appName used to build output assets path. Default is retrieved from 'app.json' file.
+  -a, --appName=<value>  App name used to build output assets path. Default is retrieved from 'app.json' file.
   -h, --help             Show CLI help.
+  -v, --verbose          Print more detailed log messages.
 
 DESCRIPTION
   Generate app splashscreens using a file as template.
