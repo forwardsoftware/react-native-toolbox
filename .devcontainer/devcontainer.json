@@ -1,21 +1,15 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node
 {
-	"name": "React Native Toolbox",
+	"name": "ForWarD Software - React Native Toolbox",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/javascript-node:22",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers/features/common-utils:2": {
-			"installZsh": true,
 			"configureZshAsDefaultShell": true,
-			"installOhMyZsh": true,
-			"installOhMyZshConfig": true,
-			"upgradePackages": true,
-			"username": "node",
-			"userUid": "automatic",
-			"userGid": "automatic"
+			"username": "node"
 		},
 		"ghcr.io/devcontainers-extra/features/zsh-plugins:0": {
 			"plugins": "git npm",
@@ -43,11 +37,12 @@
 		"vscode": {
 			"extensions": [
 				"dbaeumer.vscode-eslint",
-				"esbenp.prettier-vscode"
+				"esbenp.prettier-vscode",
+				"yzhang.markdown-all-in-one"
 			]
 		}
 	},
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	"remoteUser": "node"
+	// "remoteUser": "root"
 }
