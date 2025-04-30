@@ -19,7 +19,7 @@ describe('icons', () => {
     const {stdout} = await runCommand(['icons', '--appName', 'test'])
 
     expect(stdout).to.contain("Generating icons for 'test' app...")
-    expect(stdout).to.contain("Generated icons for 'test' app...")
+    expect(stdout).to.contain("Generated icons for 'test' app.")
 
     // Check for iOS output directory and Contents.json
     const iosDir = path.join('ios', 'test', 'Images.xcassets', 'AppIcon.appiconset')
