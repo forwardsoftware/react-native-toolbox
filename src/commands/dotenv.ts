@@ -7,8 +7,7 @@
  */
 
 import { Args, Command, Flags } from '@oclif/core'
-import { cyan, red } from 'ansis'
-import Listr from 'listr'
+import { cyan, green, red, yellow } from 'ansis'
 import { copyFile, unlink } from 'node:fs/promises'
 
 import { checkAssetFile } from '../utils/file-utils.js'
@@ -36,25 +35,22 @@ export default class Dotenv extends Command {
       this.error(`Source file ${cyan(sourceEnvFilePath)} not found! ${red('ABORTING')}`)
     }
 
-    this.log(`Generating .env from ${cyan(sourceEnvFilePath)} file...`)
+    this.log(`${yellow('≈')} Generating .env from ${cyan(sourceEnvFilePath)} file...`)
 
-    const workflow = new Listr([
-      {
-        async task() {
-          try {
-            await unlink(outputEnvFile)
-          } catch { }
-        },
-        title: 'Remove existing .env file',
-      },
-      {
-        task: () => copyFile(sourceEnvFilePath, outputEnvFile),
-        title: 'Generate .env file',
-      },
-    ])
-
+    // Remove existing .env file
+    this.log(`${yellow('≈')} Removing existing .env file (if any)...`)
     try {
-      await workflow.run()
+      await unlink(outputEnvFile)
+      this.log(`${green('✔')} Removed existing .env file.`)
+    } catch {
+      this.log(`${red('✘')} No existing .env file to remove.`)
+    }
+
+    // Copy new .env file
+    this.log(`${yellow('≈')} Generating new .env file...`)
+    try {
+      await copyFile(sourceEnvFilePath, outputEnvFile)
+      this.log(`${green('✔')} Generated new .env file.`)
     } catch (error) {
       this.error(error as Error)
     }
