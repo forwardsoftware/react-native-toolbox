@@ -7,6 +7,13 @@ updates:
     reviewers:
       - 'panz3r'
 
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: monthly
+    reviewers:
+      - 'panz3r'
+
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:

@@ -28,34 +28,88 @@ npx @forward-software/react-native-toolbox <command>
 
 <!-- commands -->
 * [`rn-toolbox dotenv ENVIRONMENTNAME`](#rn-toolbox-dotenv-environmentname)
-* [`rn-toolbox help [COMMAND]`](#rn-toolbox-help-command)
 * [`rn-toolbox icons [FILE]`](#rn-toolbox-icons-file)
 * [`rn-toolbox splash [FILE]`](#rn-toolbox-splash-file)
+* [`rn-toolbox help [COMMAND]`](#rn-toolbox-help-command)
 
 ## `rn-toolbox dotenv ENVIRONMENTNAME`
 
-manage .env files for react-native-dotenv
+Manage .env files for react-native-dotenv for a specific environment (development, production, etc...)
 
 ```
 USAGE
   $ rn-toolbox dotenv ENVIRONMENTNAME [-h]
 
 ARGUMENTS
-  ENVIRONMENTNAME  name of the environment to load .dotenv file for
+  ENVIRONMENTNAME  name of the environment to load .dotenv file for.
 
 FLAGS
   -h, --help  Show CLI help.
 
 DESCRIPTION
-  manage .env files for react-native-dotenv
   Manage .env files for react-native-dotenv for a specific environment (development, production, etc...)
-
 
 EXAMPLES
   $ rn-toolbox dotenv
 ```
 
-_See code: [src/commands/dotenv.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/v3.0.0/src/commands/dotenv.ts)_
+_See code: [src/commands/dotenv.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/main/src/commands/dotenv.ts)_
+
+## `rn-toolbox icons [FILE]`
+
+Generate app icons using a file as template.
+
+```
+USAGE
+  $ rn-toolbox icons [FILE] [-a <value>] [-h] [-v]
+
+ARGUMENTS
+  FILE  [default: ./assets/icon.png] Input icon file
+
+FLAGS
+  -a, --appName=<value>  App name used to build output assets path. Default is retrieved from 'app.json' file.
+  -h, --help             Show CLI help.
+  -v, --verbose          Print more detailed log messages.
+
+DESCRIPTION
+  Generate app icons using a file as template.
+
+  The template icon file should be at least 1024x1024px.
+
+
+EXAMPLES
+  $ rn-toolbox icons
+```
+
+_See code: [src/commands/icons.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/main/src/commands/icons.ts)_
+
+## `rn-toolbox splash [FILE]`
+
+Generate app splashscreens using a file as template.
+
+```
+USAGE
+  $ rn-toolbox splash [FILE] [-a <value>] [-h] [-v]
+
+ARGUMENTS
+  FILE  [default: ./assets/splashscreen.png] Input splashscreen file
+
+FLAGS
+  -a, --appName=<value>  App name used to build output assets path. Default is retrieved from 'app.json' file.
+  -h, --help             Show CLI help.
+  -v, --verbose          Print more detailed log messages.
+
+DESCRIPTION
+  Generate app splashscreens using a file as template.
+
+  The template splashscreen file should be at least 1242x2208px.
+
+
+EXAMPLES
+  $ rn-toolbox splash
+```
+
+_See code: [src/commands/splash.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/main/src/commands/splash.ts)_
 
 ## `rn-toolbox help [COMMAND]`
 
@@ -75,61 +129,7 @@ DESCRIPTION
   Display help for rn-toolbox.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.25/src/commands/help.ts)_
-
-## `rn-toolbox icons [FILE]`
-
-generate app icons
-
-```
-USAGE
-  $ rn-toolbox icons [FILE] [-a <value>] [-h]
-
-ARGUMENTS
-  FILE  [default: ./assets/icon.png] input icon file
-
-FLAGS
-  -a, --appName=<value>  the appName used to build output assets path. Default is retrieved from 'app.json' file.
-  -h, --help             Show CLI help.
-
-DESCRIPTION
-  generate app icons
-  Generate app icons using FILE as base.
-  The base icon file should be at least 1024x1024px.
-
-
-EXAMPLES
-  $ rn-toolbox icons
-```
-
-_See code: [src/commands/icons.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/v3.0.0/src/commands/icons.ts)_
-
-## `rn-toolbox splash [FILE]`
-
-generate app splashscreen for react-native-splash-screen
-
-```
-USAGE
-  $ rn-toolbox splash [FILE] [-a <value>] [-h]
-
-ARGUMENTS
-  FILE  [default: ./assets/splashscreen.png] input splashscreen file
-
-FLAGS
-  -a, --appName=<value>  the appName used to build output assets path. Default is retrieved from 'app.json' file.
-  -h, --help             Show CLI help.
-
-DESCRIPTION
-  generate app splashscreen for react-native-splash-screen
-  Generate app splashscreen using FILE as base to be used with crazycodeboy/react-native-splash-screen module.
-  The base splashscreen file should be at least 1242x2208px.
-
-
-EXAMPLES
-  $ rn-toolbox splash
-```
-
-_See code: [src/commands/splash.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/v3.0.0/src/commands/splash.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/6.2.27/src/commands/help.ts)_
 <!-- commandsstop -->
 
 ## License
