@@ -21,11 +21,11 @@ import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
 
 export default class Splash extends Command {
   static override args = {
-    file: Args.string({ default: './assets/splashscreen.png', description: 'input splashscreen file', hidden: false, required: false }),
+    file: Args.string({ default: './assets/splashscreen.png', description: 'input splashscreen file', required: false }),
   }
-  static override description = `generate app splashscreen for react-native-splash-screen
-Generate app splashscreen using FILE as base to be used with crazycodeboy/react-native-splash-screen module.
-The base splashscreen file should be at least 1242x2208px.
+  static override description = `Generate app splashscreens using a file as template.
+
+The template splashscreen file should be at least 1242x2208px.
   `
   static override examples = [
     '<%= config.bin %> <%= command.id %>',

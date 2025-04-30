@@ -22,11 +22,11 @@ import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
 
 export default class Icons extends Command {
   static override args = {
-    file: Args.string({ default: './assets/icon.png', description: 'input icon file', hidden: false, required: false }),
+    file: Args.string({ default: './assets/icon.png', description: 'input icon file', required: false }),
   }
-  static override description = `generate app icons
-Generate app icons using FILE as base.
-The base icon file should be at least 1024x1024px.
+  static override description = `Generate app icons using a file as template.
+
+The template icon file should be at least 1024x1024px.
 `
   static override examples = [
     '<%= config.bin %> <%= command.id %>',

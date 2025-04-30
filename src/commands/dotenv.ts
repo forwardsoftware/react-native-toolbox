@@ -15,11 +15,9 @@ import { checkAssetFile } from '../utils/file-utils.js'
 
 export default class Dotenv extends Command {
   static override args = {
-    environmentName: Args.string({ description: 'name of the environment to load .dotenv file for', hidden: false, required: true }),
+    environmentName: Args.string({ description: 'name of the environment to load .dotenv file for.', required: true }),
   }
-  static override description = `manage .env files for react-native-dotenv
-Manage .env files for react-native-dotenv for a specific environment (development, production, etc...)
-`
+  static override description = `Manage .env files for react-native-dotenv for a specific environment (development, production, etc...)`
   static override examples = [
     '<%= config.bin %> <%= command.id %>',
   ]
