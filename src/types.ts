@@ -1,3 +1,9 @@
+export interface SplashscreenSize {
+  density?: string;
+  height: number;
+  width: number;
+}
+
 export interface ContentJsonImage {
   filename: string;
   idiom: string;

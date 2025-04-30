@@ -1,3 +1,5 @@
+import type { SplashscreenSize } from "./types.js"
+
 /**
  * Android Assets Sizes
  */
@@ -25,7 +27,7 @@ export const ICON_SIZES_ANDROID = [
   },
 ]
 
-export const SPLASHSCREEN_SIZES_ANDROID = [
+export const SPLASHSCREEN_SIZES_ANDROID: Array<SplashscreenSize> = [
   {
     density: 'ldpi',
     height: 320,
@@ -91,7 +93,7 @@ export const ICON_SIZES_IOS = [
   },
 ]
 
-export const SPLASHSCREEN_SIZES_IOS = [
+export const SPLASHSCREEN_SIZES_IOS: Array<SplashscreenSize> = [
   {
     height: 480,
     width: 320,
