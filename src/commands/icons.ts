@@ -21,7 +21,11 @@ import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
 
 export default class Icons extends Command {
   static override args = {
-    file: Args.string({ default: './assets/icon.png', description: 'input icon file', required: false }),
+    file: Args.string({
+      default: './assets/icon.png',
+      description: 'Input icon file',
+      required: false,
+    }),
   }
   static override description = `Generate app icons using a file as template.
 
@@ -34,13 +38,23 @@ The template icon file should be at least 1024x1024px.
     appName: Flags.string({
       char: 'a',
       default: extractAppName,
-      description: "the appName used to build output assets path. Default is retrieved from 'app.json' file.",
+      description: "App name used to build output assets path. Default is retrieved from 'app.json' file.",
     }),
-    help: Flags.help({ char: 'h' }),
+    help: Flags.help({
+      char: 'h',
+    }),
+    verbose: Flags.boolean({
+      char: 'v',
+      default: false,
+      description: 'Print more detailed log messages.',
+    }),
   }
+  private _isVerbose: boolean = false
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Icons)
+
+    this._isVerbose = flags.verbose
 
     const sourceFilesExists = checkAssetFile(args.file)
     if (!sourceFilesExists) {
@@ -51,22 +65,19 @@ The template icon file should be at least 1024x1024px.
       this.error(`${red('✘')} Failed to retrive ${cyan('appName')} value. Please specify it with the ${green('appName')} flag or check that ${cyan('app.json')} file exists. ${red('ABORTING')}`)
     }
 
-    this.log(`${yellow('≈')} Generating icons for '${cyan(flags.appName)}' app...`)
-
-    const iOSOutputDirPath = `./ios/${flags.appName}/Images.xcassets/AppIcon.appiconset`
-    const baseAndroidOutputDirPath = './android/app/src/main'
+    this.log(yellow('≈'), `Generating icons for '${cyan(flags.appName)}' app...`)
 
     // Run both iOS and Android tasks in parallel
     await Promise.all([
-      this.generateAndroidIcons(args.file, baseAndroidOutputDirPath),
-      this.generateIOSIcons(args.file, iOSOutputDirPath),
+      this.generateAndroidIcons(args.file, 'android/app/src/main'),
+      this.generateIOSIcons(args.file, `ios/${flags.appName}/Images.xcassets/AppIcon.appiconset`),
     ])
 
-    this.log(`${green('✔')} Generated icons for '${cyan(flags.appName)}' app...`)
+    this.log(green('✔'), `Generated icons for '${cyan(flags.appName)}' app.`)
   }
 
   private async generateAndroidIcon(inputPath: string, outputPath: string, size: number, mask: Buffer) {
-    this.log(`${yellow('≈')} ${cyan('Android')}: Generating icon '${cyan(outputPath)}'...`)
+    this.logVerbose(yellow('≈'), cyan('Android'), `Generating icon '${cyan(outputPath)}'...`)
 
     try {
       await sharp(inputPath)
@@ -80,9 +91,9 @@ The template icon file should be at least 1024x1024px.
         ])
         .toFile(outputPath)
 
-      this.log(`${green('✔')} ${cyan('Android')}: icon '${cyan(outputPath)}' generated.`)
+      this.logVerbose(green('✔'), cyan('Android'), `Icon '${cyan(outputPath)}' generated.`)
     } catch (error) {
-      this.log(`${red('✘')} ${cyan('Android')}: failed to generate icon '${cyan(outputPath)}'`, error)
+      this.log(red('✘'), cyan('Android'), `Failed to generate icon '${cyan(outputPath)}':`, error)
     }
   }
 
@@ -95,7 +106,7 @@ The template icon file should be at least 1024x1024px.
   }
 
   private async generateAndroidIcons(inputFile: string, baseOutputDir: string) {
-    this.log(`${yellow('≈')} ${cyan('Android')}: Generating icons...`)
+    this.log(yellow('≈'), cyan('Android'), 'Generating icons...')
 
     await mkdirp(baseOutputDir)
 
@@ -109,7 +120,7 @@ The template icon file should be at least 1024x1024px.
 
     await Promise.all(androidTasks)
 
-    this.log(`${green('✔')} ${cyan('Android')}: icons generated.`)
+    this.log(green('✔'), cyan('Android'), 'icons generated.')
   }
 
   private async generateAndroidIconsWithDensity(inputPath: string, outputDir: string, density: string, size: number) {
@@ -117,7 +128,7 @@ The template icon file should be at least 1024x1024px.
 
     await mkdirp(densityFolderPath)
 
-    this.log(`${yellow('≈')} ${cyan('Android')}: Generating icons for density '${density}'...`)
+    this.logVerbose(yellow('≈'), cyan('Android'), `Generating icons for density '${density}'...`)
 
     await Promise.all([
       // Rounded icon
@@ -126,23 +137,23 @@ The template icon file should be at least 1024x1024px.
       this.generateAndroidIconCircle(inputPath, join(densityFolderPath, 'ic_launcher_round.png'), size),
     ])
 
-    this.log(`${green('✔')} ${cyan('Android')}: icons generated for density '${density}'.`)
+    this.logVerbose(green('✔'), cyan('Android'), `Icons generated for density '${density}'.`)
   }
 
   private async generateIOSIcon(inputPath: string, outputDir: string, filename: string, size: number) {
-    this.log(`${yellow('≈')} ${cyan('iOS')}: Generating icon '${cyan(filename)}'...`)
+    this.logVerbose(yellow('≈'), cyan('iOS'), `Generating icon '${cyan(filename)}'...`)
 
     try {
       await sharp(inputPath).resize(size, size, {fit: 'cover'}).toFile(join(outputDir, filename))
 
-      this.log(`${green('✔')} ${cyan('iOS')}: icon '${cyan(filename)}' generated.`)
+      this.logVerbose(green('✔'), cyan('iOS'), `Icon '${cyan(filename)}' generated.`)
     } catch (error) {
-      this.log(`${red('✘')} ${cyan('iOS')}: failed to generate icon '${cyan(filename)}'`, error)
+      this.log(red('✘'), cyan('iOS'), `Failed to generate icon '${cyan(filename)}'.`, error)
     }
   }
 
   private async generateIOSIcons(inputFile: string, outputDir: string) {
-    this.log(`${yellow('≈')} ${cyan('iOS')}: Generating icons...`)
+    this.log(yellow('≈'), cyan('iOS'), `Generating icons...`)
 
     await mkdirp(outputDir)
 
@@ -177,7 +188,7 @@ The template icon file should be at least 1024x1024px.
     // Write Contents.json descriptor file for iconset
     await writeFile(join(outputDir, 'Contents.json'), JSON.stringify(contentJson, null, 2))
 
-    this.log(`${green('✔')} ${cyan('iOS')}: icons generated.`)
+    this.log(green('✔'), cyan('iOS'), `Icons generated.`)
   }
 
   private getIOSIconName(baseName: string, scale: number): string {
@@ -192,5 +203,11 @@ The template icon file should be at least 1024x1024px.
 
     const radius = Math.floor(size / 2)
     return Buffer.from(`<svg><circle cx="${radius}" cy="${radius}" r="${radius}" /></svg>`)
+  }
+
+  private logVerbose(message?: string, ...args: unknown[]) {
+    if (this._isVerbose) {
+      this.log(message, ...args)
+    }
   }
 }
