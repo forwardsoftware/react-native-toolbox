@@ -28,9 +28,9 @@ npx @forward-software/react-native-toolbox <command>
 
 <!-- commands -->
 * [`rn-toolbox dotenv ENVIRONMENTNAME`](#rn-toolbox-dotenv-environmentname)
-* [`rn-toolbox help [COMMAND]`](#rn-toolbox-help-command)
 * [`rn-toolbox icons [FILE]`](#rn-toolbox-icons-file)
 * [`rn-toolbox splash [FILE]`](#rn-toolbox-splash-file)
+* [`rn-toolbox help [COMMAND]`](#rn-toolbox-help-command)
 
 ## `rn-toolbox dotenv ENVIRONMENTNAME`
 
@@ -55,27 +55,7 @@ EXAMPLES
   $ rn-toolbox dotenv
 ```
 
-_See code: [src/commands/dotenv.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/v3.0.0/src/commands/dotenv.ts)_
-
-## `rn-toolbox help [COMMAND]`
-
-Display help for rn-toolbox.
-
-```
-USAGE
-  $ rn-toolbox help [COMMAND...] [-n]
-
-ARGUMENTS
-  COMMAND...  Command to show help for.
-
-FLAGS
-  -n, --nested-commands  Include all nested commands in the output.
-
-DESCRIPTION
-  Display help for rn-toolbox.
-```
-
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.25/src/commands/help.ts)_
+_See code: [src/commands/dotenv.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/main/src/commands/dotenv.ts)_
 
 ## `rn-toolbox icons [FILE]`
 
@@ -102,7 +82,7 @@ EXAMPLES
   $ rn-toolbox icons
 ```
 
-_See code: [src/commands/icons.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/v3.0.0/src/commands/icons.ts)_
+_See code: [src/commands/icons.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/main/src/commands/icons.ts)_
 
 ## `rn-toolbox splash [FILE]`
 
@@ -129,7 +109,27 @@ EXAMPLES
   $ rn-toolbox splash
 ```
 
-_See code: [src/commands/splash.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/v3.0.0/src/commands/splash.ts)_
+_See code: [src/commands/splash.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/main/src/commands/splash.ts)_
+
+## `rn-toolbox help [COMMAND]`
+
+Display help for rn-toolbox.
+
+```
+USAGE
+  $ rn-toolbox help [COMMAND...] [-n]
+
+ARGUMENTS
+  COMMAND...  Command to show help for.
+
+FLAGS
+  -n, --nested-commands  Include all nested commands in the output.
+
+DESCRIPTION
+  Display help for rn-toolbox.
+```
+
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/6.2.27/src/commands/help.ts)_
 <!-- commandsstop -->
 
 ## License
