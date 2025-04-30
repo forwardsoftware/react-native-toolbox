@@ -7,8 +7,7 @@
  */
 
 import { Args, Command, Flags } from '@oclif/core'
-import { cyan, green, red } from 'ansis'
-import Listr from 'listr'
+import { cyan, green, red, yellow } from 'ansis'
 import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import sharp from 'sharp'
@@ -45,136 +44,23 @@ The template icon file should be at least 1024x1024px.
 
     const sourceFilesExists = checkAssetFile(args.file)
     if (!sourceFilesExists) {
-      this.error(`Source file ${cyan(args.file)} not found! ${red('ABORTING')}`)
+      this.error(`${red('✘')} Source file ${cyan(args.file)} not found! ${red('ABORTING')}`)
     }
 
     if (!flags.appName) {
-      this.error(`Failed to retrive ${cyan('appName')} value. Please specify it with the ${green('appName')} flag or check that ${cyan('app.json')} file exists. ${red('ABORTING')}`)
+      this.error(`${red('✘')} Failed to retrive ${cyan('appName')} value. Please specify it with the ${green('appName')} flag or check that ${cyan('app.json')} file exists. ${red('ABORTING')}`)
     }
 
-    this.log(`Generating icons for '${flags.appName}' app...`)
+    this.log(`${yellow('≈')} Generating icons for '${cyan(flags.appName)}' app...`)
 
     const iOSOutputDirPath = `./ios/${flags.appName}/Images.xcassets/AppIcon.appiconset`
     const baseAndroidOutputDirPath = './android/app/src/main'
 
-    const workflow = new Listr([
-      {
-        task: () => new Listr([
-          {
-            task: () => mkdirp(iOSOutputDirPath),
-            title: 'Create assets folder',
-          },
-          {
-            task: () => {
-              const iOSIconsTasks = ICON_SIZES_IOS.flatMap(sizeDef => {
-                const { baseSize, name, scales } = sizeDef
-                const iOSIconScaleTasks: Listr.ListrTask[] = scales.map(scale => {
-                  const filename = this.getIOSIconName(name, scale)
-                  const imageSize = baseSize * scale
-
-                  return {
-                    task: () => sharp(args.file)
-                      .resize(imageSize, imageSize, { fit: 'cover' })
-                      .toFile(join(iOSOutputDirPath, filename)),
-                    title: `Generate icon ${filename}...`,
-                  } as Listr.ListrTask
-                })
-
-                return iOSIconScaleTasks
-              })
-
-              return new Listr(iOSIconsTasks)
-            },
-            title: 'Generate icons',
-          },
-          {
-            task: () => {
-              const contentJson: ContentJson = {
-                images: [],
-                info: {
-                  author: 'react-native-toolbox',
-                  version: 1,
-                },
-              }
-
-              // Create Contents.json structure
-              for (const { baseSize, idiom, name, scales } of ICON_SIZES_IOS) {
-                for (const scale of scales) {
-                  contentJson.images.push({
-                    filename: this.getIOSIconName(name, scale),
-                    idiom: idiom || 'iphone',
-                    scale: `${scale}x`,
-                    size: `${baseSize}x${baseSize}`,
-                  })
-                }
-              }
-
-              return writeFile(
-                join(iOSOutputDirPath, 'Contents.json'),
-                JSON.stringify(contentJson, null, 2),
-              )
-            },
-            title: 'Generate icons manifest',
-          },
-        ]),
-        title: '🍎 iOS icons',
-      },
-      {
-        task: () => new Listr([
-          {
-            task: () => mkdirp(baseAndroidOutputDirPath),
-            title: 'Create assets folder',
-          },
-          {
-            task: () => {
-              const outputFilePath = join(baseAndroidOutputDirPath, 'web_hi_res_512.png')
-              return this.generateAndroidIconRounded(args.file, outputFilePath, 512)
-            },
-            title: 'Create web icon',
-          },
-          {
-            task: () => {
-              const androidIconTasks = ICON_SIZES_ANDROID.flatMap(({ density, size }) => {
-                const androidIconDensityTasks: Listr.ListrTask[] = []
-
-                const densityFolderPath = join(baseAndroidOutputDirPath, `res/mipmap-${density}`)
-                const densityFolderTask: Listr.ListrTask = {
-                  task: () => mkdirp(densityFolderPath),
-                  title: `Create Android '${density}' assets folder`,
-                }
-                androidIconDensityTasks.push(densityFolderTask)
-
-                const roundedFileName = 'ic_launcher.png'
-                const roundedAndroidIconTask: Listr.ListrTask = {
-                  task: () => this.generateAndroidIconRounded(args.file, join(densityFolderPath, roundedFileName), size),
-                  title: `Generate icon ${roundedFileName}...`,
-                }
-                androidIconDensityTasks.push(roundedAndroidIconTask)
-
-                const circleFileName = 'ic_launcher_round.png'
-                const circleAndroidIconTask: Listr.ListrTask = {
-                  task: () => this.generateAndroidIconCircle(args.file, join(densityFolderPath, circleFileName), size),
-                  title: `Generate icon ${circleFileName}...`,
-                }
-                androidIconDensityTasks.push(circleAndroidIconTask)
-
-                return androidIconDensityTasks
-              })
-
-              return new Listr(androidIconTasks)
-            },
-            title: 'Create launcher icons',
-          },
-        ]),
-        title: '🤖 Android icons',
-      },
+    // Run both iOS and Android tasks in parallel
+    await Promise.all([
+      this.generateIOSIcons(args.file, iOSOutputDirPath),
+      this.generateAndroidIcons(args.file, baseAndroidOutputDirPath),
     ])
-
-    try {
-      await workflow.run()
-    } catch (error) {
-      this.error(error as Error)
-    }
   }
 
   private generateAndroidIcon(inputPath: string, outputPath: string, size: number, mask: Buffer) {
@@ -198,6 +84,85 @@ The template icon file should be at least 1024x1024px.
   private generateAndroidIconRounded(inputPath: string, outputPath: string, size: number) {
     const roundedCorners = this.getMask("roundedCorners", size)
     return this.generateAndroidIcon(inputPath, outputPath, size, roundedCorners)
+  }
+
+  private async generateAndroidIcons(inputFile: string, baseOutputDir: string) {
+    this.log(`${yellow('≈')} ${cyan('Android')}: Generating icons...`)
+    await mkdirp(baseOutputDir)
+
+    // Web icon
+    this.log(`${yellow('≈')} ${cyan('Android')}: Creating web icon...`)
+    await this.generateAndroidIconRounded(inputFile, join(baseOutputDir, 'web_hi_res_512.png'), 512)
+
+    // Launcher icons (parallel per density)
+    const androidTasks: Promise<unknown>[] = []
+    for (const { density, size } of ICON_SIZES_ANDROID) {
+      const densityFolderPath = join(baseOutputDir, `res/mipmap-${density}`)
+      androidTasks.push(
+        (async () => {
+          await mkdirp(densityFolderPath)
+          this.log(`${yellow('≈')} ${cyan('Android')}: Generating icons for density '${density}'...`)
+          // Rounded icon
+          await this.generateAndroidIconRounded(inputFile, join(densityFolderPath, 'ic_launcher.png'), size)
+          // Circle icon
+          await this.generateAndroidIconCircle(inputFile, join(densityFolderPath, 'ic_launcher_round.png'), size)
+        })(),
+      )
+    }
+
+    await Promise.all(androidTasks)
+
+    this.log(`${green('✔')} ${cyan('Android')}: icons generated.`)
+  }
+
+  private async generateIOSIcons(inputFile: string, outputDir: string) {
+    this.log(`${yellow('≈')} ${cyan('iOS')}: Generating icons...`)
+    await mkdirp(outputDir)
+
+    // Generate all iOS icons in parallel
+    const iOSTasks: Promise<unknown>[] = []
+    for (const sizeDef of ICON_SIZES_IOS) {
+      const { baseSize, name, scales } = sizeDef
+      for (const scale of scales) {
+        const filename = this.getIOSIconName(name, scale)
+        const imageSize = baseSize * scale
+        this.log(`${yellow('≈')} ${cyan('iOS')}: Generating icon ${cyan(filename)}...`)
+        iOSTasks.push(
+          sharp(inputFile)
+            .resize(imageSize, imageSize, { fit: 'cover' })
+            .toFile(join(outputDir, filename))
+        )
+      }
+    }
+
+    await Promise.all(iOSTasks)
+
+    // Generate Contents.json
+    const contentJson: ContentJson = {
+      images: [],
+      info: {
+        author: 'react-native-toolbox',
+        version: 1,
+      },
+    }
+
+    for (const { baseSize, idiom, name, scales } of ICON_SIZES_IOS) {
+      for (const scale of scales) {
+        contentJson.images.push({
+          filename: this.getIOSIconName(name, scale),
+          idiom: idiom || 'iphone',
+          scale: `${scale}x`,
+          size: `${baseSize}x${baseSize}`,
+        })
+      }
+    }
+
+    await writeFile(
+      join(outputDir, 'Contents.json'),
+      JSON.stringify(contentJson, null, 2),
+    )
+
+    this.log(`${green('✔')} ${cyan('iOS')}: icons generated.`)
   }
 
   private getIOSIconName(baseName: string, scale: number): string {
