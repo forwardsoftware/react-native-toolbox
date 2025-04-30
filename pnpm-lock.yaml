@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@oclif/core':
         specifier: ^4
-        version: 4.2.10
+        version: 4.3.0
       '@oclif/plugin-help':
         specifier: ^6
         version: 6.2.27
@@ -32,7 +32,7 @@ importers:
         version: 0.2.1
       '@oclif/test':
         specifier: ^4
-        version: 4.1.12(@oclif/core@4.2.10)
+        version: 4.1.12(@oclif/core@4.3.0)
       '@types/chai':
         specifier: ^5
         version: 5.2.1
@@ -613,8 +613,8 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@oclif/core@4.2.10':
-    resolution: {integrity: sha512-fAqcXgqkUm4v5FYy7qWP4w1HaOlVSVJveah+yVTo5Nm5kTiXhmD5mQQ7+knGeBaStyrtQy6WardoC2xSic9rlQ==}
+  '@oclif/core@4.3.0':
+    resolution: {integrity: sha512-lIzHY+JMP6evrS5E/sGijNnwrCoNtGy8703jWXcMuPOYKiFhWoAqnIm1BGgoRgmxczkbSfRsHUL/lwsSgh74Lw==}
     engines: {node: '>=18.0.0'}
 
   '@oclif/plugin-help@6.2.27':
@@ -4061,7 +4061,7 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@oclif/core@4.2.10':
+  '@oclif/core@4.3.0':
     dependencies:
       ansi-escapes: 4.3.2
       ansis: 3.17.0
@@ -4084,12 +4084,12 @@ snapshots:
 
   '@oclif/plugin-help@6.2.27':
     dependencies:
-      '@oclif/core': 4.2.10
+      '@oclif/core': 4.3.0
 
   '@oclif/plugin-not-found@3.2.49(@types/node@22.15.3)':
     dependencies:
       '@inquirer/prompts': 7.4.1(@types/node@22.15.3)
-      '@oclif/core': 4.2.10
+      '@oclif/core': 4.3.0
       ansis: 3.17.0
       fast-levenshtein: 3.0.0
     transitivePeerDependencies:
@@ -4097,7 +4097,7 @@ snapshots:
 
   '@oclif/plugin-warn-if-update-available@3.1.38':
     dependencies:
-      '@oclif/core': 4.2.10
+      '@oclif/core': 4.3.0
       ansis: 3.17.0
       debug: 4.4.0(supports-color@8.1.1)
       http-call: 5.3.0
@@ -4108,9 +4108,9 @@ snapshots:
 
   '@oclif/prettier-config@0.2.1': {}
 
-  '@oclif/test@4.1.12(@oclif/core@4.2.10)':
+  '@oclif/test@4.1.12(@oclif/core@4.3.0)':
     dependencies:
-      '@oclif/core': 4.2.10
+      '@oclif/core': 4.3.0
       ansis: 3.17.0
       debug: 4.4.0(supports-color@8.1.1)
     transitivePeerDependencies:
@@ -6287,7 +6287,7 @@ snapshots:
       '@inquirer/confirm': 3.2.0
       '@inquirer/input': 2.3.0
       '@inquirer/select': 2.5.0
-      '@oclif/core': 4.2.10
+      '@oclif/core': 4.3.0
       '@oclif/plugin-help': 6.2.27
       '@oclif/plugin-not-found': 3.2.49(@types/node@22.15.3)
       '@oclif/plugin-warn-if-update-available': 3.1.38
