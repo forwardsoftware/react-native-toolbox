@@ -5,6 +5,15 @@ import path from 'node:path'
 import {rimrafSync} from 'rimraf'
 
 describe('splash', () => {
+  before(() => {
+    fs.mkdirSync('assets', {recursive: true})
+    fs.copyFileSync('test/assets/splashscreen.png', 'assets/splashscreen.png')
+  })
+
+  after(() => {
+    rimrafSync('assets')
+  })
+
   afterEach(() => {
     rimrafSync(['android', 'ios'])
   })
