@@ -7,9 +7,9 @@
  */
 
 import { Args, Command, Flags } from '@oclif/core'
+import { cyan, red } from 'ansis'
 import Listr from 'listr'
 import { copyFile, unlink } from 'node:fs/promises'
-import { cyan, red } from 'yoctocolors'
 
 import { checkAssetFile } from '../utils/file-utils.js'
 

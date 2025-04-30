@@ -14,15 +14,15 @@ importers:
       '@oclif/plugin-help':
         specifier: ^6
         version: 6.2.27
+      ansis:
+        specifier: ^3.17.0
+        version: 3.17.0
       listr:
         specifier: ^0.14.3
         version: 0.14.3
       sharp:
         specifier: ^0.34.1
         version: 0.34.1
-      yoctocolors:
-        specifier: ^2.1.1
-        version: 2.1.1
     devDependencies:
       '@eslint/compat':
         specifier: ^1
@@ -244,9 +244,6 @@ packages:
 
   '@emnapi/core@1.4.3':
     resolution: {integrity: sha512-4m62DuCE07lw01soJwPiBGC0nAww0Q+RY70VZ+n49yDIO13yyinhbWCeNnaob0lakDtWQzSdtNWzJeOJt2ma+g==}
-
-  '@emnapi/runtime@1.4.0':
-    resolution: {integrity: sha512-64WYIf4UYcdLnbKn/umDlNjQDSS8AgZrI/R9+x5ilkUVFxXcA1Ebl+gQLc/6mERA4407Xof0R7wEyEuj091CVw==}
 
   '@emnapi/runtime@1.4.3':
     resolution: {integrity: sha512-pBPWdu6MLKROBX05wSNKcNb++m5Er+KQ9QkB+WVM+pW2Kx9hoSrVTnu3BdkI5eBLZoKu/J6mW/B6i6bJB2ytXQ==}
@@ -1093,11 +1090,6 @@ packages:
     resolution: {integrity: sha512-ueEepnujpqee2o5aIYnvHU6C0A42MNdsIDeqy5BydrkuC5R1ZuUFnm27EeFJGoEHJQgn3uleRvmTXaJgfXbt4g==}
     engines: {node: '>=0.4.0'}
 
-  acorn@8.14.0:
-    resolution: {integrity: sha512-cl669nCJTZBsL97OF4kUQm5g5hC2uihk0NxY3WENAC0TYdILVkAyHymAntgxGkl7K+t0cXIrH5siy5S4XkFycA==}
-    engines: {node: '>=0.4.0'}
-    hasBin: true
-
   acorn@8.14.1:
     resolution: {integrity: sha512-OvQ/2pUDKmgfCg++xsTX1wGxfTaszcHVcTctW4UJB4hibJx2HXxxO5UmVgyjMa+ZDsiaf5wWLXYpRWMmBI0QHg==}
     engines: {node: '>=0.4.0'}
@@ -1862,10 +1854,6 @@ packages:
   for-each@0.3.5:
     resolution: {integrity: sha512-dKx12eRCVIzqCxFGplyFKJMPvLEWgmNtUrpTiJIR5u97zEhRG8ySrtboPHZXx7daLxQVrl643cTzbab2tkQjxg==}
     engines: {node: '>= 0.4'}
-
-  foreground-child@3.3.0:
-    resolution: {integrity: sha512-Ld2g8rrAyMYFXBhEqMz8ZAHBi4J4uS1i/CxGMDnjyFWddMXLVcDp051DZfu+t7+ab7Wv6SMqpWmyFIj5UbfFvg==}
-    engines: {node: '>=14'}
 
   foreground-child@3.3.1:
     resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
@@ -3169,10 +3157,6 @@ packages:
     resolution: {integrity: sha512-cYVsTjKl8b+FrnidjibDWskAv7UKOfcwaVZdp/it9n1s9fU3IkgDbhdIRKCW4JDsAlECJY0ytoVPT3sK6kideA==}
     engines: {node: '>=18'}
 
-  yoctocolors@2.1.1:
-    resolution: {integrity: sha512-GQHQqAopRhwU8Kt1DDM8NjibDXHC8eoh1erhGAJPEyveY9qqVeXvVikNKrDz69sHowPMorbPUrH/mx8c50eiBQ==}
-    engines: {node: '>=18'}
-
 snapshots:
 
   '@aws-crypto/crc32@5.2.0':
@@ -3698,11 +3682,6 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
-  '@emnapi/runtime@1.4.0':
-    dependencies:
-      tslib: 2.8.1
-    optional: true
-
   '@emnapi/runtime@1.4.3':
     dependencies:
       tslib: 2.8.1
@@ -3849,7 +3828,7 @@ snapshots:
 
   '@img/sharp-wasm32@0.34.1':
     dependencies:
-      '@emnapi/runtime': 1.4.0
+      '@emnapi/runtime': 1.4.3
     optional: true
 
   '@img/sharp-win32-ia32@0.34.1':
@@ -4677,9 +4656,7 @@ snapshots:
 
   acorn-walk@8.3.4:
     dependencies:
-      acorn: 8.14.0
-
-  acorn@8.14.0: {}
+      acorn: 8.14.1
 
   acorn@8.14.1: {}
 
@@ -5240,7 +5217,7 @@ snapshots:
       eslint-config-xo: 0.46.0(eslint@9.25.1)(typescript@5.8.3)
       eslint-config-xo-space: 0.35.0(eslint@9.25.1)
       eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1)(typescript@5.8.3))(eslint@9.25.1))(eslint@9.25.1)
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.25.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1)(typescript@5.8.3))(eslint@9.25.1))(eslint@9.25.1))(eslint@9.25.1)
       eslint-plugin-jsdoc: 50.6.11(eslint@9.25.1)
       eslint-plugin-mocha: 10.5.0(eslint@9.25.1)
       eslint-plugin-n: 17.17.0(eslint@9.25.1)
@@ -5297,7 +5274,7 @@ snapshots:
       tinyglobby: 0.2.13
       unrs-resolver: 1.7.2
     optionalDependencies:
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.25.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1)(typescript@5.8.3))(eslint@9.25.1))(eslint@9.25.1))(eslint@9.25.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -5325,7 +5302,7 @@ snapshots:
       eslint-utils: 2.1.0
       regexpp: 3.2.0
 
-  eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.25.1):
+  eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.25.1)(typescript@5.8.3))(eslint@9.25.1))(eslint@9.25.1))(eslint@9.25.1):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
@@ -5616,11 +5593,6 @@ snapshots:
     dependencies:
       is-callable: 1.2.7
 
-  foreground-child@3.3.0:
-    dependencies:
-      cross-spawn: 7.0.6
-      signal-exit: 4.1.0
-
   foreground-child@3.3.1:
     dependencies:
       cross-spawn: 7.0.6
@@ -5709,7 +5681,7 @@ snapshots:
 
   glob@11.0.1:
     dependencies:
-      foreground-child: 3.3.0
+      foreground-child: 3.3.1
       jackspeak: 4.0.3
       minimatch: 10.0.1
       minipass: 7.1.2
@@ -6811,7 +6783,7 @@ snapshots:
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
       '@types/node': 22.15.3
-      acorn: 8.14.0
+      acorn: 8.14.1
       acorn-walk: 8.3.4
       arg: 4.1.3
       create-require: 1.1.1
@@ -7059,5 +7031,3 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   yoctocolors-cjs@2.1.2: {}
-
-  yoctocolors@2.1.1: {}

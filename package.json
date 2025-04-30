@@ -50,9 +50,9 @@
   "dependencies": {
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",
+    "ansis": "^3.17.0",
     "listr": "^0.14.3",
-    "sharp": "^0.34.1",
-    "yoctocolors": "^2.1.1"
+    "sharp": "^0.34.1"
   },
   "devDependencies": {
     "@eslint/compat": "^1",

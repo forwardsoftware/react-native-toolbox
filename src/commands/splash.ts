@@ -7,11 +7,11 @@
  */
 
 import { Args, Command, Flags } from '@oclif/core'
+import { cyan, green, red } from 'ansis'
 import Listr from 'listr'
 import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import sharp from 'sharp'
-import { cyan, green, red } from 'yoctocolors'
 
 import type { ContentJson } from '../types.js'
 
