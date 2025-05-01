@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.0](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.0.6...v4.1.0) (2025-05-01)
+
+
+### Features
+
+* Reduce dependencies and enhance CLI commands ([#129](https://github.com/forwardsoftware/react-native-toolbox/issues/129)) ([096c7d3](https://github.com/forwardsoftware/react-native-toolbox/commit/096c7d3e6b7f0b9a223ee9e20de5dca42dbbab78))
+
 ## [4.0.6](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.0.5...v4.0.6) (2025-04-30)
 
 
