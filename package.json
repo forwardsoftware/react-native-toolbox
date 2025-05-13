@@ -50,7 +50,7 @@
   "dependencies": {
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",
-    "ansis": "^3.17.0",
+    "ansis": "^4.0.0",
     "sharp": "^0.34.1"
   },
   "devDependencies": {
