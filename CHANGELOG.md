@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.1.3](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.1.2...v4.1.3) (2025-06-04)
+
+
+### Bug Fixes
+
+* **deps:** bump ansis from 4.0.0 to 4.1.0 ([#154](https://github.com/forwardsoftware/react-native-toolbox/issues/154)) ([e838cb3](https://github.com/forwardsoftware/react-native-toolbox/commit/e838cb3250c32b10a45668bf6590e5d31bcff88b))
+* **deps:** bump oclif dependencies ([#152](https://github.com/forwardsoftware/react-native-toolbox/issues/152)) ([5d53bcb](https://github.com/forwardsoftware/react-native-toolbox/commit/5d53bcb4ab0b316208427d476eb5f6b1e0aacfcb))
+
 ## [4.1.2](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.1.1...v4.1.2) (2025-05-21)
 
 
