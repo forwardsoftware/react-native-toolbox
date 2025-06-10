@@ -59,7 +59,7 @@
     "@oclif/test": "^4",
     "@types/chai": "^5",
     "@types/mocha": "^10",
-    "@types/node": "^22",
+    "@types/node": "^24",
     "chai": "^5",
     "eslint": "^9",
     "eslint-config-oclif": "^6",
