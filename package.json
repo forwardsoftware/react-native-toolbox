@@ -60,7 +60,7 @@
     "@types/chai": "^5",
     "@types/mocha": "^10",
     "@types/node": "^24",
-    "chai": "^5",
+    "chai": "^6",
     "eslint": "^9",
     "eslint-config-oclif": "^6",
     "eslint-config-prettier": "^10",
