@@ -4,7 +4,10 @@
   "description": "A set of scripts to simplify React Native development",
   "author": "ForWarD Software (https://github.com/forwardsoftware)",
   "license": "MPL-2.0",
-  "repository": "https://github.com/forwardsoftware/react-native-toolbox",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/forwardsoftware/react-native-toolbox.git"
+  },
   "keywords": [
     "react-native",
     "scripts",
@@ -35,7 +38,7 @@
     "./oclif.manifest.json"
   ],
   "bin": {
-    "rn-toolbox": "./bin/run.js"
+    "rn-toolbox": "bin/run.js"
   },
   "oclif": {
     "bin": "rn-toolbox",
