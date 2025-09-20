@@ -6,21 +6,25 @@
 
 version: 2
 updates:
-  - package-ecosystem: "devcontainers"
-    directory: "/"
+  - package-ecosystem: 'devcontainers'
+    directory: '/'
     schedule:
       interval: monthly
 
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
       interval: monthly
 
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
       interval: weekly
       day: tuesday
+    commit-message:
+      include: scope
+      prefix: 'fix'
+      prefix-development: 'chore'
     groups:
       oclif:
         patterns:
