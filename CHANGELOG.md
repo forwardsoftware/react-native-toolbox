@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.7](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.1.6...v4.1.7) (2025-10-07)
+
+
+### Bug Fixes
+
+* **deps:** bump ansis from 4.1.0 to 4.2.0 ([#211](https://github.com/forwardsoftware/react-native-toolbox/issues/211)) ([4ed1227](https://github.com/forwardsoftware/react-native-toolbox/commit/4ed1227386defd8331d7d2c6185539cc5cae94ba))
+
 ## [4.1.6](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.1.5...v4.1.6) (2025-09-20)
 
 
