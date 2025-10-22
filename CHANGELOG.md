@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.1.8](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.1.7...v4.1.8) (2025-10-22)
+
+
+### Bug Fixes
+
+* **deps:** bump @oclif/core from 4.5.6 to 4.6.0 in the oclif group ([#224](https://github.com/forwardsoftware/react-native-toolbox/issues/224)) ([94a0221](https://github.com/forwardsoftware/react-native-toolbox/commit/94a0221049abfdb0413cd6e5da1506b08740cd90))
+* **deps:** bump the oclif group with 2 updates ([#220](https://github.com/forwardsoftware/react-native-toolbox/issues/220)) ([75cf149](https://github.com/forwardsoftware/react-native-toolbox/commit/75cf14922b99f98f00cb957159616806820b9a3e))
+
 ## [4.1.7](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.1.6...v4.1.7) (2025-10-07)
 
 
