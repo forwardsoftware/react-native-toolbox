@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.11](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.1.10...v4.1.11) (2025-11-12)
+
+
+### Bug Fixes
+
+* **deps:** bump sharp from 0.34.4 to 0.34.5 ([#245](https://github.com/forwardsoftware/react-native-toolbox/issues/245)) ([f6927a8](https://github.com/forwardsoftware/react-native-toolbox/commit/f6927a83f9799751df338d43cdf8f9ae0710c4c8))
+
 ## [4.1.10](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.1.9...v4.1.10) (2025-11-06)
 
 
