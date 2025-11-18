@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.1.12](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.1.11...v4.1.12) (2025-11-18)
+
+
+### Bug Fixes
+
+* **deps-dev:** update vulnerable transitive dependencies ([#253](https://github.com/forwardsoftware/react-native-toolbox/issues/253)) ([4b81752](https://github.com/forwardsoftware/react-native-toolbox/commit/4b8175228897b3a91742f5e479c8902d8b4e7045))
+* **deps:** bump the oclif group with 3 updates ([#248](https://github.com/forwardsoftware/react-native-toolbox/issues/248)) ([1a74f4e](https://github.com/forwardsoftware/react-native-toolbox/commit/1a74f4ea7fb3a8e44cb676f719d5d40de2a5606e))
+
 ## [4.1.11](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.1.10...v4.1.11) (2025-11-12)
 
 
