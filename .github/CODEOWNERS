@@ -5,3 +5,7 @@
 # @panz3r will be requested for review when someone 
 # opens a pull request.
 *       @panz3r
+
+# Make dependency files owner-free
+package.json
+pnpm-lock.yaml
