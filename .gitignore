@@ -231,3 +231,6 @@ oclif.manifest.json
 /android
 /ios
 .env
+
+# TypeScript build info
+*.tsbuildinfo

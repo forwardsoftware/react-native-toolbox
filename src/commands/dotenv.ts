@@ -7,8 +7,14 @@
  */
 
 import { Args, Command, Flags } from '@oclif/core'
-import { cyan, green, red, yellow } from 'ansis'
 import { copyFile, unlink } from 'node:fs/promises'
+import { styleText } from 'node:util'
+
+// Color helper functions using util.styleText
+const cyan = (text: string) => styleText('cyan', text)
+const green = (text: string) => styleText('green', text)
+const red = (text: string) => styleText('red', text)
+const yellow = (text: string) => styleText('yellow', text)
 
 import { checkAssetFile } from '../utils/file-utils.js'
 
