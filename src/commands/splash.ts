@@ -9,19 +9,13 @@
 import { Args, Command, Flags } from '@oclif/core'
 import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { styleText } from 'node:util'
 import sharp from 'sharp'
-
-// Color helper functions using util.styleText
-const cyan = (text: string) => styleText('cyan', text)
-const green = (text: string) => styleText('green', text)
-const red = (text: string) => styleText('red', text)
-const yellow = (text: string) => styleText('yellow', text)
 
 import type { ContentJson, SplashscreenSize } from '../types.js'
 
 import { SPLASHSCREEN_SIZES_ANDROID, SPLASHSCREEN_SIZES_IOS } from '../constants.js'
 import { extractAppName } from '../utils/app.utils.js'
+import { cyan, green, red, yellow } from '../utils/color.utils.js'
 import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
 
 export default class Splash extends Command {
