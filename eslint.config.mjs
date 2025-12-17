@@ -12,8 +12,8 @@ export default [
   prettier,
   {
     rules: {
-      // Allow util.styleText even though it's marked as experimental
-      // It's available in Node.js 20.12.0+, 21.7.0+, and 22.13.0+
+      // Allow util.styleText even though it's marked as experimental by ESLint
+      // It's available and stable in Node.js 22.13.0+ (our minimum required version)
       'n/no-unsupported-features/node-builtins': ['error', {
         ignores: ['util.styleText']
       }]
