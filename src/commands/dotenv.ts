@@ -7,9 +7,9 @@
  */
 
 import { Args, Command, Flags } from '@oclif/core'
-import { cyan, green, red, yellow } from 'ansis'
 import { copyFile, unlink } from 'node:fs/promises'
 
+import { cyan, green, red, yellow } from '../utils/color.utils.js'
 import { checkAssetFile } from '../utils/file-utils.js'
 
 export default class Dotenv extends Command {

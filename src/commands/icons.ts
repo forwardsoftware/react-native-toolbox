@@ -7,7 +7,6 @@
  */
 
 import { Args, Command, Flags } from '@oclif/core'
-import { cyan, green, red, yellow } from 'ansis'
 import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import sharp from 'sharp'
@@ -17,6 +16,7 @@ import type { ContentJson } from '../types.js'
 import { ICON_SIZES_ANDROID, ICON_SIZES_IOS } from '../constants.js'
 import { MaskType } from '../types.js'
 import { extractAppName } from '../utils/app.utils.js'
+import { cyan, green, red, yellow } from '../utils/color.utils.js'
 import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
 
 export default class Icons extends Command {

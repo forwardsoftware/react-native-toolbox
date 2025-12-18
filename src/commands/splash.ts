@@ -7,7 +7,6 @@
  */
 
 import { Args, Command, Flags } from '@oclif/core'
-import { cyan, green, red, yellow } from 'ansis'
 import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import sharp from 'sharp'
@@ -16,6 +15,7 @@ import type { ContentJson, SplashscreenSize } from '../types.js'
 
 import { SPLASHSCREEN_SIZES_ANDROID, SPLASHSCREEN_SIZES_IOS } from '../constants.js'
 import { extractAppName } from '../utils/app.utils.js'
+import { cyan, green, red, yellow } from '../utils/color.utils.js'
 import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
 
 export default class Splash extends Command {
