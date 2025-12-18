@@ -1,5 +1,16 @@
 # Changelog
 
+## [5.0.0](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.1.12...v5.0.0) (2025-12-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate from `ansis` to `util.styleText` ([#269](https://github.com/forwardsoftware/react-native-toolbox/issues/269))
+
+### Features
+
+* migrate from `ansis` to `util.styleText` ([#269](https://github.com/forwardsoftware/react-native-toolbox/issues/269)) ([cb63c99](https://github.com/forwardsoftware/react-native-toolbox/commit/cb63c992947b34a2e6342b3b1a3261af63dec17d))
+
 ## [4.1.12](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.1.11...v4.1.12) (2025-11-18)
 
 
