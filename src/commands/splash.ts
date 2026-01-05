@@ -61,15 +61,15 @@ The template splashscreen file should be at least 1242x2208px.
     }
 
     if (!flags.appName) {
-      this.error(`${red('✘')} Failed to retrive ${cyan('appName')} value. Please specify it with the ${green('appName')} flag or check that ${cyan('app.json')} file exists. ${red('ABORTING')}`)
+      this.error(`${red('✘')} Failed to retrieve ${cyan('appName')} value. Please specify it with the ${green('appName')} flag or check that ${cyan('app.json')} file exists. ${red('ABORTING')}`)
     }
 
     this.log(yellow('≈'), `Generating splashscreens for '${cyan(flags.appName)}' app...`)
 
     // Run both iOS and Android tasks in parallel
     await Promise.all([
-      this.generateAndroidSplashscreens(args.file, './android/app/src/main/res'),
-      this.generateIOSSplashscreens(args.file, `./ios/${flags.appName}/Images.xcassets/Splashscreen.imageset`),
+      this.generateAndroidSplashscreens(args.file, 'android/app/src/main/res'),
+      this.generateIOSSplashscreens(args.file, `ios/${flags.appName}/Images.xcassets/Splashscreen.imageset`),
     ])
 
     this.log(green('✔'), `Generated splashscreens for '${cyan(flags.appName)}' app.`)

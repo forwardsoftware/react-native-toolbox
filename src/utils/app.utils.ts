@@ -8,10 +8,16 @@
 
 import { readFileSync } from 'node:fs'
 
-export function extractAppName() {
+export function extractAppName(): string | null {
   try {
-    const { name } = JSON.parse(readFileSync('./app.json', 'utf8'))
-    return name
+    const content = readFileSync('./app.json', 'utf8')
+    const parsed = JSON.parse(content)
+    
+    if (typeof parsed.name !== 'string' || parsed.name.trim() === '') {
+      return null
+    }
+    
+    return parsed.name
   } catch {
     return null
   }

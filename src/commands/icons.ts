@@ -62,7 +62,7 @@ The template icon file should be at least 1024x1024px.
     }
 
     if (!flags.appName) {
-      this.error(`${red('✘')} Failed to retrive ${cyan('appName')} value. Please specify it with the ${green('appName')} flag or check that ${cyan('app.json')} file exists. ${red('ABORTING')}`)
+      this.error(`${red('✘')} Failed to retrieve ${cyan('appName')} value. Please specify it with the ${green('appName')} flag or check that ${cyan('app.json')} file exists. ${red('ABORTING')}`)
     }
 
     this.log(yellow('≈'), `Generating icons for '${cyan(flags.appName)}' app...`)

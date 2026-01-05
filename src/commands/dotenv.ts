@@ -22,10 +22,18 @@ export default class Dotenv extends Command {
   ]
   static override flags = {
     help: Flags.help({ char: 'h' }),
+    verbose: Flags.boolean({
+      char: 'v',
+      default: false,
+      description: 'Print more detailed log messages.',
+    }),
   }
+  private _isVerbose: boolean = false
 
   public async run(): Promise<void> {
-    const { args } = await this.parse(Dotenv)
+    const { args, flags } = await this.parse(Dotenv)
+
+    this._isVerbose = flags.verbose
 
     const sourceEnvFilePath = `./.env.${args.environmentName}`
     const outputEnvFile = './.env'
@@ -35,24 +43,31 @@ export default class Dotenv extends Command {
       this.error(`Source file ${cyan(sourceEnvFilePath)} not found! ${red('ABORTING')}`)
     }
 
+    this.logVerbose(`${yellow('≈')} Source environment file: ${cyan(sourceEnvFilePath)}`)
     this.log(`${yellow('≈')} Generating .env from ${cyan(sourceEnvFilePath)} file...`)
 
     // Remove existing .env file
-    this.log(`${yellow('≈')} Removing existing .env file (if any)...`)
+    this.logVerbose(`${yellow('≈')} Removing existing .env file (if any)...`)
     try {
       await unlink(outputEnvFile)
-      this.log(`${green('✔')} Removed existing .env file.`)
+      this.logVerbose(`${green('✔')} Removed existing .env file.`)
     } catch {
-      this.log(`${red('✘')} No existing .env file to remove.`)
+      this.logVerbose(`${red('✘')} No existing .env file to remove.`)
     }
 
     // Copy new .env file
-    this.log(`${yellow('≈')} Generating new .env file...`)
+    this.logVerbose(`${yellow('≈')} Generating new .env file...`)
     try {
       await copyFile(sourceEnvFilePath, outputEnvFile)
       this.log(`${green('✔')} Generated new .env file.`)
     } catch (error) {
       this.error(error as Error)
+    }
+  }
+
+  private logVerbose(message?: string, ...args: unknown[]) {
+    if (this._isVerbose) {
+      this.log(message, ...args)
     }
   }
 }
