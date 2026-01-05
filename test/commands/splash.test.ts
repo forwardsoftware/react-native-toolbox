@@ -56,4 +56,12 @@ describe('splash', () => {
     // Expect 6 densities * 1 splashscreen = 6
     expect(androidSplashscreensCount).to.eq(6)
   })
+
+  it('runs splash with verbose flag and shows detailed output', async () => {
+    const {stdout} = await runCommand(['splash', '--appName', 'test', '-v'])
+
+    expect(stdout).to.contain("Generating splashscreens for 'test' app...")
+    expect(stdout).to.contain('Generating splashscreen')
+    expect(stdout).to.contain("Generated splashscreens for 'test' app.")
+  })
 })
