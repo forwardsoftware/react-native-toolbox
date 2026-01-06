@@ -6,13 +6,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import type { SplashscreenSize } from "./types.js"
+import type { IconSizeAndroid, IconSizeIOS, SplashscreenSize } from "./types.js"
 
 /**
  * Android Assets Sizes
  */
 
-export const ICON_SIZES_ANDROID = [
+export const ICON_SIZES_ANDROID: Array<IconSizeAndroid> = [
   {
     density: 'mdpi',
     size: 48,
@@ -72,7 +72,7 @@ export const SPLASHSCREEN_SIZES_ANDROID: Array<SplashscreenSize> = [
  * iOS Assets Sizes
  */
 
-export const ICON_SIZES_IOS = [
+export const ICON_SIZES_IOS: Array<IconSizeIOS> = [
   {
     baseSize: 20,
     name: 'Icon-Notification',

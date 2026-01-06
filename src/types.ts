@@ -4,6 +4,18 @@ export interface SplashscreenSize {
   width: number;
 }
 
+export interface IconSizeAndroid {
+  density: string;
+  size: number;
+}
+
+export interface IconSizeIOS {
+  baseSize: number;
+  idiom?: string;
+  name: string;
+  scales: number[];
+}
+
 export interface ContentJsonImage {
   filename: string;
   idiom: string;
