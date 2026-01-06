@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.0.1](https://github.com/forwardsoftware/react-native-toolbox/compare/v5.0.0...v5.0.1) (2026-01-06)
+
+
+### Bug Fixes
+
+* extract base command, improve type safety, add additional errors handling, and improve tests coverage ([#281](https://github.com/forwardsoftware/react-native-toolbox/issues/281)) ([69763d7](https://github.com/forwardsoftware/react-native-toolbox/commit/69763d7a82746554956b132bf828591a99d470ef))
+* implement code review findings - fix typos, add verbose flag to `dotenv`, improve error handling ([#279](https://github.com/forwardsoftware/react-native-toolbox/issues/279)) ([a2d3029](https://github.com/forwardsoftware/react-native-toolbox/commit/a2d302903913d98f5a327be14ed55bf05a3dff6a))
+
 ## [5.0.0](https://github.com/forwardsoftware/react-native-toolbox/compare/v4.1.12...v5.0.0) (2025-12-18)
 
 
