@@ -6,13 +6,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { readFileSync } from 'node:fs'
+import {readFile} from 'node:fs/promises'
 
-export function extractAppName() {
+export async function extractAppName(): Promise<string | undefined> {
   try {
-    const { name } = JSON.parse(readFileSync('./app.json', 'utf8'))
-    return name
+    const content = await readFile('./app.json', {encoding: 'utf8'})
+    const parsed = JSON.parse(content)
+
+    if (typeof parsed.name !== 'string' || parsed.name.trim() === '') {
+      return undefined
+    }
+
+    return parsed.name
   } catch {
-    return null
+    return undefined
   }
 }

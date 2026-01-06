@@ -59,4 +59,13 @@ describe('icons', () => {
     // Expect 5 densities * 2 launcher icons/density = 10
     expect(androidPngCount).to.eq(10)
   })
+
+  it('runs icons with verbose flag and shows detailed output', async () => {
+    const {stdout} = await runCommand(['icons', '--appName', 'test', '-v'])
+
+    expect(stdout).to.contain("Generating icons for 'test' app...")
+    expect(stdout).to.contain('Generating icon')
+    expect(stdout).to.contain("Icon '")
+    expect(stdout).to.contain("Generated icons for 'test' app.")
+  })
 })

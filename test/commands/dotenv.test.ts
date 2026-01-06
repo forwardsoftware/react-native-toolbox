@@ -49,4 +49,19 @@ describe('dotenv', () => {
     const envContent = fs.readFileSync('.env', 'utf8')
     expect(envContent).to.contain(`TEST=${testID}`)
   })
+
+  it('runs dotenv with verbose flag and shows detailed output', async () => {
+    // Arrange
+    const testID = randomUUID()
+    fs.writeFileSync('.env.dev', `TEST=${testID}`)
+
+    // Act
+    const {stdout} = await runCommand(['dotenv', 'dev', '-v'])
+
+    // Assert
+    expect(stdout).to.contain('Generating .env from ./.env.dev file...')
+    expect(stdout).to.contain('Source environment file:')
+    expect(stdout).to.contain('Removing existing .env file')
+    expect(stdout).to.contain('Generated new .env file.')
+  })
 })
