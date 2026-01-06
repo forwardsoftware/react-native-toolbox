@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { Args, Command, Flags } from '@oclif/core'
+import { Args, Flags } from '@oclif/core'
 import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import sharp from 'sharp'
@@ -17,8 +17,9 @@ import { SPLASHSCREEN_SIZES_ANDROID, SPLASHSCREEN_SIZES_IOS } from '../constants
 import { extractAppName } from '../utils/app.utils.js'
 import { cyan, green, red, yellow } from '../utils/color.utils.js'
 import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
+import { BaseCommand } from './base.js'
 
-export default class Splash extends Command {
+export default class Splash extends BaseCommand {
   static override args = {
     file: Args.string({
       default: './assets/splashscreen.png',
@@ -48,7 +49,7 @@ The template splashscreen file should be at least 1242x2208px.
       description: 'Print more detailed log messages.',
     }),
   }
-  private _isVerbose: boolean = false
+  private errors: string[] = []
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Splash)
@@ -71,6 +72,13 @@ The template splashscreen file should be at least 1242x2208px.
       this.generateAndroidSplashscreens(args.file, 'android/app/src/main/res'),
       this.generateIOSSplashscreens(args.file, `ios/${flags.appName}/Images.xcassets/Splashscreen.imageset`),
     ])
+
+    if (this.errors.length > 0) {
+      this.warn(`${yellow('⚠')} ${this.errors.length} asset(s) failed to generate:`)
+      for (const err of this.errors) {
+        this.log(`  - ${err}`)
+      }
+    }
 
     this.log(green('✔'), `Generated splashscreens for '${cyan(flags.appName)}' app.`)
   }
@@ -154,17 +162,12 @@ The template splashscreen file should be at least 1242x2208px.
 
       this.logVerbose(green('✔'), `Splashscreen '${cyan(outputPath)}' generated.`)
     } catch (error) {
+      this.errors.push(`Failed to generate: ${outputPath}`)
       this.log(red('✘'), `Failed to generate splashscreen '${cyan(outputPath)}':`, error)
     }
   }
 
   private getIOSAssetNameForDensity(density?: string): string {
     return `splashscreen${density ? `@${density}` : ''}.png`
-  }
-
-  private logVerbose(message?: string, ...args: unknown[]) {
-    if (this._isVerbose) {
-      this.log(message, ...args)
-    }
   }
 }

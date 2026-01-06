@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { Args, Command, Flags } from '@oclif/core'
+import { Args, Flags } from '@oclif/core'
 import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import sharp from 'sharp'
@@ -18,8 +18,9 @@ import { MaskType } from '../types.js'
 import { extractAppName } from '../utils/app.utils.js'
 import { cyan, green, red, yellow } from '../utils/color.utils.js'
 import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
+import { BaseCommand } from './base.js'
 
-export default class Icons extends Command {
+export default class Icons extends BaseCommand {
   static override args = {
     file: Args.string({
       default: './assets/icon.png',
@@ -49,7 +50,7 @@ The template icon file should be at least 1024x1024px.
       description: 'Print more detailed log messages.',
     }),
   }
-  private _isVerbose: boolean = false
+  private errors: string[] = []
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Icons)
@@ -73,6 +74,13 @@ The template icon file should be at least 1024x1024px.
       this.generateIOSIcons(args.file, `ios/${flags.appName}/Images.xcassets/AppIcon.appiconset`),
     ])
 
+    if (this.errors.length > 0) {
+      this.warn(`${yellow('⚠')} ${this.errors.length} asset(s) failed to generate:`)
+      for (const err of this.errors) {
+        this.log(`  - ${err}`)
+      }
+    }
+
     this.log(green('✔'), `Generated icons for '${cyan(flags.appName)}' app.`)
   }
 
@@ -93,6 +101,7 @@ The template icon file should be at least 1024x1024px.
 
       this.logVerbose(green('✔'), cyan('Android'), `Icon '${cyan(outputPath)}' generated.`)
     } catch (error) {
+      this.errors.push(`Failed to generate: ${outputPath}`)
       this.log(red('✘'), cyan('Android'), `Failed to generate icon '${cyan(outputPath)}':`, error)
     }
   }
@@ -148,6 +157,7 @@ The template icon file should be at least 1024x1024px.
 
       this.logVerbose(green('✔'), cyan('iOS'), `Icon '${cyan(filename)}' generated.`)
     } catch (error) {
+      this.errors.push(`Failed to generate: ${filename}`)
       this.log(red('✘'), cyan('iOS'), `Failed to generate icon '${cyan(filename)}'.`, error)
     }
   }
@@ -203,11 +213,5 @@ The template icon file should be at least 1024x1024px.
 
     const radius = Math.floor(size / 2)
     return Buffer.from(`<svg><circle cx="${radius}" cy="${radius}" r="${radius}" /></svg>`)
-  }
-
-  private logVerbose(message?: string, ...args: unknown[]) {
-    if (this._isVerbose) {
-      this.log(message, ...args)
-    }
   }
 }

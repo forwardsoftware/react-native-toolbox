@@ -234,3 +234,6 @@ oclif.manifest.json
 
 # TypeScript build info
 *.tsbuildinfo
+
+# npm lock file (this is a pnpm project)
+package-lock.json
