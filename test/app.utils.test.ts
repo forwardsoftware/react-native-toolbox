@@ -14,31 +14,31 @@ describe('extractAppName', () => {
     expect(await extractAppName()).to.equal('TestApp')
   })
 
-  it('returns null when app.json is missing', async () => {
+  it('returns undefined when app.json is missing', async () => {
     expect(await extractAppName()).to.be.undefined
   })
 
-  it('returns null when app.json has invalid JSON', async () => {
+  it('returns undefined when app.json has invalid JSON', async () => {
     fs.writeFileSync('app.json', 'not valid json')
     expect(await extractAppName()).to.be.undefined
   })
 
-  it('returns null when name property is missing', async () => {
+  it('returns undefined when name property is missing', async () => {
     fs.writeFileSync('app.json', JSON.stringify({version: '1.0.0'}))
     expect(await extractAppName()).to.be.undefined
   })
 
-  it('returns null when name property is empty string', async () => {
+  it('returns undefined when name property is empty string', async () => {
     fs.writeFileSync('app.json', JSON.stringify({name: ''}))
     expect(await extractAppName()).to.be.undefined
   })
 
-  it('returns null when name property is whitespace only', async () => {
+  it('returns undefined when name property is whitespace only', async () => {
     fs.writeFileSync('app.json', JSON.stringify({name: '   '}))
     expect(await extractAppName()).to.be.undefined
   })
 
-  it('returns null when name property is not a string', async () => {
+  it('returns undefined when name property is not a string', async () => {
     fs.writeFileSync('app.json', JSON.stringify({name: 123}))
     expect(await extractAppName()).to.be.undefined
   })
