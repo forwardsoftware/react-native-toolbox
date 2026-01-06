@@ -50,6 +50,8 @@ The template splashscreen file should be at least 1242x2208px.
     }),
   }
 
+  private errors: string[] = []
+
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Splash)
 
@@ -71,6 +73,11 @@ The template splashscreen file should be at least 1242x2208px.
       this.generateAndroidSplashscreens(args.file, 'android/app/src/main/res'),
       this.generateIOSSplashscreens(args.file, `ios/${flags.appName}/Images.xcassets/Splashscreen.imageset`),
     ])
+
+    if (this.errors.length > 0) {
+      this.warn(`${yellow('⚠')} ${this.errors.length} asset(s) failed to generate:`)
+      this.errors.forEach(err => this.log(`  - ${err}`))
+    }
 
     this.log(green('✔'), `Generated splashscreens for '${cyan(flags.appName)}' app.`)
   }
@@ -154,6 +161,7 @@ The template splashscreen file should be at least 1242x2208px.
 
       this.logVerbose(green('✔'), `Splashscreen '${cyan(outputPath)}' generated.`)
     } catch (error) {
+      this.errors.push(`Failed to generate: ${outputPath}`)
       this.log(red('✘'), `Failed to generate splashscreen '${cyan(outputPath)}':`, error)
     }
   }

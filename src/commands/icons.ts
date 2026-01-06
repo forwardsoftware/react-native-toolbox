@@ -51,6 +51,8 @@ The template icon file should be at least 1024x1024px.
     }),
   }
 
+  private errors: string[] = []
+
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Icons)
 
@@ -73,6 +75,11 @@ The template icon file should be at least 1024x1024px.
       this.generateIOSIcons(args.file, `ios/${flags.appName}/Images.xcassets/AppIcon.appiconset`),
     ])
 
+    if (this.errors.length > 0) {
+      this.warn(`${yellow('⚠')} ${this.errors.length} asset(s) failed to generate:`)
+      this.errors.forEach(err => this.log(`  - ${err}`))
+    }
+
     this.log(green('✔'), `Generated icons for '${cyan(flags.appName)}' app.`)
   }
 
@@ -93,6 +100,7 @@ The template icon file should be at least 1024x1024px.
 
       this.logVerbose(green('✔'), cyan('Android'), `Icon '${cyan(outputPath)}' generated.`)
     } catch (error) {
+      this.errors.push(`Failed to generate: ${outputPath}`)
       this.log(red('✘'), cyan('Android'), `Failed to generate icon '${cyan(outputPath)}':`, error)
     }
   }
@@ -148,6 +156,7 @@ The template icon file should be at least 1024x1024px.
 
       this.logVerbose(green('✔'), cyan('iOS'), `Icon '${cyan(filename)}' generated.`)
     } catch (error) {
+      this.errors.push(`Failed to generate: ${filename}`)
       this.log(red('✘'), cyan('iOS'), `Failed to generate icon '${cyan(filename)}'.`, error)
     }
   }
