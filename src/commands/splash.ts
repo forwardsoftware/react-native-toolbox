@@ -13,11 +13,11 @@ import sharp from 'sharp'
 
 import type { ContentJson, SplashscreenSize } from '../types.js'
 
-import { BaseCommand } from './base.js'
 import { SPLASHSCREEN_SIZES_ANDROID, SPLASHSCREEN_SIZES_IOS } from '../constants.js'
 import { extractAppName } from '../utils/app.utils.js'
 import { cyan, green, red, yellow } from '../utils/color.utils.js'
 import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
+import { BaseCommand } from './base.js'
 
 export default class Splash extends BaseCommand {
   static override args = {
@@ -49,7 +49,6 @@ The template splashscreen file should be at least 1242x2208px.
       description: 'Print more detailed log messages.',
     }),
   }
-
   private errors: string[] = []
 
   public async run(): Promise<void> {
@@ -76,7 +75,9 @@ The template splashscreen file should be at least 1242x2208px.
 
     if (this.errors.length > 0) {
       this.warn(`${yellow('⚠')} ${this.errors.length} asset(s) failed to generate:`)
-      this.errors.forEach(err => this.log(`  - ${err}`))
+      for (const err of this.errors) {
+        this.log(`  - ${err}`)
+      }
     }
 
     this.log(green('✔'), `Generated splashscreens for '${cyan(flags.appName)}' app.`)
