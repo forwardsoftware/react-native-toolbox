@@ -68,4 +68,19 @@ describe('icons', () => {
     expect(stdout).to.contain("Icon '")
     expect(stdout).to.contain("Generated icons for 'test' app.")
   })
+
+  it('handles corrupt image file gracefully', async () => {
+    const corruptFile = 'assets/corrupt-icon.png'
+    fs.writeFileSync(corruptFile, 'not a valid image')
+
+    try {
+      const {stdout} = await runCommand(['icons', '--appName', 'TestApp', corruptFile])
+
+      // Should handle error gracefully - verify error collection message appears
+      // Check if errors were reported (either via warning symbol or "failed to generate" text)
+      expect(stdout).to.match(/failed to generate|asset.*failed/i)
+    } finally {
+      // Cleanup is handled by afterEach
+    }
+  })
 })
