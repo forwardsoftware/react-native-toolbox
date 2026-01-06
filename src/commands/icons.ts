@@ -6,20 +6,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { Args, Command, Flags } from '@oclif/core'
+import { Args, Flags } from '@oclif/core'
 import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import sharp from 'sharp'
 
 import type { ContentJson } from '../types.js'
 
+import { BaseCommand } from './base.js'
 import { ICON_SIZES_ANDROID, ICON_SIZES_IOS } from '../constants.js'
 import { MaskType } from '../types.js'
 import { extractAppName } from '../utils/app.utils.js'
 import { cyan, green, red, yellow } from '../utils/color.utils.js'
 import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
 
-export default class Icons extends Command {
+export default class Icons extends BaseCommand {
   static override args = {
     file: Args.string({
       default: './assets/icon.png',
@@ -49,7 +50,6 @@ The template icon file should be at least 1024x1024px.
       description: 'Print more detailed log messages.',
     }),
   }
-  private _isVerbose: boolean = false
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Icons)
@@ -203,11 +203,5 @@ The template icon file should be at least 1024x1024px.
 
     const radius = Math.floor(size / 2)
     return Buffer.from(`<svg><circle cx="${radius}" cy="${radius}" r="${radius}" /></svg>`)
-  }
-
-  private logVerbose(message?: string, ...args: unknown[]) {
-    if (this._isVerbose) {
-      this.log(message, ...args)
-    }
   }
 }

@@ -6,19 +6,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { Args, Command, Flags } from '@oclif/core'
+import { Args, Flags } from '@oclif/core'
 import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import sharp from 'sharp'
 
 import type { ContentJson, SplashscreenSize } from '../types.js'
 
+import { BaseCommand } from './base.js'
 import { SPLASHSCREEN_SIZES_ANDROID, SPLASHSCREEN_SIZES_IOS } from '../constants.js'
 import { extractAppName } from '../utils/app.utils.js'
 import { cyan, green, red, yellow } from '../utils/color.utils.js'
 import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
 
-export default class Splash extends Command {
+export default class Splash extends BaseCommand {
   static override args = {
     file: Args.string({
       default: './assets/splashscreen.png',
@@ -48,7 +49,6 @@ The template splashscreen file should be at least 1242x2208px.
       description: 'Print more detailed log messages.',
     }),
   }
-  private _isVerbose: boolean = false
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Splash)
@@ -160,11 +160,5 @@ The template splashscreen file should be at least 1242x2208px.
 
   private getIOSAssetNameForDensity(density?: string): string {
     return `splashscreen${density ? `@${density}` : ''}.png`
-  }
-
-  private logVerbose(message?: string, ...args: unknown[]) {
-    if (this._isVerbose) {
-      this.log(message, ...args)
-    }
   }
 }
