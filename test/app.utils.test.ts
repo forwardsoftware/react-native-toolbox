@@ -9,37 +9,37 @@ describe('extractAppName', () => {
     rimrafSync('app.json')
   })
 
-  it('returns name from valid app.json', () => {
+  it('returns name from valid app.json', async () => {
     fs.writeFileSync('app.json', JSON.stringify({name: 'TestApp'}))
-    expect(extractAppName()).to.equal('TestApp')
+    expect(await extractAppName()).to.equal('TestApp')
   })
 
-  it('returns null when app.json is missing', () => {
-    expect(extractAppName()).to.be.null
+  it('returns null when app.json is missing', async () => {
+    expect(await extractAppName()).to.be.undefined
   })
 
-  it('returns null when app.json has invalid JSON', () => {
+  it('returns null when app.json has invalid JSON', async () => {
     fs.writeFileSync('app.json', 'not valid json')
-    expect(extractAppName()).to.be.null
+    expect(await extractAppName()).to.be.undefined
   })
 
-  it('returns null when name property is missing', () => {
+  it('returns null when name property is missing', async () => {
     fs.writeFileSync('app.json', JSON.stringify({version: '1.0.0'}))
-    expect(extractAppName()).to.be.null
+    expect(await extractAppName()).to.be.undefined
   })
 
-  it('returns null when name property is empty string', () => {
+  it('returns null when name property is empty string', async () => {
     fs.writeFileSync('app.json', JSON.stringify({name: ''}))
-    expect(extractAppName()).to.be.null
+    expect(await extractAppName()).to.be.undefined
   })
 
-  it('returns null when name property is whitespace only', () => {
+  it('returns null when name property is whitespace only', async () => {
     fs.writeFileSync('app.json', JSON.stringify({name: '   '}))
-    expect(extractAppName()).to.be.null
+    expect(await extractAppName()).to.be.undefined
   })
 
-  it('returns null when name property is not a string', () => {
+  it('returns null when name property is not a string', async () => {
     fs.writeFileSync('app.json', JSON.stringify({name: 123}))
-    expect(extractAppName()).to.be.null
+    expect(await extractAppName()).to.be.undefined
   })
 })
