@@ -1,4 +1,0 @@
-{
-  "extends": ["oclif", "oclif-typescript", "prettier"],
-  "ignores": ["/dist"]
-}

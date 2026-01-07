@@ -1,8 +1,11 @@
-import {runCommand} from '@oclif/test'
 import {expect} from 'chai'
 import fs from 'node:fs'
 import path from 'node:path'
 import {rimrafSync} from 'rimraf'
+
+import {ExitCode} from '../../src/cli/errors.js'
+import Splash from '../../src/commands/splash.js'
+import {runCommand} from '../helpers/run-command.js'
 
 describe('splash', () => {
   before(() => {
@@ -19,13 +22,13 @@ describe('splash', () => {
   })
 
   it('should fail to run splash when no app.json file exists', async () => {
-    const {error} = await runCommand(['splash'])
+    const {error} = await runCommand(Splash, [])
 
-    expect(error?.oclif?.exit).to.equal(2)
+    expect(error?.exitCode).to.equal(ExitCode.CONFIG_ERROR)
   })
 
   it('runs splash --appName test and generates expected files', async () => {
-    const {stdout} = await runCommand(['splash', '--appName', 'test'])
+    const {stdout} = await runCommand(Splash, ['--appName', 'test'])
 
     expect(stdout).to.contain("Generating splashscreens for 'test' app...")
     expect(stdout).to.contain("Generated splashscreens for 'test' app.")
@@ -58,7 +61,7 @@ describe('splash', () => {
   })
 
   it('runs splash with verbose flag and shows detailed output', async () => {
-    const {stdout} = await runCommand(['splash', '--appName', 'test', '-v'])
+    const {stdout} = await runCommand(Splash, ['--appName', 'test', '-v'])
 
     expect(stdout).to.contain("Generating splashscreens for 'test' app...")
     expect(stdout).to.contain('Generating splashscreen')
@@ -70,7 +73,7 @@ describe('splash', () => {
     fs.writeFileSync(corruptFile, 'not a valid image')
 
     try {
-      const {stdout} = await runCommand(['splash', '--appName', 'TestApp', corruptFile])
+      const {stdout} = await runCommand(Splash, ['--appName', 'TestApp', corruptFile])
 
       // Should handle error gracefully - verify error collection message appears
       // Check if errors were reported (either via warning symbol or "failed to generate" text)

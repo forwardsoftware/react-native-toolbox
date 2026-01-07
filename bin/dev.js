@@ -1,5 +1,5 @@
 #!/usr/bin/env -S node --loader ts-node/esm --disable-warning=ExperimentalWarning
 
-import {execute} from '@oclif/core'
+import { runCLI } from '../src/cli/runner.js'
 
-await execute({development: true, dir: import.meta.url})
+await runCLI(process.argv.slice(2))

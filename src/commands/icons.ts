@@ -6,13 +6,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { Args, Flags } from '@oclif/core'
 import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import sharp from 'sharp'
 
 import type { ContentJson } from '../types.js'
+import type { CommandConfig, ParsedArgs } from './base.js'
 
+import { ExitCode } from '../cli/errors.js'
 import { ICON_SIZES_ANDROID, ICON_SIZES_IOS } from '../constants.js'
 import { MaskType } from '../types.js'
 import { extractAppName } from '../utils/app.utils.js'
@@ -21,57 +22,66 @@ import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
 import { BaseCommand } from './base.js'
 
 export default class Icons extends BaseCommand {
-  static override args = {
-    file: Args.string({
-      default: './assets/icon.png',
-      description: 'Input icon file',
-      required: false,
-    }),
-  }
-  static override description = `Generate app icons using a file as template.
+  readonly config: CommandConfig = {
+    args: [
+      {
+        default: './assets/icon.png',
+        description: 'Input icon file',
+        name: 'file',
+        required: false,
+      },
+    ],
+    description: `Generate app icons using a file as template.
 
-The template icon file should be at least 1024x1024px.
-`
-  static override examples = [
-    '<%= config.bin %> <%= command.id %>',
-  ]
-  static override flags = {
-    appName: Flags.string({
-      char: 'a',
-      default: extractAppName,
-      description: "App name used to build output assets path. Default is retrieved from 'app.json' file.",
-    }),
-    help: Flags.help({
-      char: 'h',
-    }),
-    verbose: Flags.boolean({
-      char: 'v',
-      default: false,
-      description: 'Print more detailed log messages.',
-    }),
+The template icon file should be at least 1024x1024px.`,
+    examples: ['<%= config.bin %> <%= command.id %>'],
+    flags: {
+      appName: {
+        default: extractAppName,
+        description: "App name used to build output assets path. Default is retrieved from 'app.json' file.",
+        short: 'a',
+        type: 'string',
+      },
+      help: {
+        description: 'Show help',
+        short: 'h',
+        type: 'boolean',
+      },
+      verbose: {
+        default: false,
+        description: 'Print more detailed log messages.',
+        short: 'v',
+        type: 'boolean',
+      },
+    },
+    name: 'icons',
   }
+
   private errors: string[] = []
 
-  public async run(): Promise<void> {
-    const { args, flags } = await this.parse(Icons)
+  public async execute(parsed: ParsedArgs): Promise<void> {
+    const { args, flags } = parsed
+    const file = args.file!
+    const appName = flags.appName as string | undefined
 
-    this._isVerbose = flags.verbose
-
-    const sourceFilesExists = checkAssetFile(args.file)
+    const sourceFilesExists = checkAssetFile(file)
     if (!sourceFilesExists) {
-      this.error(`${red('✘')} Source file ${cyan(args.file)} not found! ${red('ABORTING')}`)
+      this.error(`${red('✘')} Source file ${cyan(file)} not found! ${red('ABORTING')}`, ExitCode.FILE_NOT_FOUND)
     }
 
-    if (!flags.appName) {
-      this.error(`${red('✘')} Failed to retrieve ${cyan('appName')} value. Please specify it with the ${green('appName')} flag or check that ${cyan('app.json')} file exists. ${red('ABORTING')}`)
+    if (!appName) {
+      this.error(
+        `${red('✘')} Failed to retrieve ${cyan('appName')} value. Please specify it with the ${green('appName')} flag or check that ${cyan('app.json')} file exists. ${red('ABORTING')}`,
+        ExitCode.CONFIG_ERROR,
+      )
     }
 
-    this.log(yellow('≈'), `Generating icons for '${cyan(flags.appName)}' app...`)
+    this.log(yellow('≈'), `Generating icons for '${cyan(appName)}' app...`)
 
     // Run both iOS and Android tasks in parallel
     await Promise.all([
-      this.generateAndroidIcons(args.file, 'android/app/src/main'),
-      this.generateIOSIcons(args.file, `ios/${flags.appName}/Images.xcassets/AppIcon.appiconset`),
+      this.generateAndroidIcons(file, 'android/app/src/main'),
+      this.generateIOSIcons(file, `ios/${appName}/Images.xcassets/AppIcon.appiconset`),
     ])
 
     if (this.errors.length > 0) {
@@ -81,7 +91,7 @@ The template icon file should be at least 1024x1024px.
       }
     }
 
-    this.log(green('✔'), `Generated icons for '${cyan(flags.appName)}' app.`)
+    this.log(green('✔'), `Generated icons for '${cyan(appName)}' app.`)
   }
 
   private async generateAndroidIcon(inputPath: string, outputPath: string, size: number, mask: Buffer) {

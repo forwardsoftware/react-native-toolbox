@@ -1,8 +1,11 @@
-import {runCommand} from '@oclif/test'
 import {expect} from 'chai'
 import {randomUUID} from 'node:crypto'
 import fs from 'node:fs'
 import {rimrafSync} from 'rimraf'
+
+import {ExitCode} from '../../src/cli/errors.js'
+import Dotenv from '../../src/commands/dotenv.js'
+import {runCommand} from '../helpers/run-command.js'
 
 describe('dotenv', () => {
   afterEach(() => {
@@ -10,9 +13,9 @@ describe('dotenv', () => {
   })
 
   it('should fail to run dotenv when no environmentName is specified', async () => {
-    const {error} = await runCommand(['dotenv'])
+    const {error} = await runCommand(Dotenv, [])
 
-    expect(error?.oclif?.exit).to.equal(2)
+    expect(error?.exitCode).to.equal(ExitCode.INVALID_ARGUMENT)
   })
 
   it('runs dotenv dev', async () => {
@@ -23,7 +26,7 @@ describe('dotenv', () => {
 
     // Act
 
-    const {stdout} = await runCommand(['dotenv', 'dev'])
+    const {stdout} = await runCommand(Dotenv, ['dev'])
 
     // Assert
 
@@ -41,7 +44,7 @@ describe('dotenv', () => {
 
     // Act
 
-    const {stdout} = await runCommand(['dotenv', 'prod'])
+    const {stdout} = await runCommand(Dotenv, ['prod'])
 
     // Assert
     expect(stdout).to.contain('Generating .env from ./.env.prod file...')
@@ -56,7 +59,7 @@ describe('dotenv', () => {
     fs.writeFileSync('.env.dev', `TEST=${testID}`)
 
     // Act
-    const {stdout} = await runCommand(['dotenv', 'dev', '-v'])
+    const {stdout} = await runCommand(Dotenv, ['dev', '-v'])
 
     // Assert
     expect(stdout).to.contain('Generating .env from ./.env.dev file...')

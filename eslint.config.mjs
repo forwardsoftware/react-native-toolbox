@@ -1,22 +1,18 @@
-import {includeIgnoreFile} from '@eslint/compat'
-import oclif from 'eslint-config-oclif'
-import prettier from 'eslint-config-prettier'
-import path from 'node:path'
-import {fileURLToPath} from 'node:url'
+import { defineConfig } from "eslint/config";
+import prettier from "eslint-config-prettier";
+import tseslint from "typescript-eslint";
 
-const gitignorePath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '.gitignore')
-
-export default [
-  includeIgnoreFile(gitignorePath),
-  ...oclif,
+export default defineConfig(
+  {
+    ignores: ["dist/", "node_modules/", "coverage/", ".nyc_output/"],
+  },
+  tseslint.configs.recommended,
   prettier,
   {
+    // Test files use Chai's expect().to.be.true style which triggers this rule
+    files: ["test/**/*.ts"],
     rules: {
-      // Allow util.styleText even though it's marked as experimental by ESLint
-      // It's available and stable in Node.js 22.13.0+ (our minimum required version)
-      'n/no-unsupported-features/node-builtins': ['error', {
-        ignores: ['util.styleText']
-      }]
-    }
+      "@typescript-eslint/no-unused-expressions": "off",
+    },
   }
-]
+);

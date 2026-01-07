@@ -17,14 +17,12 @@
   "homepage": "https://github.com/forwardsoftware/react-native-toolbox#readme",
   "bugs": "https://github.com/forwardsoftware/react-native-toolbox/issues",
   "scripts": {
-    "cleanup": "rimraf android/ ios/ dist/ .nyc_output/ oclif.manifest.json .env",
+    "cleanup": "rimraf android/ ios/ dist/ .nyc_output/ .env",
     "build": "rimraf dist && tsc -b",
     "lint": "eslint",
-    "postpack": "rimraf oclif.manifest.json",
-    "posttest": "pnpm run lint",
-    "prepack": "oclif manifest && oclif readme",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif readme && git add README.md"
+    "check": "pnpm run lint && pnpm run test",
+    "prepack": "pnpm build"
   },
   "engines": {
     "node": ">=22.13.0"
@@ -34,42 +32,26 @@
   "types": "dist/index.d.ts",
   "files": [
     "./bin",
-    "./dist",
-    "./oclif.manifest.json"
+    "./dist"
   ],
   "bin": {
     "rn-toolbox": "bin/run.js"
   },
-  "oclif": {
-    "bin": "rn-toolbox",
-    "dirname": "rn-toolbox",
-    "commands": "./dist/commands",
-    "plugins": [
-      "@oclif/plugin-help"
-    ],
-    "topicSeparator": " "
-  },
   "packageManager": "pnpm@10.17.0+sha512.fce8a3dd29a4ed2ec566fb53efbb04d8c44a0f05bc6f24a73046910fb9c3ce7afa35a0980500668fa3573345bd644644fa98338fa168235c80f4aa17aa17fbef",
   "dependencies": {
-    "@oclif/core": "^4.5.2",
-    "@oclif/plugin-help": "^6.2.32",
     "sharp": "^0.34.1"
   },
   "devDependencies": {
-    "@eslint/compat": "^2",
-    "@oclif/prettier-config": "^0.2.1",
-    "@oclif/test": "^4",
     "@types/chai": "^5",
     "@types/mocha": "^10",
     "@types/node": "^25",
     "chai": "^6",
     "eslint": "^9",
-    "eslint-config-oclif": "^6",
     "eslint-config-prettier": "^10",
     "mocha": "^11",
-    "oclif": "^4.22.6",
     "rimraf": "^6",
     "ts-node": "^10",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-eslint": "^8.52.0"
   }
 }
