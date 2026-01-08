@@ -18,7 +18,7 @@ import Icons from '../commands/icons.js'
 import Splash from '../commands/splash.js'
 import { CommandError, ExitCode } from './errors.js'
 import { generateGlobalHelp } from './help.js'
-import { log } from './output.js'
+import { error, log } from './output.js'
 
 // Command registry - maps command names to command classes
 const commands: Record<string, new () => BaseCommand> = {
@@ -84,10 +84,7 @@ export async function runCLI(argv: string[]): Promise<void> {
 
   if (!CommandClass) {
     const availableCommands = Object.keys(commands).join(', ')
-    console.error(`Unknown command: ${commandName}`)
-    console.error(`Available commands: ${availableCommands}`)
-    console.error(`Run 'rn-toolbox --help' for usage information.`)
-    process.exit(ExitCode.INVALID_ARGUMENT)
+    error(`Unknown command: ${commandName}\nAvailable commands: ${availableCommands}\nRun 'rn-toolbox --help' for usage information.`, ExitCode.INVALID_ARGUMENT)
   }
 
   // Run the command with remaining args
@@ -97,8 +94,7 @@ export async function runCLI(argv: string[]): Promise<void> {
     await command.run(argv.slice(1))
   } catch (err) {
     if (err instanceof CommandError) {
-      console.error(err.message)
-      process.exit(err.exitCode)
+      error(err.message, err.exitCode)
     }
 
     throw err
