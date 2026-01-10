@@ -46,11 +46,10 @@ export default class MyCommand extends BaseCommand {
   async execute(parsed: ParsedArgs): Promise<void> {
     const { args, flags } = parsed
     // Implementation here
-  }
 
-  // logVerbose() is inherited from BaseCommand
+    // logVerbose() is inherited from BaseCommand
     if (this.flags?.verbose) {
-      this.log(message)
+      this.logVerbose(message)
     }
   }
 }
@@ -71,7 +70,6 @@ When adding new asset types, define sizes in `src/constants.ts` as typed arrays.
 ### After Creating a Command
 
 1. Run `pnpm build` to compile TypeScript
-2. Run `oclif manifest` to update the command registry
 3. Create tests in `test/commands/{name}.test.ts`
 4. Test locally via `./bin/dev.js {command} --appName TestApp`
 
@@ -85,11 +83,10 @@ When adding new asset types, define sizes in `src/constants.ts` as typed arrays.
 
 ## Command Checklist
 
-- [ ] Command extends `Command` from `@oclif/core`
+- [ ] Extends `BaseCommand` from `src/commands/base.ts`
 - [ ] Static properties defined: `args`, `flags`, `description`, `examples`
 - [ ] Verbose logging support with `-v` flag
 - [ ] ESM imports with `.js` extensions
 - [ ] MPL-2.0 license header present
 - [ ] Colors used from `utils/color.utils.ts`
 - [ ] Tests created in `test/commands/`
-- [ ] Command registry updated via `oclif manifest`

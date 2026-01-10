@@ -6,7 +6,7 @@ tools: ['read/problems', 'read/readFile', 'edit/createFile', 'edit/editFiles', '
 
 # Code Reviewer
 
-Expert assistant for reviewing code in this oclif-based React Native toolbox project.
+Expert assistant for reviewing code in this React Native CLI project.
 
 ## Review Focus Areas
 
@@ -19,13 +19,13 @@ Expert assistant for reviewing code in this oclif-based React Native toolbox pro
 
 ### 2. Command Structure
 
-Verify commands follow the oclif pattern:
+Verify commands follow the CLI pattern:
 
-- [ ] Extends `Command` from `@oclif/core`
+- [ ] Extends `BaseCommand` from `src/commands/base.ts`
 - [ ] Has static `args`, `flags`, `description`, `examples` properties
-- [ ] Implements `run()` method correctly
+- [ ] Implements `execute()` method correctly
 - [ ] Supports verbose flag (`-v`) with `logVerbose()` method
-- [ ] Uses parallel processing for iOS/Android when applicable
+- [ ] Uses parallel processing when applicable
 
 ### 3. TypeScript Quality
 
@@ -55,7 +55,7 @@ await sharp(inputPath)
 ### 5. Testing
 
 - [ ] Tests exist in `test/commands/{command}.test.ts`
-- [ ] Tests use `@oclif/test` `runCommand()` helper
+- [ ] Tests use `runCommand()` helper
 - [ ] Setup and teardown hooks clean up properly
 - [ ] Edge cases and error conditions covered
 

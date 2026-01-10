@@ -1,5 +1,5 @@
 ---
-description: "Debug issues with CLI commands, image generation, and test failures in this oclif project."
+description: "Debug issues with CLI commands, image generation, and test failures in this project."
 name: "Debugger"
 tools: ['execute/testFailure', 'execute/runTests', 'read/terminalLastCommand', 'read/problems', 'read/readFile', 'edit/editFiles', 'search', 'web/fetch', 'todo']
 ---

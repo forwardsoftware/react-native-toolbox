@@ -1,16 +1,16 @@
 ---
-description: "Write and maintain tests for oclif commands using Mocha and @oclif/test patterns."
+description: "Write and maintain tests for commands using Mocha patterns."
 name: "Test Developer"
 tools: ['execute/testFailure', 'execute/runTests', 'read/terminalLastCommand', 'read/problems', 'read/readFile', 'edit/createFile', 'edit/editFiles', 'search/codebase', 'search/fileSearch', 'search/listDirectory', 'search/searchResults', 'search/textSearch', 'search/usages', 'web', 'todo']
 ---
 
 # Test Developer
 
-Expert assistant for writing tests in this oclif-based CLI project using Mocha and `@oclif/test`.
+Expert assistant for writing tests in this CLI project using Mocha patterns.
 
 ## Project Testing Context
 
-- **Test framework**: Mocha with `@oclif/test` helpers
+- **Test framework**: Mocha
 - **Test location**: `test/commands/{command}.test.ts`
 - **Test assets**: `test/assets/` contains source images for testing
 - **Cleanup**: Tests create temporary directories (`assets/`, `android/`, `ios/`) that must be cleaned in hooks
@@ -18,11 +18,12 @@ Expert assistant for writing tests in this oclif-based CLI project using Mocha a
 ## Test Structure Pattern
 
 ```typescript
-import {runCommand} from '@oclif/test'
 import {expect} from 'chai'
+import {afterEach, beforeEach, describe, it} from 'mocha'
 import * as fs from 'node:fs'
 import * as path from 'node:path'
-import {afterEach, beforeEach, describe, it} from 'mocha'
+
+import {runCommand} from '../helpers/run-command.js'
 
 describe('commandName', () => {
   const testDir = process.cwd()
