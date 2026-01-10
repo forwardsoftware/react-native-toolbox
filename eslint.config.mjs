@@ -1,12 +1,11 @@
-import { defineConfig } from "eslint/config";
 import prettier from "eslint-config-prettier";
 import tseslint from "typescript-eslint";
 
-export default defineConfig(
+export default [
   {
     ignores: ["dist/", "node_modules/", "coverage/", ".nyc_output/"],
   },
-  tseslint.configs.recommended,
+  ...tseslint.configs.recommended,
   prettier,
   {
     // Test files use Chai's expect().to.be.true style which triggers this rule
@@ -14,5 +13,5 @@ export default defineConfig(
     rules: {
       "@typescript-eslint/no-unused-expressions": "off",
     },
-  }
-);
+  },
+];
