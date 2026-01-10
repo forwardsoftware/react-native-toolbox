@@ -1,7 +1,8 @@
 # Migration Plan: Mocha → Node.js Test Runner
 
-**Status:** Pending  
+**Status:** Ready for Implementation  
 **Created:** 2026-01-05  
+**Updated:** 2026-01-11  
 **Target:** Replace Mocha/Chai with Node.js built-in test runner, tsx, and node:assert
 
 ---
@@ -84,6 +85,46 @@
 
 - [ ] Replace assertions (same patterns as 2.2)
 
+#### 2.4 Migrate app.utils.test.ts
+
+- [ ] Update imports:
+  ```typescript
+  // Remove
+  import {expect} from 'chai'
+  
+  // Add
+  import assert from 'node:assert/strict'
+  import {afterEach, describe, it} from 'node:test'
+  ```
+
+- [ ] Replace assertions:
+  | Before | After |
+  |--------|-------|
+  | `expect(await extractAppName()).to.equal('TestApp')` | `assert.equal(await extractAppName(), 'TestApp')` |
+  | `expect(await extractAppName()).to.be.undefined` | `assert.equal(await extractAppName(), undefined)` |
+
+#### 2.5 Migrate color.utils.test.ts
+
+- [ ] Update imports (same pattern as 2.4)
+
+- [ ] Replace assertions:
+  | Before | After |
+  |--------|-------|
+  | `expect(result).to.include('test')` | `assert.ok(result.includes('test'))` |
+  | `expect(result).to.be.a('string')` | `assert.equal(typeof result, 'string')` |
+
+#### 2.6 Migrate file-utils.test.ts
+
+- [ ] Update imports (same pattern as 2.4)
+
+- [ ] Replace assertions:
+  | Before | After |
+  |--------|-------|
+  | `expect(result).to.be.true` | `assert.ok(result)` |
+  | `expect(result).to.be.false` | `assert.equal(result, false)` |
+  | `expect(fs.existsSync(dirPath)).to.be.true` | `assert.ok(fs.existsSync(dirPath))` |
+  | `expect(fs.statSync(dirPath).isDirectory()).to.be.true` | `assert.ok(fs.statSync(dirPath).isDirectory())` |
+
 ---
 
 ### Phase 3: Update Configuration Files
@@ -94,12 +135,14 @@
   ```json
   {
     "scripts": {
-      "cleanup": "rimraf android/ ios/ dist/ coverage/ oclif.manifest.json .env",
+      "cleanup": "node -e \"const fs=require('fs');['android','ios','dist','coverage','.nyc_output','.env','tsconfig.tsbuildinfo'].forEach(p=>fs.rmSync(p,{force:true,recursive:true}))\"",
       "test": "node --import tsx --test --experimental-test-coverage 'test/**/*.test.ts'",
       "posttest": "pnpm run lint"
     }
   }
   ```
+
+  > **Note:** The test command runs tests in parallel by default. If file-based tests conflict, add `--test-concurrency=1`.
 
 - [ ] Remove devDependencies:
   - `mocha`
@@ -166,9 +209,10 @@
 - [ ] Update test patterns and examples
 - [ ] Update imports in code examples
 
-#### 4.3 Update TODO.md
+#### 4.3 Update AGENTS.md
 
-- [ ] Update test file references (remove Mocha-specific notes)
+- [ ] Update "Testing Instructions" section to reference Node.js test runner
+- [ ] Update test command examples
 
 ---
 
@@ -208,10 +252,13 @@
 | `expect(x).to.eq(y)` | `assert.equal(x, y)` |
 | `expect(x).to.be.true` | `assert.ok(x)` |
 | `expect(x).to.be.false` | `assert.equal(x, false)` |
+| `expect(x).to.be.undefined` | `assert.equal(x, undefined)` |
 | `expect(x).to.contain(y)` | `assert.ok(x.includes(y))` |
+| `expect(x).to.include(y)` | `assert.ok(x.includes(y))` |
 | `expect(x).to.match(/re/)` | `assert.match(x, /re/)` |
 | `expect(x).to.deep.equal(y)` | `assert.deepEqual(x, y)` |
 | `expect(x).to.be.null` | `assert.equal(x, null)` |
+| `expect(x).to.be.a('string')` | `assert.equal(typeof x, 'string')` |
 | `expect(fn).to.throw()` | `assert.throws(fn)` |
 
 ---
@@ -219,19 +266,24 @@
 ## Reference: Test File Template
 
 ```typescript
-import {runCommand} from '@oclif/test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import {after, afterEach, before, beforeEach, describe, it} from 'node:test'
-import {rimrafSync} from 'rimraf'
+
+import {ExitCode} from '../../src/cli/errors.js'
+import CommandClass from '../../src/commands/{command}.js'
+import {runCommand} from '../helpers/run-command.js'
 
 describe('command-name', {timeout: 60_000}, () => {
   before(() => {
-    // One-time setup
+    // One-time setup (e.g., create assets directory, copy test files)
+    fs.mkdirSync('assets', {recursive: true})
+    fs.copyFileSync('test/assets/icon.png', 'assets/icon.png')
   })
 
   after(() => {
     // One-time teardown
+    fs.rmSync('assets', {force: true, recursive: true})
   })
 
   beforeEach(() => {
@@ -239,20 +291,23 @@ describe('command-name', {timeout: 60_000}, () => {
   })
 
   afterEach(() => {
-    // Per-test teardown
+    // Per-test teardown (e.g., remove generated directories)
+    for (const dir of ['android', 'ios']) {
+      fs.rmSync(dir, {force: true, recursive: true})
+    }
   })
 
   it('should do something', async () => {
-    const {stdout, error} = await runCommand(['command', '--flag', 'value'])
+    const {stdout, error} = await runCommand(CommandClass, ['--flag', 'value'])
     
     assert.ok(stdout.includes('expected output'))
     assert.equal(error, undefined)
   })
 
   it('should fail gracefully', async () => {
-    const {error} = await runCommand(['command'])
+    const {error} = await runCommand(CommandClass, [])
     
-    assert.equal(error?.oclif?.exit, 2)
+    assert.equal(error?.exitCode, ExitCode.INVALID_ARGUMENT)
   })
 })
 ```
@@ -263,22 +318,17 @@ describe('command-name', {timeout: 60_000}, () => {
 
 ```diff
   "devDependencies": {
-    "@eslint/compat": "^2",
-    "@oclif/prettier-config": "^0.2.1",
-    "@oclif/test": "^4",
 -   "@types/chai": "^5",
 -   "@types/mocha": "^10",
     "@types/node": "^25",
 -   "chai": "^6",
     "eslint": "^9",
-    "eslint-config-oclif": "^6",
     "eslint-config-prettier": "^10",
 -   "mocha": "^11",
-    "oclif": "^4.22.6",
-    "rimraf": "^6",
 -   "ts-node": "^10",
 +   "tsx": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-eslint": "^8.52.0"
   }
 ```
 
