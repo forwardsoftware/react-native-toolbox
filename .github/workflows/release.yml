@@ -61,11 +61,5 @@ jobs:
       - name: Build CLI
         run: pnpm build
 
-      - name: Prepare package
-        run: pnpm prepack
-
       - name: Publish package
         run: npm publish
-
-      - name: Cleanup
-        run: pnpm run postpack

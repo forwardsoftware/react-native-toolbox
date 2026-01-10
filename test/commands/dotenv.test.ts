@@ -1,18 +1,30 @@
-import {runCommand} from '@oclif/test'
+/*
+ * Copyright (c) 2025 ForWarD Software (https://forwardsoftware.solutions/)
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 import {expect} from 'chai'
 import {randomUUID} from 'node:crypto'
 import fs from 'node:fs'
-import {rimrafSync} from 'rimraf'
+
+import {ExitCode} from '../../src/cli/errors.js'
+import Dotenv from '../../src/commands/dotenv.js'
+import {runCommand} from '../helpers/run-command.js'
 
 describe('dotenv', () => {
   afterEach(() => {
-    rimrafSync(['.env', '.env.dev', '.env.prod'])
+    for (const file of ['.env', '.env.dev', '.env.prod']) {
+      fs.rmSync(file, {force: true})
+    }
   })
 
   it('should fail to run dotenv when no environmentName is specified', async () => {
-    const {error} = await runCommand(['dotenv'])
+    const {error} = await runCommand(Dotenv, [])
 
-    expect(error?.oclif?.exit).to.equal(2)
+    expect(error?.exitCode).to.equal(ExitCode.INVALID_ARGUMENT)
   })
 
   it('runs dotenv dev', async () => {
@@ -23,7 +35,7 @@ describe('dotenv', () => {
 
     // Act
 
-    const {stdout} = await runCommand(['dotenv', 'dev'])
+    const {stdout} = await runCommand(Dotenv, ['dev'])
 
     // Assert
 
@@ -41,7 +53,7 @@ describe('dotenv', () => {
 
     // Act
 
-    const {stdout} = await runCommand(['dotenv', 'prod'])
+    const {stdout} = await runCommand(Dotenv, ['prod'])
 
     // Assert
     expect(stdout).to.contain('Generating .env from ./.env.prod file...')
@@ -56,7 +68,7 @@ describe('dotenv', () => {
     fs.writeFileSync('.env.dev', `TEST=${testID}`)
 
     // Act
-    const {stdout} = await runCommand(['dotenv', 'dev', '-v'])
+    const {stdout} = await runCommand(Dotenv, ['dev', '-v'])
 
     // Assert
     expect(stdout).to.contain('Generating .env from ./.env.dev file...')

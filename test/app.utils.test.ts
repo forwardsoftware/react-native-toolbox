@@ -1,12 +1,11 @@
 import {expect} from 'chai'
 import fs from 'node:fs'
-import {rimrafSync} from 'rimraf'
 
 import {extractAppName} from '../src/utils/app.utils.js'
 
 describe('extractAppName', () => {
   afterEach(() => {
-    rimrafSync('app.json')
+    fs.rmSync('app.json', {force: true})
   })
 
   it('returns name from valid app.json', async () => {

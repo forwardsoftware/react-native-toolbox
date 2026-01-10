@@ -6,41 +6,52 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { Args, Command, Flags } from '@oclif/core'
 import { copyFile, unlink } from 'node:fs/promises'
 
+import type { CommandConfig, ParsedArgs } from './base.js'
+
+import { ExitCode } from '../cli/errors.js'
 import { cyan, green, red, yellow } from '../utils/color.utils.js'
 import { checkAssetFile } from '../utils/file-utils.js'
+import { BaseCommand } from './base.js'
 
-export default class Dotenv extends Command {
-  static override args = {
-    environmentName: Args.string({ description: 'name of the environment to load .dotenv file for.', required: true }),
+export default class Dotenv extends BaseCommand {
+  readonly config: CommandConfig = {
+    args: [
+      {
+        description: 'Name of the environment to load .dotenv file for.',
+        name: 'environmentName',
+        required: true,
+      },
+    ],
+    description: 'Manage .env files for react-native-dotenv for a specific environment (development, production, etc...)',
+    examples: ['<%= config.bin %> <%= command.id %> development'],
+    flags: {
+      help: {
+        description: 'Show help',
+        short: 'h',
+        type: 'boolean',
+      },
+      verbose: {
+        default: false,
+        description: 'Print more detailed log messages.',
+        short: 'v',
+        type: 'boolean',
+      },
+    },
+    name: 'dotenv',
   }
-  static override description = `Manage .env files for react-native-dotenv for a specific environment (development, production, etc...)`
-  static override examples = [
-    '<%= config.bin %> <%= command.id %>',
-  ]
-  static override flags = {
-    help: Flags.help({ char: 'h' }),
-    verbose: Flags.boolean({
-      char: 'v',
-      default: false,
-      description: 'Print more detailed log messages.',
-    }),
-  }
-  private _isVerbose: boolean = false
 
-  public async run(): Promise<void> {
-    const { args, flags } = await this.parse(Dotenv)
+  public async execute(parsed: ParsedArgs): Promise<void> {
+    const { args } = parsed
+    const environmentName = args.environmentName!
 
-    this._isVerbose = flags.verbose
-
-    const sourceEnvFilePath = `./.env.${args.environmentName}`
+    const sourceEnvFilePath = `./.env.${environmentName}`
     const outputEnvFile = './.env'
 
     const sourceFilesExists = checkAssetFile(sourceEnvFilePath)
     if (!sourceFilesExists) {
-      this.error(`Source file ${cyan(sourceEnvFilePath)} not found! ${red('ABORTING')}`)
+      this.error(`Source file ${cyan(sourceEnvFilePath)} not found! ${red('ABORTING')}`, ExitCode.FILE_NOT_FOUND)
     }
 
     this.logVerbose(`${yellow('≈')} Source environment file: ${cyan(sourceEnvFilePath)}`)
@@ -60,14 +71,8 @@ export default class Dotenv extends Command {
     try {
       await copyFile(sourceEnvFilePath, outputEnvFile)
       this.log(`${green('✔')} Generated new .env file.`)
-    } catch (error) {
-      this.error(error as Error)
-    }
-  }
-
-  private logVerbose(message?: string, ...args: unknown[]) {
-    if (this._isVerbose) {
-      this.log(message, ...args)
+    } catch (err) {
+      this.error(`Failed to generate .env file: ${err instanceof Error ? err.message : String(err)}`, ExitCode.GENERATION_ERROR)
     }
   }
 }

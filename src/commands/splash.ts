@@ -6,13 +6,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { Args, Flags } from '@oclif/core'
 import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import sharp from 'sharp'
 
 import type { ContentJson, SplashscreenSize } from '../types.js'
+import type { CommandConfig, ParsedArgs } from './base.js'
 
+import { ExitCode } from '../cli/errors.js'
 import { SPLASHSCREEN_SIZES_ANDROID, SPLASHSCREEN_SIZES_IOS } from '../constants.js'
 import { extractAppName } from '../utils/app.utils.js'
 import { cyan, green, red, yellow } from '../utils/color.utils.js'
@@ -20,57 +21,66 @@ import { checkAssetFile, mkdirp } from '../utils/file-utils.js'
 import { BaseCommand } from './base.js'
 
 export default class Splash extends BaseCommand {
-  static override args = {
-    file: Args.string({
-      default: './assets/splashscreen.png',
-      description: 'Input splashscreen file',
-      required: false,
-    }),
-  }
-  static override description = `Generate app splashscreens using a file as template.
+  readonly config: CommandConfig = {
+    args: [
+      {
+        default: './assets/splashscreen.png',
+        description: 'Input splashscreen file',
+        name: 'file',
+        required: false,
+      },
+    ],
+    description: `Generate app splashscreens using a file as template.
 
-The template splashscreen file should be at least 1242x2208px.
-  `
-  static override examples = [
-    '<%= config.bin %> <%= command.id %>',
-  ]
-  static override flags = {
-    appName: Flags.string({
-      char: 'a',
-      default: extractAppName,
-      description: "App name used to build output assets path. Default is retrieved from 'app.json' file.",
-    }),
-    help: Flags.help({
-      char: 'h',
-    }),
-    verbose: Flags.boolean({
-      char: 'v',
-      default: false,
-      description: 'Print more detailed log messages.',
-    }),
+The template splashscreen file should be at least 1242x2208px.`,
+    examples: ['<%= config.bin %> <%= command.id %>'],
+    flags: {
+      appName: {
+        default: extractAppName,
+        description: "App name used to build output assets path. Default is retrieved from 'app.json' file.",
+        short: 'a',
+        type: 'string',
+      },
+      help: {
+        description: 'Show help',
+        short: 'h',
+        type: 'boolean',
+      },
+      verbose: {
+        default: false,
+        description: 'Print more detailed log messages.',
+        short: 'v',
+        type: 'boolean',
+      },
+    },
+    name: 'splash',
   }
+
   private errors: string[] = []
 
-  public async run(): Promise<void> {
-    const { args, flags } = await this.parse(Splash)
+  public async execute(parsed: ParsedArgs): Promise<void> {
+    const { args, flags } = parsed
+    const file = args.file!
+    const appName = flags.appName as string | undefined
 
-    this._isVerbose = flags.verbose
-
-    const sourceFilesExists = checkAssetFile(args.file)
+    const sourceFilesExists = checkAssetFile(file)
     if (!sourceFilesExists) {
-      this.error(`${red('✘')} Source file ${cyan(args.file)} not found! ${red('ABORTING')}`)
+      this.error(`${red('✘')} Source file ${cyan(file)} not found! ${red('ABORTING')}`, ExitCode.FILE_NOT_FOUND)
     }
 
-    if (!flags.appName) {
-      this.error(`${red('✘')} Failed to retrieve ${cyan('appName')} value. Please specify it with the ${green('appName')} flag or check that ${cyan('app.json')} file exists. ${red('ABORTING')}`)
+    if (!appName) {
+      this.error(
+        `${red('✘')} Failed to retrieve ${cyan('appName')} value. Please specify it with the ${green('appName')} flag or check that ${cyan('app.json')} file exists. ${red('ABORTING')}`,
+        ExitCode.CONFIG_ERROR,
+      )
     }
 
-    this.log(yellow('≈'), `Generating splashscreens for '${cyan(flags.appName)}' app...`)
+    this.log(yellow('≈'), `Generating splashscreens for '${cyan(appName)}' app...`)
 
     // Run both iOS and Android tasks in parallel
     await Promise.all([
-      this.generateAndroidSplashscreens(args.file, 'android/app/src/main/res'),
-      this.generateIOSSplashscreens(args.file, `ios/${flags.appName}/Images.xcassets/Splashscreen.imageset`),
+      this.generateAndroidSplashscreens(file, 'android/app/src/main/res'),
+      this.generateIOSSplashscreens(file, `ios/${appName}/Images.xcassets/Splashscreen.imageset`),
     ])
 
     if (this.errors.length > 0) {
@@ -80,7 +90,7 @@ The template splashscreen file should be at least 1242x2208px.
       }
     }
 
-    this.log(green('✔'), `Generated splashscreens for '${cyan(flags.appName)}' app.`)
+    this.log(green('✔'), `Generated splashscreens for '${cyan(appName)}' app.`)
   }
 
   private async generateAndroidSplashscreen(inputFile: string, outputDir: string, sizeDef: SplashscreenSize) {

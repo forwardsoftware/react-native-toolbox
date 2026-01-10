@@ -1,0 +1,422 @@
+# Proposal: E2E Test Implementation
+
+**Status**: Proposed  
+**Date**: January 11, 2026  
+**Author**: Architecture Review  
+**Priority**: Nice to Have  
+**Related**: [003-OCLIF-MIGRATION-PROPOSAL.md](003-OCLIF-MIGRATION-PROPOSAL.md) (Appendix B)
+
+---
+
+## Executive Summary
+
+This proposal outlines the implementation of End-to-End (E2E) tests for the `rn-toolbox` CLI. E2E tests spawn the actual CLI binary as a subprocess and verify behavior from the user's perspective, complementing the existing integration tests.
+
+---
+
+## Background
+
+### Current Test Infrastructure
+
+The project currently has **integration tests** that:
+- Import command classes directly
+- Call `command.run(args)` method
+- Capture console output via mocked `console.log/warn/error`
+- Assert on `CommandError` instances
+
+**Location**: [test/helpers/run-command.ts](../test/helpers/run-command.ts)
+
+### Why E2E Tests?
+
+| Aspect | Integration Tests | E2E Tests |
+|--------|------------------|-----------|
+| Speed | Fast | Slower |
+| Isolation | Imports code directly | Spawns subprocess |
+| Coverage | Command logic | Full CLI lifecycle |
+| Exit codes | Via `CommandError.exitCode` | Via `process.exitCode` |
+| Entry points | Skip `bin/run.js` | Test actual entry point |
+| Env variables | Shared with test process | Isolated subprocess |
+
+**E2E tests catch issues that integration tests miss:**
+- Entry point configuration errors (`bin/run.js`)
+- Module resolution issues in production build
+- Exit code propagation
+- Signal handling (SIGINT, SIGTERM)
+- Environment variable isolation
+
+---
+
+## Goals
+
+1. Verify CLI works correctly when spawned as subprocess
+2. Test global flags (`--help`, `--version`)
+3. Test error handling for unknown commands
+4. Validate exit codes match specification
+5. Ensure built output (`dist/`) works correctly
+
+---
+
+## Design
+
+### E2E Test Helper
+
+Create `test/helpers/run-cli.ts`:
+
+```typescript
+/*
+ * Copyright (c) 2025 ForWarD Software (https://forwardsoftware.solutions/)
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+import { spawn } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
+import { dirname, join } from 'node:path'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+export interface CLIResult {
+  stdout: string
+  stderr: string
+  exitCode: number
+}
+
+export interface CLIOptions {
+  /** Use dev entry point (TypeScript) instead of production build */
+  dev?: boolean
+  /** Environment variables to pass to subprocess */
+  env?: Record<string, string>
+  /** Timeout in milliseconds (default: 30000) */
+  timeout?: number
+  /** Current working directory for the subprocess */
+  cwd?: string
+}
+
+/**
+ * Spawns the CLI as a subprocess and captures output
+ */
+export function runCLI(args: string[], options: CLIOptions = {}): Promise<CLIResult> {
+  const { dev = false, env = {}, timeout = 30000, cwd } = options
+
+  return new Promise((resolve, reject) => {
+    const binPath = dev
+      ? join(__dirname, '../../bin/dev.js')
+      : join(__dirname, '../../bin/run.js')
+
+    const child = spawn('node', [binPath, ...args], {
+      env: {
+        ...process.env,
+        ...env,
+        NO_COLOR: '1', // Disable colors for easier assertion
+      },
+      cwd,
+    })
+
+    let stdout = ''
+    let stderr = ''
+
+    child.stdout.on('data', (data: Buffer) => {
+      stdout += data.toString()
+    })
+
+    child.stderr.on('data', (data: Buffer) => {
+      stderr += data.toString()
+    })
+
+    const timer = setTimeout(() => {
+      child.kill('SIGTERM')
+      reject(new Error(`CLI timed out after ${timeout}ms`))
+    }, timeout)
+
+    child.on('close', (exitCode) => {
+      clearTimeout(timer)
+      resolve({
+        stdout,
+        stderr,
+        exitCode: exitCode ?? 0,
+      })
+    })
+
+    child.on('error', (err) => {
+      clearTimeout(timer)
+      reject(err)
+    })
+  })
+}
+```
+
+---
+
+### E2E Test File
+
+Create `test/e2e/cli.test.ts`:
+
+```typescript
+/*
+ * Copyright (c) 2025 ForWarD Software (https://forwardsoftware.solutions/)
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+import { expect } from 'chai'
+
+import { ExitCode } from '../../src/cli/errors.js'
+import { runCLI } from '../helpers/run-cli.js'
+
+describe('CLI E2E', () => {
+  describe('Global flags', () => {
+    it('shows help with --help flag', async () => {
+      const { stdout, exitCode } = await runCLI(['--help'])
+
+      expect(exitCode).to.equal(ExitCode.SUCCESS)
+      expect(stdout).to.contain('rn-toolbox')
+      expect(stdout).to.contain('icons')
+      expect(stdout).to.contain('splash')
+      expect(stdout).to.contain('dotenv')
+    })
+
+    it('shows help with -h flag', async () => {
+      const { stdout, exitCode } = await runCLI(['-h'])
+
+      expect(exitCode).to.equal(ExitCode.SUCCESS)
+      expect(stdout).to.contain('USAGE')
+    })
+
+    it('shows version with --version flag', async () => {
+      const { stdout, exitCode } = await runCLI(['--version'])
+
+      expect(exitCode).to.equal(ExitCode.SUCCESS)
+      expect(stdout).to.match(/rn-toolbox\/\d+\.\d+\.\d+/)
+      expect(stdout).to.contain('node-')
+    })
+
+    it('shows version with -V flag', async () => {
+      const { stdout, exitCode } = await runCLI(['-V'])
+
+      expect(exitCode).to.equal(ExitCode.SUCCESS)
+      expect(stdout).to.match(/rn-toolbox\/\d+\.\d+\.\d+/)
+    })
+
+    it('shows help when no command provided', async () => {
+      const { stdout, exitCode } = await runCLI([])
+
+      expect(exitCode).to.equal(ExitCode.SUCCESS)
+      expect(stdout).to.contain('COMMANDS')
+    })
+  })
+
+  describe('Unknown command', () => {
+    it('exits with error for unknown command', async () => {
+      const { stderr, exitCode } = await runCLI(['unknown'])
+
+      expect(exitCode).to.equal(ExitCode.INVALID_ARGUMENT)
+      expect(stderr).to.contain('Unknown command: unknown')
+      expect(stderr).to.contain('Available commands')
+    })
+
+    it('suggests available commands', async () => {
+      const { stderr } = await runCLI(['icns']) // typo
+
+      expect(stderr).to.contain('icons')
+      expect(stderr).to.contain('splash')
+      expect(stderr).to.contain('dotenv')
+    })
+  })
+
+  describe('Command help', () => {
+    it('shows icons command help', async () => {
+      const { stdout, exitCode } = await runCLI(['icons', '--help'])
+
+      expect(exitCode).to.equal(ExitCode.SUCCESS)
+      expect(stdout).to.contain('Generate app icons')
+      expect(stdout).to.contain('--appName')
+      expect(stdout).to.contain('--verbose')
+    })
+
+    it('shows splash command help', async () => {
+      const { stdout, exitCode } = await runCLI(['splash', '--help'])
+
+      expect(exitCode).to.equal(ExitCode.SUCCESS)
+      expect(stdout).to.contain('Generate app splashscreens')
+      expect(stdout).to.contain('--appName')
+    })
+
+    it('shows dotenv command help', async () => {
+      const { stdout, exitCode } = await runCLI(['dotenv', '--help'])
+
+      expect(exitCode).to.equal(ExitCode.SUCCESS)
+      expect(stdout).to.contain('Manage .env files')
+      expect(stdout).to.contain('ENVIRONMENTNAME')
+    })
+  })
+
+  describe('Exit codes', () => {
+    it('returns FILE_NOT_FOUND for missing source file', async () => {
+      const { exitCode } = await runCLI(['icons', './nonexistent.png', '--appName', 'Test'])
+
+      expect(exitCode).to.equal(ExitCode.FILE_NOT_FOUND)
+    })
+
+    it('returns CONFIG_ERROR when app.json missing and no --appName', async () => {
+      const { exitCode } = await runCLI(['icons'], { cwd: '/tmp' })
+
+      expect(exitCode).to.equal(ExitCode.CONFIG_ERROR)
+    })
+
+    it('returns INVALID_ARGUMENT for missing required arg', async () => {
+      const { exitCode } = await runCLI(['dotenv'])
+
+      expect(exitCode).to.equal(ExitCode.INVALID_ARGUMENT)
+    })
+  })
+})
+```
+
+---
+
+## Implementation Plan
+
+### Phase 1: Helper & Basic Tests
+
+| Task | Description | Effort |
+|------|-------------|--------|
+| 1.1 | Create `test/helpers/run-cli.ts` | 30 min |
+| 1.2 | Create `test/e2e/cli.test.ts` with global flag tests | 30 min |
+| 1.3 | Add unknown command tests | 15 min |
+| 1.4 | Add command help tests | 15 min |
+
+### Phase 2: Exit Code Tests
+
+| Task | Description | Effort |
+|------|-------------|--------|
+| 2.1 | Add exit code tests for each error scenario | 30 min |
+| 2.2 | Test production build (`bin/run.js`) | 15 min |
+| 2.3 | Test dev build (`bin/dev.js`) | 15 min |
+
+### Phase 3: CI Integration (Optional)
+
+| Task | Description | Effort |
+|------|-------------|--------|
+| 3.1 | Add E2E test script to `package.json` | 10 min |
+| 3.2 | Run E2E tests in CI after build step | 15 min |
+
+---
+
+## Test Organization
+
+### Directory Structure
+
+```
+test/
+├── helpers/
+│   ├── run-command.ts   # Integration test helper (existing)
+│   └── run-cli.ts       # E2E test helper (new)
+├── commands/            # Integration tests (existing)
+│   ├── dotenv.test.ts
+│   ├── icons.test.ts
+│   └── splash.test.ts
+└── e2e/                 # E2E tests (new)
+    └── cli.test.ts
+```
+
+### Running Tests
+
+```bash
+# Run all tests (integration + E2E)
+pnpm test
+
+# Run only E2E tests
+pnpm mocha --forbid-only "test/e2e/**/*.test.ts"
+
+# Run only integration tests
+pnpm mocha --forbid-only "test/commands/**/*.test.ts"
+```
+
+### Package.json Scripts (Optional)
+
+```json
+{
+  "scripts": {
+    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "test:unit": "mocha --forbid-only \"test/commands/**/*.test.ts\" \"test/utils/**/*.test.ts\"",
+    "test:e2e": "mocha --forbid-only \"test/e2e/**/*.test.ts\""
+  }
+}
+```
+
+---
+
+## Considerations
+
+### Build Before E2E
+
+E2E tests for production mode require the TypeScript to be compiled:
+
+```bash
+pnpm build && pnpm test:e2e
+```
+
+Alternatively, E2E tests can use `dev: true` option to test via `ts-node`.
+
+### Test Isolation
+
+Each E2E test spawns a new process, ensuring:
+- No shared state between tests
+- Clean environment variables
+- Proper exit code propagation
+
+### Color Handling
+
+E2E helper sets `NO_COLOR=1` to disable ANSI codes, making stdout/stderr assertions simpler.
+
+### Timeout
+
+Default 30-second timeout handles slow CI environments. Individual tests can override:
+
+```typescript
+const { stdout } = await runCLI(['icons'], { timeout: 60000 })
+```
+
+---
+
+## Success Criteria
+
+- [ ] `test/helpers/run-cli.ts` created and working
+- [ ] `test/e2e/cli.test.ts` with core test cases
+- [ ] All global flag tests passing
+- [ ] Exit code tests for all error scenarios
+- [ ] Tests work with both `bin/run.js` and `bin/dev.js`
+- [ ] Tests pass in CI environment
+
+---
+
+## Effort Estimation
+
+| Phase | Estimated Time |
+|-------|----------------|
+| Phase 1: Helper & Basic Tests | 1.5 hours |
+| Phase 2: Exit Code Tests | 1 hour |
+| Phase 3: CI Integration | 30 min |
+| **Total** | **~3 hours** |
+
+---
+
+## When to Implement
+
+Recommended triggers:
+- Before major version releases
+- After any changes to `bin/run.js` or `bin/dev.js`
+- When hardening CI pipeline
+- If integration tests miss real-world issues
+
+---
+
+## Changelog
+
+| Date | Change | Author |
+|------|--------|--------|
+| 2026-01-11 | Initial proposal (extracted from 003-OCLIF-MIGRATION-PROPOSAL.md Appendix B) | Architecture Review |

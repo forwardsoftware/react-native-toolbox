@@ -1,8 +1,18 @@
-import {runCommand} from '@oclif/test'
+/*
+ * Copyright (c) 2025 ForWarD Software (https://forwardsoftware.solutions/)
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 import {expect} from 'chai'
 import fs from 'node:fs'
 import path from 'node:path'
-import {rimrafSync} from 'rimraf'
+
+import {ExitCode} from '../../src/cli/errors.js'
+import Icons from '../../src/commands/icons.js'
+import {runCommand} from '../helpers/run-command.js'
 
 describe('icons', () => {
   before(() => {
@@ -11,21 +21,23 @@ describe('icons', () => {
   })
 
   after(() => {
-    rimrafSync('assets')
+    fs.rmSync('assets', {force: true, recursive: true})
   })
 
   afterEach(() => {
-    rimrafSync(['android', 'ios'])
+    for (const dir of ['android', 'ios']) {
+      fs.rmSync(dir, {force: true, recursive: true})
+    }
   })
 
   it('should fail to run icons when no app.json file exists', async () => {
-    const {error} = await runCommand(['icons'])
+    const {error} = await runCommand(Icons, [])
 
-    expect(error?.oclif?.exit).to.equal(2)
+    expect(error?.exitCode).to.equal(ExitCode.CONFIG_ERROR)
   })
 
   it('runs icons --appName test and generates expected files', async () => {
-    const {stdout} = await runCommand(['icons', '--appName', 'test'])
+    const {stdout} = await runCommand(Icons, ['--appName', 'test'])
 
     expect(stdout).to.contain("Generating icons for 'test' app...")
     expect(stdout).to.contain("Generated icons for 'test' app.")
@@ -61,7 +73,7 @@ describe('icons', () => {
   })
 
   it('runs icons with verbose flag and shows detailed output', async () => {
-    const {stdout} = await runCommand(['icons', '--appName', 'test', '-v'])
+    const {stdout} = await runCommand(Icons, ['--appName', 'test', '-v'])
 
     expect(stdout).to.contain("Generating icons for 'test' app...")
     expect(stdout).to.contain('Generating icon')
@@ -74,7 +86,7 @@ describe('icons', () => {
     fs.writeFileSync(corruptFile, 'not a valid image')
 
     try {
-      const {stdout} = await runCommand(['icons', '--appName', 'TestApp', corruptFile])
+      const {stdout} = await runCommand(Icons, ['--appName', 'TestApp', corruptFile])
 
       // Should handle error gracefully - verify error collection message appears
       // Check if errors were reported (either via warning symbol or "failed to generate" text)
