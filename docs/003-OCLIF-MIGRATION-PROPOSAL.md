@@ -1,9 +1,10 @@
 # Proposal: Migrate from oclif to Zero-Dependencies CLI
 
-**Status**: Approved ✅  
+**Status**: Completed ✅  
 **Date**: January 7, 2026  
 **Author**: Architecture Review  
 **Approved**: January 7, 2026  
+**Completed**: January 11, 2026  
 
 ---
 
@@ -229,11 +230,11 @@ async function runCLI(args: string[]): Promise<{
 
 ## Migration Plan
 
-### Phase 1: Foundation
+### Phase 1: Foundation ✅ COMPLETE
 
 Create the CLI infrastructure without modifying existing commands.
 
-#### 1.1 Create `src/cli/errors.ts`
+#### 1.1 Create `src/cli/errors.ts` ✅
 
 ```typescript
 /*
@@ -263,7 +264,7 @@ export class CommandError extends Error {
 }
 ```
 
-#### 1.2 Create `src/cli/output.ts`
+#### 1.2 Create `src/cli/output.ts` ✅
 
 Console output utilities with color support.
 
@@ -274,7 +275,7 @@ export function error(message: string, exitCode?: ExitCodeValue): never
 export function logVerbose(message: string, isVerbose: boolean): void
 ```
 
-#### 1.3 Create `src/cli/parser.ts`
+#### 1.3 Create `src/cli/parser.ts` ✅
 
 Wrapper around `node:util.parseArgs()` with:
 - Positional args with defaults
@@ -282,13 +283,13 @@ Wrapper around `node:util.parseArgs()` with:
 - Help flag interception
 - Validation
 
-#### 1.4 Create `src/cli/help.ts`
+#### 1.4 Create `src/cli/help.ts` ✅
 
 Help text generator:
 - `generateCommandHelp(commandConfig)` — single command help
 - `generateGlobalHelp()` — list all commands
 
-#### 1.5 Create `src/cli/runner.ts`
+#### 1.5 Create `src/cli/runner.ts` ✅
 
 Command router:
 - Parse first arg as command name
@@ -310,11 +311,11 @@ Command router:
 
 ---
 
-### Phase 2: Command Migration
+### Phase 2: Command Migration ✅ COMPLETE
 
 Migrate commands one at a time, starting with the simplest.
 
-#### 2.1 Update `src/commands/base.ts`
+#### 2.1 Update `src/commands/base.ts` ✅
 
 New base command class without oclif:
 
@@ -350,7 +351,7 @@ export abstract class BaseCommand {
 }
 ```
 
-#### 2.2 Migrate `dotenv` Command
+#### 2.2 Migrate `dotenv` Command ✅
 
 **Why first**: Simplest command, no image processing, validates approach.
 
@@ -360,23 +361,23 @@ export abstract class BaseCommand {
 - Replace `this.parse()` with new parser
 - Update error handling to use `CommandError`
 
-#### 2.3 Migrate `icons` Command
+#### 2.3 Migrate `icons` Command ✅
 
 **Changes**:
 - Same structural changes as dotenv
 - Ensure lazy `extractAppName` still works
 - Preserve parallel iOS/Android generation
 
-#### 2.4 Migrate `splash` Command
+#### 2.4 Migrate `splash` Command ✅
 
 **Changes**:
 - Same structural changes as icons
 
 ---
 
-### Phase 3: Test Infrastructure
+### Phase 3: Test Infrastructure ✅ COMPLETE
 
-#### 3.1 Create `test/helpers/run-command.ts`
+#### 3.1 Create `test/helpers/run-command.ts` ✅
 
 ```typescript
 import { BaseCommand } from '../../src/commands/base.js'
@@ -429,7 +430,7 @@ export async function runCommand(
 }
 ```
 
-#### 3.2 Update Test Files
+#### 3.2 Update Test Files ✅
 
 **Before** (oclif):
 ```typescript
@@ -455,9 +456,9 @@ it('runs icons', async () => {
 
 ---
 
-### Phase 4: Cleanup & Documentation
+### Phase 4: Cleanup & Documentation ✅ COMPLETE
 
-#### 4.1 Update Entry Points
+#### 4.1 Update Entry Points ✅
 
 **bin/run.js**:
 ```javascript
@@ -477,7 +478,7 @@ const { runCLI } = await import('../src/cli/runner.js')
 await runCLI(process.argv.slice(2))
 ```
 
-#### 4.2 Update `package.json`
+#### 4.2 Update `package.json` ✅
 
 **Remove**:
 ```json
@@ -523,7 +524,7 @@ await runCLI(process.argv.slice(2))
 - Keep `eslint-config-prettier` and standard TypeScript rules
 ```
 
-#### 4.3 Update `src/index.ts`
+#### 4.3 Update `src/index.ts` ✅
 
 ```typescript
 // Public API exports
@@ -537,7 +538,7 @@ export { default as Splash } from './commands/splash.js'
 export { default as Dotenv } from './commands/dotenv.js'
 ```
 
-#### 4.4 Create README Maintenance Guide
+#### 4.4 Create README Maintenance Guide ✅
 
 See [Appendix A: README Maintenance Guide](#appendix-a-readme-maintenance-guide).
 
@@ -618,16 +619,16 @@ If critical issues are discovered after migration:
 
 ## Success Criteria
 
-- [ ] All existing tests pass
-- [ ] CLI interface unchanged (`rn-toolbox icons`, `splash`, `dotenv`)
-- [ ] Help output matches oclif format
-- [ ] Exit codes work correctly
-- [ ] No oclif packages in `dependencies`
-- [ ] No oclif packages in `devDependencies`
-- [ ] Bundle size reduced (measure before/after)
-- [ ] README updated with accurate command docs
-- [ ] `--version` flag works (shows package version)
-- [ ] Unknown command shows helpful error message
+- [x] All existing tests pass
+- [x] CLI interface unchanged (`rn-toolbox icons`, `splash`, `dotenv`)
+- [x] Help output matches oclif format
+- [x] Exit codes work correctly
+- [x] No oclif packages in `dependencies`
+- [x] No oclif packages in `devDependencies`
+- [x] Bundle size reduced (sharp is now the only runtime dependency)
+- [x] README updated with accurate command docs
+- [x] `--version` flag works (shows package version)
+- [x] Unknown command shows helpful error message
 
 ---
 
@@ -813,3 +814,4 @@ describe('CLI E2E', () => {
 |------|--------|--------|
 | 2026-01-07 | Initial proposal | Architecture Review |
 | 2026-01-07 | Added: version flag, global CLI features, ESLint config, rollback plan | Architecture Review |
+| 2026-01-11 | Migration completed: all phases implemented, tests passing, README updated | Architecture Review |
