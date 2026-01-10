@@ -26,14 +26,7 @@ updates:
       prefix: 'fix'
       prefix-development: 'chore'
     groups:
-      oclif:
-        patterns:
-          - '@oclif/*'
-          - 'oclif'
-        exclude-patterns:
-          - '@oclif/prettier-config'
       eslint:
         patterns:
           - '@eslint/*'
           - 'eslint*'
-          - '@oclif/prettier-config'
