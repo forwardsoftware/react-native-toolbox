@@ -1,7 +1,6 @@
 import {expect} from 'chai'
 import fs from 'node:fs'
 import path from 'node:path'
-import {rimrafSync} from 'rimraf'
 
 import {checkAssetFile, mkdirp} from '../../src/utils/file-utils.js'
 
@@ -9,7 +8,7 @@ describe('file-utils', () => {
   const testDir = 'test-file-utils-temp'
 
   afterEach(() => {
-    rimrafSync(testDir)
+    fs.rmSync(testDir, {force: true, recursive: true})
   })
 
   describe('checkAssetFile', () => {

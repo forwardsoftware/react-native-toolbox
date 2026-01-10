@@ -9,7 +9,6 @@
 import {expect} from 'chai'
 import fs from 'node:fs'
 import path from 'node:path'
-import {rimrafSync} from 'rimraf'
 
 import {ExitCode} from '../../src/cli/errors.js'
 import Splash from '../../src/commands/splash.js'
@@ -22,11 +21,13 @@ describe('splash', () => {
   })
 
   after(() => {
-    rimrafSync('assets')
+    fs.rmSync('assets', {force: true, recursive: true})
   })
 
   afterEach(() => {
-    rimrafSync(['android', 'ios'])
+    for (const dir of ['android', 'ios']) {
+      fs.rmSync(dir, {force: true, recursive: true})
+    }
   })
 
   it('should fail to run splash when no app.json file exists', async () => {

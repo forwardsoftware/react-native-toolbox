@@ -9,7 +9,6 @@
 import {expect} from 'chai'
 import {randomUUID} from 'node:crypto'
 import fs from 'node:fs'
-import {rimrafSync} from 'rimraf'
 
 import {ExitCode} from '../../src/cli/errors.js'
 import Dotenv from '../../src/commands/dotenv.js'
@@ -17,7 +16,9 @@ import {runCommand} from '../helpers/run-command.js'
 
 describe('dotenv', () => {
   afterEach(() => {
-    rimrafSync(['.env', '.env.dev', '.env.prod'])
+    for (const file of ['.env', '.env.dev', '.env.prod']) {
+      fs.rmSync(file, {force: true})
+    }
   })
 
   it('should fail to run dotenv when no environmentName is specified', async () => {
