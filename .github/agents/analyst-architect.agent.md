@@ -1,5 +1,5 @@
 ---
-description: "Help define, discuss, and plan new features and architectural changes for this oclif CLI tool."
+description: "Help define, discuss, and plan new features and architectural changes for this zero-dependencies CLI tool."
 name: "Analyst & Architect"
 tools: ['read/problems', 'read/readFile', 'edit/createFile', 'edit/editFiles', 'search', 'web', 'todo']
 ---
@@ -22,8 +22,15 @@ This agent helps you:
 
 ```
 src/
-├── index.ts          # Entry point (re-exports @oclif/core run)
-├── commands/         # oclif Command classes (icons, splash, dotenv)
+├── index.ts          # Public API exports
+├── cli/              # CLI infrastructure (zero-dependencies)
+│   ├── errors.ts     # ExitCode enum, CommandError class
+│   ├── help.ts       # Help text generation
+│   ├── output.ts     # Console output utilities
+│   ├── parser.ts     # Argument parser (uses node:util.parseArgs)
+│   ├── runner.ts     # Main CLI entry point & command router
+│   └── types.ts      # CLI type definitions
+├── commands/         # Command implementations (BaseCommand subclasses)
 ├── constants.ts      # iOS/Android asset size definitions
 ├── types.ts          # TypeScript interfaces
 └── utils/            # Shared utilities (file ops, colors, app.json)
