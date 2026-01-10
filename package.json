@@ -17,8 +17,9 @@
   "homepage": "https://github.com/forwardsoftware/react-native-toolbox#readme",
   "bugs": "https://github.com/forwardsoftware/react-native-toolbox/issues",
   "scripts": {
-    "cleanup": "rimraf android/ ios/ dist/ .nyc_output/ .env",
-    "build": "rimraf dist && tsc -b",
+    "cleanup": "node -e \"const fs=require('fs');['android','ios','dist','.nyc_output','.env','tsconfig.tsbuildinfo'].forEach(p=>fs.rmSync(p,{force:true,recursive:true}))\"",
+    "prebuild": "pnpm run cleanup",
+    "build": "tsc -b",
     "lint": "eslint",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "check": "pnpm run lint && pnpm run test",
@@ -49,7 +50,6 @@
     "eslint": "^9",
     "eslint-config-prettier": "^10",
     "mocha": "^11",
-    "rimraf": "^6",
     "ts-node": "^10",
     "typescript": "^5",
     "typescript-eslint": "^8.52.0"
