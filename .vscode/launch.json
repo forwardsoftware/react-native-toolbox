@@ -8,9 +8,8 @@
       "skipFiles": ["<node_internals>/**"],
       "runtimeExecutable": "node",
       "runtimeArgs": [
-        "--loader",
-        "ts-node/esm",
-        "--no-warnings=ExperimentalWarning"
+        "--import",
+        "tsx"
       ],
       "program": "${workspaceFolder}/bin/dev.js",
       "args": ["dotenv", "dev"]
@@ -22,9 +21,8 @@
       "skipFiles": ["<node_internals>/**"],
       "runtimeExecutable": "node",
       "runtimeArgs": [
-        "--loader",
-        "ts-node/esm",
-        "--no-warnings=ExperimentalWarning"
+        "--import",
+        "tsx"
       ],
       "program": "${workspaceFolder}/bin/dev.js",
       "args": ["icons", "./test/assets/icon.png", "--appName", "TestApp"]
@@ -36,9 +34,8 @@
       "skipFiles": ["<node_internals>/**"],
       "runtimeExecutable": "node",
       "runtimeArgs": [
-        "--loader",
-        "ts-node/esm",
-        "--no-warnings=ExperimentalWarning"
+        "--import",
+        "tsx"
       ],
       "program": "${workspaceFolder}/bin/dev.js",
       "args": ["splash", "./test/assets/splashscreen.png", "--appName", "TestApp"]
