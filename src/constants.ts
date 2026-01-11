@@ -9,6 +9,11 @@
 import type { IconSizeAndroid, IconSizeIOS, SplashscreenSize } from "./types.js"
 
 /**
+ * CLI binary name
+ */
+export const CLI_BIN = 'rn-toolbox'
+
+/**
  * Android Assets Sizes
  */
 

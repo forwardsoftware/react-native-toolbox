@@ -6,9 +6,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import { CLI_BIN } from '../constants.js'
 import type { CommandConfig } from './types.js'
-
-const CLI_BIN = 'rn-toolbox'
 
 /**
  * Generates help text for a single command
