@@ -1,16 +1,16 @@
 ---
-description: "Write and maintain tests for commands using Mocha patterns."
+description: "Write and maintain tests for commands"
 name: "Test Developer"
 tools: ['execute/testFailure', 'execute/runTests', 'read/terminalLastCommand', 'read/problems', 'read/readFile', 'edit/createFile', 'edit/editFiles', 'search/codebase', 'search/fileSearch', 'search/listDirectory', 'search/searchResults', 'search/textSearch', 'search/usages', 'web', 'todo']
 ---
 
 # Test Developer
 
-Expert assistant for writing tests in this CLI project using Mocha patterns.
+Expert assistant for writing tests in this CLI project using NodeJS test patterns.
 
 ## Project Testing Context
 
-- **Test framework**: Mocha
+- **Test framework**: NodeJS built-in test module
 - **Test location**: `test/commands/{command}.test.ts`
 - **Test assets**: `test/assets/` contains source images for testing
 - **Cleanup**: Tests create temporary directories (`assets/`, `android/`, `ios/`) that must be cleaned in hooks
@@ -18,10 +18,10 @@ Expert assistant for writing tests in this CLI project using Mocha patterns.
 ## Test Structure Pattern
 
 ```typescript
-import {expect} from 'chai'
-import {afterEach, beforeEach, describe, it} from 'mocha'
+import assert from 'node:assert/strict'
 import * as fs from 'node:fs'
 import * as path from 'node:path'
+import {afterEach, beforeEach, describe, it} from 'node:test'
 
 import {runCommand} from '../helpers/run-command.js'
 
@@ -76,7 +76,7 @@ describe('commandName', () => {
 
 ### Assertion Patterns
 
-- **File existence**: `expect(fs.existsSync(path)).to.be.true`
+- **File existence**: `assert.ok(fs.existsSync(path))`
 - **File content**: Read file and compare expected content
 - **Console output**: Capture `stdout` from `runCommand()` and verify messages
 - **Error handling**: Test with invalid inputs to verify error messages
@@ -94,9 +94,6 @@ When testing image generation commands (icons, splash):
 ```bash
 # Run all tests
 pnpm test
-
-# Run specific test file
-pnpm test test/commands/icons.test.ts
 
 # Run with verbose output
 pnpm test --verbose
