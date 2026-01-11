@@ -17,11 +17,11 @@
   "homepage": "https://github.com/forwardsoftware/react-native-toolbox#readme",
   "bugs": "https://github.com/forwardsoftware/react-native-toolbox/issues",
   "scripts": {
-    "cleanup": "node -e \"const fs=require('fs');['android','ios','dist','.nyc_output','.env','tsconfig.tsbuildinfo'].forEach(p=>fs.rmSync(p,{force:true,recursive:true}))\"",
+    "cleanup": "node -e \"const fs=require('fs');['android','ios','dist','coverage','.nyc_output','.env','tsconfig.tsbuildinfo'].forEach(p=>fs.rmSync(p,{force:true,recursive:true}))\"",
     "prebuild": "pnpm run cleanup",
     "build": "tsc -b",
     "lint": "eslint",
-    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "test": "node --import tsx --test --test-concurrency=1 --experimental-test-coverage 'test/**/*.test.ts'",
     "check": "pnpm run lint && pnpm run test",
     "prepack": "pnpm build"
   },
@@ -43,14 +43,10 @@
     "sharp": "^0.34.1"
   },
   "devDependencies": {
-    "@types/chai": "^5",
-    "@types/mocha": "^10",
     "@types/node": "^25",
-    "chai": "^6",
     "eslint": "^9",
     "eslint-config-prettier": "^10",
-    "mocha": "^11",
-    "ts-node": "^10",
+    "tsx": "^4",
     "typescript": "^5",
     "typescript-eslint": "^8.52.0"
   }
