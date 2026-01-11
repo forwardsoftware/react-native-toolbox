@@ -149,6 +149,7 @@ The template icon file should be at least 1024x1024px.`,
   private async generateAndroidIconsWithDensity(inputPath: string, outputDir: string, density: string, size: number) {
     const densityFolderPath = join(outputDir, `mipmap-${density}`)
 
+    // Safe for concurrent execution - mkdir with recursive:true is idempotent
     await mkdirp(densityFolderPath)
 
     this.logVerbose(yellow('≈'), cyan('Android'), `Generating icons for density '${density}'...`)
