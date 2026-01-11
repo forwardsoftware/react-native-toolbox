@@ -9,10 +9,21 @@
 import { existsSync } from 'node:fs'
 import { mkdir } from 'node:fs/promises'
 
+/**
+ * Checks if an asset file exists at the specified path.
+ * 
+ * @param filePath - The path to the asset file
+ * @returns true if the file exists, false otherwise
+ */
 export function checkAssetFile(filePath: string): boolean {
   return existsSync(filePath)
 }
 
+/**
+ * Creates a directory and all necessary parent directories.
+ * 
+ * @param path - The path to create
+ */
 export async function mkdirp(path: string): Promise<void> {
   await mkdir(path, { recursive: true })
 }
