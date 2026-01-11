@@ -75,7 +75,7 @@ try {
 - [src/commands/splash.ts](../src/commands/splash.ts#L64)
 
 **Severity:** Medium  
-**Status:** ⚠️ **UNRESOLVED**  
+**Status:** ✅ **RESOLVED**  
 **Issue:** Type assertions bypass TypeScript's type safety.
 
 **Current Code:**
@@ -113,7 +113,7 @@ const appName = isStringOrUndefined(flags.appName) ? flags.appName : undefined
 - [src/commands/splash.ts](../src/commands/splash.ts#L79-L84)
 
 **Severity:** Medium  
-**Status:** ⚠️ **UNRESOLVED**  
+**Status:** ✅ **RESOLVED**  
 **Issue:** Commands can complete with partial failures but still exit with success code (0).
 
 **Current Behavior:**
@@ -183,7 +183,7 @@ if (this.errors.length > 0) {
 
 **File:** [eslint.config.mjs](../eslint.config.mjs#L12)  
 **Severity:** Low-Medium  
-**Status:** ⚠️ **UNRESOLVED**  
+**Status:** ✅ **RESOLVED**  
 **Issue:** Comment references Chai but project now uses `node:assert/strict`.
 
 **Current Code:**
@@ -496,9 +496,9 @@ This is a style consistency issue. Either:
 2. ✅ ~~Add MPL-2.0 license header to [src/types.ts](../src/types.ts)~~ **COMPLETED**
 
 ### 🟡 Short Term (This Sprint)
-3. ⚠️ Update ESLint comment to reflect current test framework
-4. ⚠️ Replace type assertions with type guards in command files
-5. ⚠️ Decide on exit code behavior for partial failures (add `--strict` flag or always fail)
+3. ✅ ~~Update ESLint comment to reflect current test framework~~ **COMPLETED**
+4. ✅ ~~Replace type assertions with type guards in command files~~ **COMPLETED**
+5. ✅ ~~Decide on exit code behavior for partial failures (add `--strict` flag or always fail)~~ **COMPLETED**
 6. ⚠️ Add JSDoc comments to public utility functions
 
 ### 🔵 Long Term (Future Enhancements)
@@ -531,9 +531,9 @@ pnpm lint
 |-------|----------|--------|
 | #1 - License header in types.ts | 🔴 Critical | ✅ Resolved |
 | #2 - Error handling in runner.ts | 🟡 Medium | ✅ Resolved |
-| #3 - Type assertions | 🟡 Medium | ⚠️ Unresolved |
-| #4 - Partial failure exit codes | 🟡 Medium | ⚠️ Unresolved |
-| #5 - ESLint comment outdated | 🟡 Medium | ⚠️ Unresolved |
+| #3 - Type assertions | 🟡 Medium | ✅ Resolved |
+| #4 - Partial failure exit codes | 🟡 Medium | ✅ Resolved |
+| #5 - ESLint comment outdated | 🟡 Medium | ✅ Resolved |
 | #6 - Race condition docs | 🔵 Low | 🔧 Addressed |
 | #7 - Code duplication | 🔵 Low | Enhancement |
 | #8 - Missing JSDoc | 🔵 Low | ⚠️ Unresolved |
@@ -543,7 +543,7 @@ pnpm lint
 | #12 - Dry-run flag | 🔵 Low | Enhancement |
 | #13 - Semicolon consistency | 🔵 Low | ⚠️ New Finding |
 
-**Progress:** 2 of 13 issues resolved (15.4%)
+**Progress:** 5 of 13 issues resolved (38.5%)
 
 ---
 
