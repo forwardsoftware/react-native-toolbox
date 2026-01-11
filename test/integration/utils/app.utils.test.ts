@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import {afterEach, describe, it} from 'node:test'
 
-import {extractAppName} from '../../src/utils/app.utils.js'
+import {extractAppName} from '../../../src/utils/app.utils.js'
 
 describe('extractAppName', () => {
   afterEach(() => {

@@ -9,8 +9,8 @@
 import assert from 'node:assert/strict'
 import {describe, it} from 'node:test'
 
-import {generateCommandHelp, generateGlobalHelp} from '../../src/cli/help.js'
-import type {CommandConfig} from '../../src/cli/types.js'
+import {generateCommandHelp, generateGlobalHelp} from '../../../src/cli/help.js'
+import type {CommandConfig} from '../../../src/cli/types.js'
 
 describe('help', () => {
   describe('generateCommandHelp', () => {

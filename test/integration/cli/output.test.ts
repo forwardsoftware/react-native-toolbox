@@ -9,8 +9,8 @@
 import assert from 'node:assert/strict'
 import {describe, it} from 'node:test'
 
-import {ExitCode} from '../../src/cli/errors.js'
-import {error, log, logVerbose, warn} from '../../src/cli/output.js'
+import {ExitCode} from '../../../src/cli/errors.js'
+import {error, log, logVerbose, warn} from '../../../src/cli/output.js'
 
 describe('output', () => {
   describe('log', () => {

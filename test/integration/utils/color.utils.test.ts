@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import {describe, it} from 'node:test'
 
-import {cyan, green, red, yellow} from '../../src/utils/color.utils.js'
+import {cyan, green, red, yellow} from '../../../src/utils/color.utils.js'
 
 describe('color.utils', () => {
   describe('cyan', () => {

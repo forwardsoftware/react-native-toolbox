@@ -9,9 +9,9 @@
 import assert from 'node:assert/strict'
 import {describe, it} from 'node:test'
 
-import {CommandError, ExitCode} from '../../src/cli/errors.js'
-import {parseArgs} from '../../src/cli/parser.js'
-import type {CommandConfig} from '../../src/cli/types.js'
+import {CommandError, ExitCode} from '../../../src/cli/errors.js'
+import {parseArgs} from '../../../src/cli/parser.js'
+import type {CommandConfig} from '../../../src/cli/types.js'
 
 describe('parser', () => {
   describe('parseArgs', () => {
