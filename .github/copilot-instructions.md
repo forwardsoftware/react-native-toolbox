@@ -52,7 +52,7 @@ src/
 ```bash
 pnpm install          # Install dependencies
 pnpm build            # Compile TypeScript to dist/
-pnpm test             # Run Mocha tests + lint
+pnpm test             # Run Node.js test runner with coverage + lint
 pnpm lint             # ESLint only
 ```
 
@@ -64,6 +64,7 @@ pnpm lint             # ESLint only
 ## Testing & Debugging
 
 - Tests live in `test/commands/{command}.test.ts`
+- Uses Node.js built-in `node:test` runner with `node:assert/strict`
 - Use custom `runCommand()` helper from `test/helpers/run-command.ts`
 - Tests create temporary `assets/`, `android/`, `ios/` directories - cleaned up in `after`/`afterEach` hooks
 - Test assets stored in `test/assets/`

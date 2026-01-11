@@ -1,6 +1,7 @@
-import {expect} from 'chai'
+import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import path from 'node:path'
+import {afterEach, describe, it} from 'node:test'
 
 import {checkAssetFile, mkdirp} from '../../src/utils/file-utils.js'
 
@@ -19,13 +20,13 @@ describe('file-utils', () => {
 
       const result = checkAssetFile(testFile)
 
-      expect(result).to.be.true
+      assert.ok(result)
     })
 
     it('returns false when file does not exist', () => {
       const result = checkAssetFile(path.join(testDir, 'nonexistent.txt'))
 
-      expect(result).to.be.false
+      assert.equal(result, false)
     })
 
     it('returns true when directory exists', () => {
@@ -33,13 +34,13 @@ describe('file-utils', () => {
 
       const result = checkAssetFile(testDir)
 
-      expect(result).to.be.true
+      assert.ok(result)
     })
 
     it('returns false for empty string path', () => {
       const result = checkAssetFile('')
 
-      expect(result).to.be.false
+      assert.equal(result, false)
     })
   })
 
@@ -49,8 +50,8 @@ describe('file-utils', () => {
 
       await mkdirp(dirPath)
 
-      expect(fs.existsSync(dirPath)).to.be.true
-      expect(fs.statSync(dirPath).isDirectory()).to.be.true
+      assert.ok(fs.existsSync(dirPath))
+      assert.ok(fs.statSync(dirPath).isDirectory())
     })
 
     it('creates nested directories', async () => {
@@ -58,8 +59,8 @@ describe('file-utils', () => {
 
       await mkdirp(dirPath)
 
-      expect(fs.existsSync(dirPath)).to.be.true
-      expect(fs.statSync(dirPath).isDirectory()).to.be.true
+      assert.ok(fs.existsSync(dirPath))
+      assert.ok(fs.statSync(dirPath).isDirectory())
     })
 
     it('does not throw error if directory already exists', async () => {
@@ -68,7 +69,7 @@ describe('file-utils', () => {
 
       await mkdirp(dirPath)
 
-      expect(fs.existsSync(dirPath)).to.be.true
+      assert.ok(fs.existsSync(dirPath))
     })
 
     it('creates directory with complex path', async () => {
@@ -76,8 +77,8 @@ describe('file-utils', () => {
 
       await mkdirp(dirPath)
 
-      expect(fs.existsSync(dirPath)).to.be.true
-      expect(fs.statSync(dirPath).isDirectory()).to.be.true
+      assert.ok(fs.existsSync(dirPath))
+      assert.ok(fs.statSync(dirPath).isDirectory())
     })
   })
 })

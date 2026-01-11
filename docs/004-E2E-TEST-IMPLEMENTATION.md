@@ -162,7 +162,8 @@ Create `test/e2e/cli.test.ts`:
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { expect } from 'chai'
+import assert from 'node:assert/strict'
+import { describe, it } from 'node:test'
 
 import { ExitCode } from '../../src/cli/errors.js'
 import { runCLI } from '../helpers/run-cli.js'
@@ -172,40 +173,40 @@ describe('CLI E2E', () => {
     it('shows help with --help flag', async () => {
       const { stdout, exitCode } = await runCLI(['--help'])
 
-      expect(exitCode).to.equal(ExitCode.SUCCESS)
-      expect(stdout).to.contain('rn-toolbox')
-      expect(stdout).to.contain('icons')
-      expect(stdout).to.contain('splash')
-      expect(stdout).to.contain('dotenv')
+      assert.equal(exitCode, ExitCode.SUCCESS)
+      assert.ok(stdout.includes('rn-toolbox'))
+      assert.ok(stdout.includes('icons'))
+      assert.ok(stdout.includes('splash'))
+      assert.ok(stdout.includes('dotenv'))
     })
 
     it('shows help with -h flag', async () => {
       const { stdout, exitCode } = await runCLI(['-h'])
 
-      expect(exitCode).to.equal(ExitCode.SUCCESS)
-      expect(stdout).to.contain('USAGE')
+      assert.equal(exitCode, ExitCode.SUCCESS)
+      assert.ok(stdout.includes('USAGE'))
     })
 
     it('shows version with --version flag', async () => {
       const { stdout, exitCode } = await runCLI(['--version'])
 
-      expect(exitCode).to.equal(ExitCode.SUCCESS)
-      expect(stdout).to.match(/rn-toolbox\/\d+\.\d+\.\d+/)
-      expect(stdout).to.contain('node-')
+      assert.equal(exitCode, ExitCode.SUCCESS)
+      assert.match(stdout, /rn-toolbox\/\d+\.\d+\.\d+/)
+      assert.ok(stdout.includes('node-'))
     })
 
     it('shows version with -V flag', async () => {
       const { stdout, exitCode } = await runCLI(['-V'])
 
-      expect(exitCode).to.equal(ExitCode.SUCCESS)
-      expect(stdout).to.match(/rn-toolbox\/\d+\.\d+\.\d+/)
+      assert.equal(exitCode, ExitCode.SUCCESS)
+      assert.match(stdout, /rn-toolbox\/\d+\.\d+\.\d+/)
     })
 
     it('shows help when no command provided', async () => {
       const { stdout, exitCode } = await runCLI([])
 
-      expect(exitCode).to.equal(ExitCode.SUCCESS)
-      expect(stdout).to.contain('COMMANDS')
+      assert.equal(exitCode, ExitCode.SUCCESS)
+      assert.ok(stdout.includes('COMMANDS'))
     })
   })
 
@@ -213,17 +214,17 @@ describe('CLI E2E', () => {
     it('exits with error for unknown command', async () => {
       const { stderr, exitCode } = await runCLI(['unknown'])
 
-      expect(exitCode).to.equal(ExitCode.INVALID_ARGUMENT)
-      expect(stderr).to.contain('Unknown command: unknown')
-      expect(stderr).to.contain('Available commands')
+      assert.equal(exitCode, ExitCode.INVALID_ARGUMENT)
+      assert.ok(stderr.includes('Unknown command: unknown'))
+      assert.ok(stderr.includes('Available commands'))
     })
 
     it('suggests available commands', async () => {
       const { stderr } = await runCLI(['icns']) // typo
 
-      expect(stderr).to.contain('icons')
-      expect(stderr).to.contain('splash')
-      expect(stderr).to.contain('dotenv')
+      assert.ok(stderr.includes('icons'))
+      assert.ok(stderr.includes('splash'))
+      assert.ok(stderr.includes('dotenv'))
     })
   })
 
@@ -231,26 +232,26 @@ describe('CLI E2E', () => {
     it('shows icons command help', async () => {
       const { stdout, exitCode } = await runCLI(['icons', '--help'])
 
-      expect(exitCode).to.equal(ExitCode.SUCCESS)
-      expect(stdout).to.contain('Generate app icons')
-      expect(stdout).to.contain('--appName')
-      expect(stdout).to.contain('--verbose')
+      assert.equal(exitCode, ExitCode.SUCCESS)
+      assert.ok(stdout.includes('Generate app icons'))
+      assert.ok(stdout.includes('--appName'))
+      assert.ok(stdout.includes('--verbose'))
     })
 
     it('shows splash command help', async () => {
       const { stdout, exitCode } = await runCLI(['splash', '--help'])
 
-      expect(exitCode).to.equal(ExitCode.SUCCESS)
-      expect(stdout).to.contain('Generate app splashscreens')
-      expect(stdout).to.contain('--appName')
+      assert.equal(exitCode, ExitCode.SUCCESS)
+      assert.ok(stdout.includes('Generate app splashscreens'))
+      assert.ok(stdout.includes('--appName'))
     })
 
     it('shows dotenv command help', async () => {
       const { stdout, exitCode } = await runCLI(['dotenv', '--help'])
 
-      expect(exitCode).to.equal(ExitCode.SUCCESS)
-      expect(stdout).to.contain('Manage .env files')
-      expect(stdout).to.contain('ENVIRONMENTNAME')
+      assert.equal(exitCode, ExitCode.SUCCESS)
+      assert.ok(stdout.includes('Manage .env files'))
+      assert.ok(stdout.includes('ENVIRONMENTNAME'))
     })
   })
 
@@ -258,19 +259,19 @@ describe('CLI E2E', () => {
     it('returns FILE_NOT_FOUND for missing source file', async () => {
       const { exitCode } = await runCLI(['icons', './nonexistent.png', '--appName', 'Test'])
 
-      expect(exitCode).to.equal(ExitCode.FILE_NOT_FOUND)
+      assert.equal(exitCode, ExitCode.FILE_NOT_FOUND)
     })
 
     it('returns CONFIG_ERROR when app.json missing and no --appName', async () => {
       const { exitCode } = await runCLI(['icons'], { cwd: '/tmp' })
 
-      expect(exitCode).to.equal(ExitCode.CONFIG_ERROR)
+      assert.equal(exitCode, ExitCode.CONFIG_ERROR)
     })
 
     it('returns INVALID_ARGUMENT for missing required arg', async () => {
       const { exitCode } = await runCLI(['dotenv'])
 
-      expect(exitCode).to.equal(ExitCode.INVALID_ARGUMENT)
+      assert.equal(exitCode, ExitCode.INVALID_ARGUMENT)
     })
   })
 })
@@ -330,10 +331,10 @@ test/
 pnpm test
 
 # Run only E2E tests
-pnpm mocha --forbid-only "test/e2e/**/*.test.ts"
+node --import tsx --test "test/e2e/**/*.test.ts"
 
 # Run only integration tests
-pnpm mocha --forbid-only "test/commands/**/*.test.ts"
+node --import tsx --test "test/commands/**/*.test.ts"
 ```
 
 ### Package.json Scripts (Optional)
@@ -341,9 +342,9 @@ pnpm mocha --forbid-only "test/commands/**/*.test.ts"
 ```json
 {
   "scripts": {
-    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
-    "test:unit": "mocha --forbid-only \"test/commands/**/*.test.ts\" \"test/utils/**/*.test.ts\"",
-    "test:e2e": "mocha --forbid-only \"test/e2e/**/*.test.ts\""
+    "test": "node --import tsx --test 'test/**/*.test.ts'",
+    "test:unit": "node --import tsx --test 'test/commands/**/*.test.ts' 'test/utils/**/*.test.ts'",
+    "test:e2e": "node --import tsx --test 'test/e2e/**/*.test.ts'"
   }
 }
 ```
@@ -360,7 +361,7 @@ E2E tests for production mode require the TypeScript to be compiled:
 pnpm build && pnpm test:e2e
 ```
 
-Alternatively, E2E tests can use `dev: true` option to test via `ts-node`.
+Alternatively, E2E tests can use `dev: true` option to test via `tsx`.
 
 ### Test Isolation
 
