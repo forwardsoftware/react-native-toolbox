@@ -1,5 +1,16 @@
 # Changelog
 
+## [6.0.0](https://github.com/forwardsoftware/react-native-toolbox/compare/v5.0.1...v6.0.0) (2026-01-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate away from `oclif` framework to native tooling ([#282](https://github.com/forwardsoftware/react-native-toolbox/issues/282))
+
+### Features
+
+* migrate away from `oclif` framework to native tooling ([#282](https://github.com/forwardsoftware/react-native-toolbox/issues/282)) ([1126b97](https://github.com/forwardsoftware/react-native-toolbox/commit/1126b9797a0519a13bb12bb182f28366378716eb))
+
 ## [5.0.1](https://github.com/forwardsoftware/react-native-toolbox/compare/v5.0.0...v5.0.1) (2026-01-06)
 
 
