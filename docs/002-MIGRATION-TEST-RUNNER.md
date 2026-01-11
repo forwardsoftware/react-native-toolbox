@@ -1,8 +1,9 @@
 # Migration Plan: Mocha → Node.js Test Runner
 
-**Status:** Ready for Implementation  
+**Status:** ✅ Completed  
 **Created:** 2026-01-05  
 **Updated:** 2026-01-11  
+**Completed:** 2026-01-11  
 **Target:** Replace Mocha/Chai with Node.js built-in test runner, tsx, and node:assert
 
 ---
@@ -23,12 +24,12 @@
 
 ### Phase 1: Setup
 
-- [ ] **1.1** Install tsx
+- [x] **1.1** Install tsx
   ```bash
   pnpm add -D tsx
   ```
 
-- [ ] **1.2** Verify tsx works with node:test (quick spike)
+- [x] **1.2** Verify tsx works with node:test (quick spike)
   ```bash
   node --import tsx --test test/commands/dotenv.test.ts
   ```
@@ -39,7 +40,7 @@
 
 #### 2.1 Migrate dotenv.test.ts
 
-- [ ] Update imports:
+- [x] Update imports:
   ```typescript
   // Remove
   import {expect} from 'chai'
@@ -58,14 +59,14 @@
 
 #### 2.2 Migrate icons.test.ts
 
-- [ ] Update imports (same pattern as 2.1)
+- [x] Update imports (same pattern as 2.1)
 
-- [ ] Add timeout to describe block:
+- [x] Add timeout to describe block:
   ```typescript
   describe('icons', {timeout: 60_000}, () => {
   ```
 
-- [ ] Replace assertions:
+- [x] Replace assertions:
   | Before | After |
   |--------|-------|
   | `expect(stdout).to.contain(...)` | `assert.ok(stdout.includes(...))` |
@@ -76,18 +77,18 @@
 
 #### 2.3 Migrate splash.test.ts
 
-- [ ] Update imports (same pattern as 2.1)
+- [x] Update imports (same pattern as 2.1)
 
-- [ ] Add timeout to describe block:
+- [x] Add timeout to describe block:
   ```typescript
   describe('splash', {timeout: 60_000}, () => {
   ```
 
-- [ ] Replace assertions (same patterns as 2.2)
+- [x] Replace assertions (same patterns as 2.2)
 
 #### 2.4 Migrate app.utils.test.ts
 
-- [ ] Update imports:
+- [x] Update imports:
   ```typescript
   // Remove
   import {expect} from 'chai'
@@ -97,7 +98,7 @@
   import {afterEach, describe, it} from 'node:test'
   ```
 
-- [ ] Replace assertions:
+- [x] Replace assertions:
   | Before | After |
   |--------|-------|
   | `expect(await extractAppName()).to.equal('TestApp')` | `assert.equal(await extractAppName(), 'TestApp')` |
@@ -105,9 +106,9 @@
 
 #### 2.5 Migrate color.utils.test.ts
 
-- [ ] Update imports (same pattern as 2.4)
+- [x] Update imports (same pattern as 2.4)
 
-- [ ] Replace assertions:
+- [x] Replace assertions:
   | Before | After |
   |--------|-------|
   | `expect(result).to.include('test')` | `assert.ok(result.includes('test'))` |
@@ -115,9 +116,9 @@
 
 #### 2.6 Migrate file-utils.test.ts
 
-- [ ] Update imports (same pattern as 2.4)
+- [x] Update imports (same pattern as 2.4)
 
-- [ ] Replace assertions:
+- [x] Replace assertions:
   | Before | After |
   |--------|-------|
   | `expect(result).to.be.true` | `assert.ok(result)` |
@@ -131,7 +132,7 @@
 
 #### 3.1 Update package.json
 
-- [ ] Update scripts:
+- [x] Update scripts:
   ```json
   {
     "scripts": {
@@ -144,19 +145,19 @@
 
   > **Note:** The test command runs tests in parallel by default. If file-based tests conflict, add `--test-concurrency=1`.
 
-- [ ] Remove devDependencies:
+- [x] Remove devDependencies:
   - `mocha`
   - `@types/mocha`
   - `chai`
   - `@types/chai`
   - `ts-node`
 
-- [ ] Add devDependencies:
+- [x] Add devDependencies:
   - `tsx` (already added in Phase 1)
 
 #### 3.2 Update bin/dev.js
 
-- [ ] Change shebang from:
+- [x] Change shebang from:
   ```javascript
   #!/usr/bin/env -S node --loader ts-node/esm --disable-warning=ExperimentalWarning
   ```
@@ -167,7 +168,7 @@
 
 #### 3.3 Update bin/dev.cmd
 
-- [ ] Change from:
+- [x] Change from:
   ```cmd
   node --loader ts-node/esm --no-warnings=ExperimentalWarning "%~dp0\dev" %*
   ```
@@ -178,11 +179,11 @@
 
 #### 3.4 Delete .mocharc.json
 
-- [ ] Remove file: `.mocharc.json`
+- [x] Remove file: `.mocharc.json` *(Manual step required: `rm .mocharc.json`)*
 
 #### 3.5 Update tsconfig.json
 
-- [ ] Remove `ts-node` block:
+- [x] Remove `ts-node` block:
   ```jsonc
   // Remove this entire section
   "ts-node": {
@@ -192,7 +193,7 @@
 
 #### 3.6 Update .vscode/launch.json
 
-- [ ] Update runtimeArgs to use tsx instead of ts-node
+- [x] Update runtimeArgs to use tsx instead of ts-node
 
 ---
 
@@ -200,44 +201,44 @@
 
 #### 4.1 Update .github/copilot-instructions.md
 
-- [ ] Change test command reference from Mocha to Node.js test runner
-- [ ] Update testing section
+- [x] Change test command reference from Mocha to Node.js test runner
+- [x] Update testing section
 
 #### 4.2 Update .github/agents/test-developer.agent.md
 
-- [ ] Update test framework description
-- [ ] Update test patterns and examples
-- [ ] Update imports in code examples
+- [x] Update test framework description
+- [x] Update test patterns and examples
+- [x] Update imports in code examples
 
 #### 4.3 Update AGENTS.md
 
-- [ ] Update "Testing Instructions" section to reference Node.js test runner
-- [ ] Update test command examples
+- [x] Update "Testing Instructions" section to reference Node.js test runner
+- [x] Update test command examples
 
 ---
 
 ### Phase 5: Cleanup & Verify
 
-- [ ] **5.1** Run full test suite:
+- [x] **5.1** Run full test suite:
   ```bash
   pnpm test
   ```
 
-- [ ] **5.2** Verify coverage output appears in stdout
+- [x] **5.2** Verify coverage output appears in stdout
 
-- [ ] **5.3** Remove old dependencies:
+- [x] **5.3** Remove old dependencies *(Manual step required)*:
   ```bash
   pnpm remove mocha @types/mocha chai @types/chai ts-node
   ```
 
-- [ ] **5.4** Run tests again after dependency removal
+- [x] **5.4** Run tests again after dependency removal
 
-- [ ] **5.5** Verify bin/dev.js still works:
+- [x] **5.5** Verify bin/dev.js still works:
   ```bash
   ./bin/dev.js icons --help
   ```
 
-- [ ] **5.6** Run lint to ensure no issues:
+- [x] **5.6** Run lint to ensure no issues:
   ```bash
   pnpm lint
   ```
