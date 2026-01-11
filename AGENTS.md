@@ -14,7 +14,7 @@ This is a **zero-dependencies CLI tool** (`rn-toolbox`) that automates React Nat
 ```bash
 pnpm install          # Install dependencies
 pnpm build            # Compile TypeScript to dist/
-pnpm test             # Run Mocha tests + lint
+pnpm test             # Run Node.js test runner with coverage + lint
 pnpm lint             # ESLint only
 pnpm cleanup          # Remove generated android/, ios/, dist/, .env
 ```
@@ -32,14 +32,16 @@ Use the development entry point during development:
 ## Testing Instructions
 
 - Tests are located in `test/commands/{command}.test.ts`
-- Run `pnpm test` to execute all tests with Mocha
+- Run `pnpm test` to execute all tests with Node.js built-in test runner
+- Uses `node:test` runner with `node:assert/strict` for assertions
+- TypeScript support via `tsx` loader
 - Run `pnpm lint` before committing to ensure ESLint passes
 - Tests create temporary `assets/`, `android/`, `ios/` directories - cleaned up in `after`/`afterEach` hooks
 - Test assets are stored in `test/assets/`
 
 To run a specific test file:
 ```bash
-pnpm mocha --forbid-only "test/commands/icons.test.ts"
+node --import tsx --test test/commands/icons.test.ts
 ```
 
 ## Code Style
