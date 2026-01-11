@@ -9,6 +9,7 @@
 import {spawn} from 'node:child_process'
 import {dirname, join} from 'node:path'
 import {fileURLToPath} from 'node:url'
+import { stripVTControlCharacters } from 'node:util'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -49,6 +50,7 @@ export function runCLI(args: string[], options: CLIOptions = {}): Promise<CLIRes
             ...process.env,
             ...env,
             NO_COLOR: '1', // Disable colors for easier assertion
+            NODE_DISABLE_COLORS: '1',
           },
         }
       )
@@ -60,6 +62,7 @@ export function runCLI(args: string[], options: CLIOptions = {}): Promise<CLIRes
           ...process.env,
           ...env,
           NO_COLOR: '1', // Disable colors for easier assertion
+          NODE_DISABLE_COLORS: '1',
         },
       })
     }
@@ -84,8 +87,8 @@ export function runCLI(args: string[], options: CLIOptions = {}): Promise<CLIRes
       clearTimeout(timer)
       resolve({
         exitCode: exitCode ?? 0,
-        stderr,
-        stdout,
+        stderr: stripVTControlCharacters(stderr),
+        stdout: stripVTControlCharacters(stdout),
       })
     })
 
