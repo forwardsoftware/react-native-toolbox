@@ -350,7 +350,7 @@ async function getCliName(): Promise<string> {
 
 **File:** [eslint.config.mjs](../eslint.config.mjs#L12)  
 **Severity:** Low  
-**Issue:** Comment references Chai but project uses `node:assert/strict`.
+**Issue:** Comment references Chai but project now uses `node:assert/strict`.
 
 **Current Code:**
 ```javascript
@@ -366,8 +366,8 @@ async function getCliName(): Promise<string> {
 **Fix:**
 ```javascript
 {
-  // Disable no-unused-expressions for test files (legacy from Chai migration)
-  // May no longer be necessary with node:assert/strict
+  // Disable no-unused-expressions for test files
+  // Note: May no longer be necessary with node:assert/strict after Chai migration
   files: ["test/**/*.ts"],
   rules: {
     "@typescript-eslint/no-unused-expressions": "off",
@@ -376,7 +376,7 @@ async function getCliName(): Promise<string> {
 ```
 
 **Action Item:**
-Verify if this rule is still needed and remove if not necessary.
+Verify if this rule is still needed with Node.js test runner and remove if not necessary.
 
 **Impact:** Accurate documentation and potentially stricter linting in tests.
 
