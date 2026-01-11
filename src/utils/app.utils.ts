@@ -8,6 +8,16 @@
 
 import {readFile} from 'node:fs/promises'
 
+/**
+ * Extracts the app name from app.json in the current directory.
+ * 
+ * @returns The app name if found and valid, undefined otherwise
+ * @example
+ * const name = await extractAppName()
+ * if (name) {
+ *   console.log(`Found app: ${name}`)
+ * }
+ */
 export async function extractAppName(): Promise<string | undefined> {
   try {
     const content = await readFile('./app.json', {encoding: 'utf8'})
