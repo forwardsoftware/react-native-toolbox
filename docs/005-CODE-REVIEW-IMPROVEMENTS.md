@@ -222,7 +222,7 @@ Verify if this rule is still needed with Node.js test runner and remove if not n
 
 **File:** [src/commands/icons.ts](../src/commands/icons.ts#L145-L148)  
 **Severity:** Low  
-**Status:** 🔧 **Addressed** (No action needed)
+**Status:** ✅ **RESOLVED**
 
 **Context:**
 Multiple density tasks run in parallel via `Promise.all()`, each calling `mkdirp()`. Node.js `mkdir()` with `recursive: true` is safe for concurrent calls to the same path.
@@ -297,7 +297,7 @@ private async generateSplashscreensForPlatform(
 
 **Files:** Multiple utility files  
 **Severity:** Low  
-**Status:** ⚠️ **UNRESOLVED**  
+**Status:** ✅ **RESOLVED**  
 **Issue:** Public API methods lack documentation.
 
 **Examples:**
@@ -330,7 +330,7 @@ export async function extractAppName(): Promise<string | undefined> {
 
 **File:** [src/cli/help.ts](../src/cli/help.ts#L11)  
 **Severity:** Low  
-**Status:** ⚠️ **UNRESOLVED**  
+**Status:** ✅ **RESOLVED**  
 **Issue:** CLI name "rn-toolbox" is hardcoded instead of using a constant.
 
 **Current Code:**
@@ -534,16 +534,16 @@ pnpm lint
 | #3 - Type assertions | 🟡 Medium | ✅ Resolved |
 | #4 - Partial failure exit codes | 🟡 Medium | ✅ Resolved |
 | #5 - ESLint comment outdated | 🟡 Medium | ✅ Resolved |
-| #6 - Race condition docs | 🔵 Low | 🔧 Addressed |
+| #6 - Race condition docs | 🔵 Low | ✅ Resolved |
 | #7 - Code duplication | 🔵 Low | Enhancement |
-| #8 - Missing JSDoc | 🔵 Low | ⚠️ Unresolved |
-| #9 - Hardcoded CLI name | 🔵 Low | ⚠️ Unresolved |
+| #8 - Missing JSDoc | 🔵 Low | ✅ Resolved |
+| #9 - Hardcoded CLI name | 🔵 Low | ✅ Resolved |
 | #10 - Boolean coercion | 🔵 Low | ⚠️ Unresolved |
 | #11 - File size validation | 🔵 Low | Enhancement |
 | #12 - Dry-run flag | 🔵 Low | Enhancement |
 | #13 - Semicolon consistency | 🔵 Low | ⚠️ New Finding |
 
-**Progress:** 5 of 13 issues resolved (38.5%)
+**Progress:** 8 of 13 issues resolved (61.5%)
 
 ---
 
