@@ -9,7 +9,7 @@
 import assert from 'node:assert/strict'
 import {describe, it} from 'node:test'
 
-import {CommandError, ExitCode} from '../../src/cli/errors.js'
+import {CommandError, ExitCode} from '../../../src/cli/errors.js'
 
 describe('errors', () => {
   describe('ExitCode', () => {

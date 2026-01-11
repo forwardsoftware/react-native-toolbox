@@ -9,7 +9,7 @@
 import assert from 'node:assert/strict'
 import {describe, it} from 'node:test'
 
-import {runCLI} from '../../src/cli/runner.js'
+import {runCLI} from '../../../src/cli/runner.js'
 
 describe('runner', () => {
   describe('runCLI', () => {

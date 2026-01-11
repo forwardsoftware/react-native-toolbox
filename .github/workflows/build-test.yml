@@ -42,5 +42,8 @@ jobs:
       - name: Build CLI
         run: pnpm run build
 
-      - name: Test CLI commands
-        run: pnpm run test
+      - name: Test CLI commands (unit & integration)
+        run: pnpm run test:integration
+
+      - name: Test CLI commands (e2e)
+        run: pnpm run test:e2e

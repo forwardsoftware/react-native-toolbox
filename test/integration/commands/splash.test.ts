@@ -11,9 +11,9 @@ import fs from 'node:fs'
 import path from 'node:path'
 import {after, afterEach, before, describe, it} from 'node:test'
 
-import {ExitCode} from '../../src/cli/errors.js'
-import Splash from '../../src/commands/splash.js'
-import {runCommand} from '../helpers/run-command.js'
+import {ExitCode} from '../../../src/cli/errors.js'
+import Splash from '../../../src/commands/splash.js'
+import {runCommand} from '../../helpers/run-command.js'
 
 describe('splash', {concurrency: 1, timeout: 60_000}, () => {
   before(async () => {

@@ -11,9 +11,9 @@ import {randomUUID} from 'node:crypto'
 import fs from 'node:fs'
 import {afterEach, describe, it} from 'node:test'
 
-import {ExitCode} from '../../src/cli/errors.js'
-import Dotenv from '../../src/commands/dotenv.js'
-import {runCommand} from '../helpers/run-command.js'
+import {ExitCode} from '../../../src/cli/errors.js'
+import Dotenv from '../../../src/commands/dotenv.js'
+import {runCommand} from '../../helpers/run-command.js'
 
 describe('dotenv', () => {
   afterEach(() => {

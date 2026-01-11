@@ -22,6 +22,8 @@
     "build": "tsc -b",
     "lint": "eslint",
     "test": "node --import tsx --test --test-concurrency=1 --experimental-test-coverage 'test/**/*.test.ts'",
+    "test:integration": "node --import tsx --test --test-concurrency=1 'test/integration/**/*.test.ts'",
+    "test:e2e": "node --import tsx --test --test-concurrency=1 'test/e2e/**/*.test.ts'",
     "check": "pnpm run lint && pnpm run test",
     "prepack": "pnpm build"
   },

@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import {afterEach, describe, it} from 'node:test'
 
-import {checkAssetFile, mkdirp} from '../../src/utils/file-utils.js'
+import {checkAssetFile, mkdirp} from '../../../src/utils/file-utils.js'
 
 describe('file-utils', () => {
   const testDir = 'test-file-utils-temp'

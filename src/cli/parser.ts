@@ -72,6 +72,9 @@ export async function parseArgs(argv: string[], config: CommandConfig): Promise<
   // Build args object from positionals
   const args: Record<string, string | undefined> = {}
 
+  // Skip required argument validation if help flag is present
+  const isHelpRequested = Boolean(flags.help)
+
   for (const [index, argConfig] of config.args.entries()) {
     const value = positionals[index]
 
@@ -79,7 +82,7 @@ export async function parseArgs(argv: string[], config: CommandConfig): Promise<
       args[argConfig.name] = value
     } else if (argConfig.default !== undefined) {
       args[argConfig.name] = argConfig.default
-    } else if (argConfig.required) {
+    } else if (argConfig.required && !isHelpRequested) {
       throw new CommandError(
         `Missing required argument: ${argConfig.name}`,
         ExitCode.INVALID_ARGUMENT,

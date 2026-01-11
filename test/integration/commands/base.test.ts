@@ -9,8 +9,8 @@
 import assert from 'node:assert/strict'
 import {describe, it} from 'node:test'
 
-import {BaseCommand, CommandError, ExitCode} from '../../src/commands/base.js'
-import type {CommandConfig, ParsedArgs} from '../../src/cli/types.js'
+import {BaseCommand, CommandError, ExitCode} from '../../../src/commands/base.js'
+import type {CommandConfig, ParsedArgs} from '../../../src/cli/types.js'
 
 // Test implementation of BaseCommand
 class TestCommand extends BaseCommand {
