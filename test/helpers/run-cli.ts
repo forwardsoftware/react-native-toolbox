@@ -9,7 +9,7 @@
 import {spawn} from 'node:child_process'
 import {dirname, join} from 'node:path'
 import {fileURLToPath} from 'node:url'
-import { stripVTControlCharacters } from 'node:util'
+import {stripVTControlCharacters} from 'node:util'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
