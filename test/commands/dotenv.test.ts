@@ -77,4 +77,41 @@ describe('dotenv', () => {
     assert.ok(stdout.includes('Removing existing .env file'))
     assert.ok(stdout.includes('Generated new .env file.'))
   })
+
+  it('handles missing environment file gracefully', async () => {
+    const {error} = await runCommand(Dotenv, ['nonexistent'])
+
+    assert.equal(error?.exitCode, ExitCode.FILE_NOT_FOUND)
+  })
+
+  it('overwrites existing .env file', async () => {
+    // Arrange
+    fs.writeFileSync('.env', 'OLD_VAR=old_value')
+    fs.writeFileSync('.env.dev', 'NEW_VAR=new_value')
+
+    // Act
+    const {stdout} = await runCommand(Dotenv, ['dev'])
+
+    // Assert
+    assert.ok(stdout.includes('Generated new .env file.'))
+
+    const envContent = fs.readFileSync('.env', 'utf8')
+    assert.equal(envContent, 'NEW_VAR=new_value')
+    assert.ok(!envContent.includes('OLD_VAR'))
+  })
+
+  it('preserves multiline environment variables', async () => {
+    // Arrange
+    const multilineContent = `VAR1=value1
+VAR2=value2
+VAR3=line1\\nline2\\nline3`
+    fs.writeFileSync('.env.dev', multilineContent)
+
+    // Act
+    await runCommand(Dotenv, ['dev'])
+
+    // Assert
+    const envContent = fs.readFileSync('.env', 'utf8')
+    assert.equal(envContent, multilineContent)
+  })
 })

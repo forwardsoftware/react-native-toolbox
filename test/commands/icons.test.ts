@@ -15,7 +15,7 @@ import {ExitCode} from '../../src/cli/errors.js'
 import Icons from '../../src/commands/icons.js'
 import {runCommand} from '../helpers/run-command.js'
 
-describe('icons', {timeout: 60_000}, () => {
+describe('icons', {concurrency: 1, timeout: 60_000}, () => {
   before(async () => {
     fs.mkdirSync('assets', {recursive: true})
     fs.copyFileSync('test/assets/icon.png', 'assets/icon.png')
@@ -27,7 +27,11 @@ describe('icons', {timeout: 60_000}, () => {
 
   afterEach(async () => {
     for (const dir of ['android', 'ios']) {
-      fs.rmSync(dir, {force: true, recursive: true})
+      try {
+        fs.rmSync(dir, {force: true, maxRetries: 3, recursive: true})
+      } catch {
+        // Ignore errors - directory may have been removed by another test
+      }
     }
   })
 
@@ -96,5 +100,11 @@ describe('icons', {timeout: 60_000}, () => {
     } finally {
       // Cleanup is handled by afterEach
     }
+  })
+
+  it('handles missing source file gracefully', async () => {
+    const {error} = await runCommand(Icons, ['--appName', 'TestApp', 'nonexistent.png'])
+
+    assert.equal(error?.exitCode, ExitCode.FILE_NOT_FOUND)
   })
 })
