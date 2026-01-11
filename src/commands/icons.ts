@@ -62,7 +62,7 @@ The template icon file should be at least 1024x1024px.`,
   public async execute(parsed: ParsedArgs): Promise<void> {
     const { args, flags } = parsed
     const file = args.file!
-    const appName = flags.appName as string | undefined
+    const appName = typeof flags.appName === 'string' ? flags.appName : undefined
 
     const sourceFilesExists = checkAssetFile(file)
     if (!sourceFilesExists) {
@@ -89,6 +89,10 @@ The template icon file should be at least 1024x1024px.`,
       for (const err of this.errors) {
         this.log(`  - ${err}`)
       }
+      this.error(
+        `Failed to generate ${this.errors.length} asset(s)`,
+        ExitCode.GENERATION_ERROR
+      )
     }
 
     this.log(green('✔'), `Generated icons for '${cyan(appName)}' app.`)
