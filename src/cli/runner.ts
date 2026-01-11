@@ -95,6 +95,9 @@ export async function runCLI(argv: string[]): Promise<void> {
   } catch (err) {
     if (err instanceof CommandError) {
       error(err.message, err.exitCode)
+      // error() calls process.exit(), so this line is never reached
+      // but TypeScript doesn't know that, so we need to return or re-throw
+      return
     }
 
     throw err

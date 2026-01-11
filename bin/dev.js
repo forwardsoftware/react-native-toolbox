@@ -2,4 +2,11 @@
 
 import { runCLI } from '../src/cli/runner.js'
 
-await runCLI(process.argv.slice(2))
+try {
+  await runCLI(process.argv.slice(2))
+} catch (err) {
+  // CommandError will call process.exit() via error() function
+  // Other errors should exit with code 1
+  console.error(err)
+  process.exit(1)
+}
