@@ -267,7 +267,7 @@ describe('CLI E2E', () => {
       })
 
       // Command completes but reports failures
-      assert.equal(exitCode, ExitCode.SUCCESS)
+      assert.equal(exitCode, ExitCode.GENERATION_ERROR)
       assert.ok(stdout.includes('Warning') || stdout.includes('Failed'))
       assert.ok(stdout.includes('asset') || stdout.includes('generate'))
     })
