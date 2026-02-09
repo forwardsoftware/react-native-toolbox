@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@types/node": "^25",
-    "eslint": "^9",
+    "eslint": "^10",
     "eslint-config-prettier": "^10",
     "tsx": "^4",
     "typescript": "^5",
