@@ -1,0 +1,11 @@
+allowBuilds:
+  esbuild: false
+
+# Security Settings
+#  Increase security by only allowing updates that are at least 24 hours old
+minimumReleaseAge: 1440
+minimumReleaseAgeStrict: true
+#  Prevent updates to packages that have exotic dependencies (e.g. git dependencies, file dependencies, etc.)
+blockExoticSubdeps: true
+#  Prevent updates to packages if its trust level has decreased compared to previous releases
+trustPolicy: "no-downgrade"
