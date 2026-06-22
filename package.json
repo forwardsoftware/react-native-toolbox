@@ -45,7 +45,7 @@
     "sharp": "^0.35.1"
   },
   "devDependencies": {
-    "@types/node": "^25",
+    "@types/node": "^26",
     "eslint": "^10",
     "eslint-config-prettier": "^10",
     "tsx": "^4",
