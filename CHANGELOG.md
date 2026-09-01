@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.0.4](https://github.com/forwardsoftware/react-native-toolbox/compare/v6.0.3...v6.0.4) (2026-09-01)
+
+
+### Bug Fixes
+
+* **deps:** bump sharp from 0.35.3 to 0.35.4 ([#400](https://github.com/forwardsoftware/react-native-toolbox/issues/400)) ([f107a43](https://github.com/forwardsoftware/react-native-toolbox/commit/f107a43ccf83ccfb6f78f112e27d508fa70ec970))
+
 ## [6.0.3](https://github.com/forwardsoftware/react-native-toolbox/compare/v6.0.2...v6.0.3) (2026-07-07)
 
 
