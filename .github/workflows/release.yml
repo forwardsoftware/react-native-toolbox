@@ -1,114 +1,101 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - main
   schedule:
     - cron: "0 17 * * 2" # Weekly on Tuesday evenings
   workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Compute the next version and release notes without publishing
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
 
 jobs:
-  release-please:
-    name: Run Release Please
+  release:
+    name: Release
 
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write
-      pull-requests: write
-
-    outputs:
-      releases_created: ${{ steps.release.outputs.releases_created }}
-
-    steps:
-      - name: Run release-please command
-        id: release
-        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
-
-  merge-release-pr:
-    name: Merge Release PR
-
-    runs-on: ubuntu-latest
-
-    needs: [release-please]
-
-    if: github.event_name == 'schedule' && needs.release-please.outputs.releases_created != 'true'
-
-    permissions:
-      actions: write
-      contents: write
-      pull-requests: write
-
-    env:
-      GH_TOKEN: ${{ github.token }}
-      GH_REPO: ${{ github.repository }}
-
-    steps:
-      - name: Find pending release PR
-        id: pr
-        run: |
-          gh pr list --state open --label "autorelease: pending" --json number,headRefName,headRefOid \
-            --jq '.[0] // empty | "number=\(.number)\nbranch=\(.headRefName)\nsha=\(.headRefOid)"' >> "$GITHUB_OUTPUT"
-
-      # Pushes made with GITHUB_TOKEN don't trigger CI, so dispatch it to get the required checks
-      - name: Run Build & Test on release PR
-        if: steps.pr.outputs.number
-        env:
-          PR_NUMBER: ${{ steps.pr.outputs.number }}
-          PR_BRANCH: ${{ steps.pr.outputs.branch }}
-        run: |
-          gh workflow run build-test.yml --ref "$PR_BRANCH"
-          sleep 30
-          gh pr checks "$PR_NUMBER" --required --watch --fail-fast --interval 30
-
-      - name: Merge release PR
-        if: steps.pr.outputs.number
-        env:
-          PR_NUMBER: ${{ steps.pr.outputs.number }}
-          PR_SHA: ${{ steps.pr.outputs.sha }}
-        run: gh pr merge "$PR_NUMBER" --squash --match-head-commit "$PR_SHA"
-
-      # The merge push is made with GITHUB_TOKEN and won't start this workflow on its own
-      - name: Trigger release
-        if: steps.pr.outputs.number
-        run: gh workflow run release.yml --ref main
-
-  build-and-publish:
-    name: Build & Publish
-
-    runs-on: ubuntu-latest
-
-    needs: [release-please]
-
-    if: needs.release-please.outputs.releases_created != 'false'
-
-    concurrency: publish-group # optional: ensure only one action runs at a time
-
-    permissions:
-      contents: read
-      id-token: write
+      contents: write # create the tag and GitHub release
+      id-token: write # npm trusted publishing
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
-      - name: Setup pnpm
+      - name: Generate release notes
+        id: notes
+        uses: orhun/git-cliff-action@a9a95522b26fe6403f7bb24031f21fb573d0f5ff # v4.9.1
+        with:
+          args: --unreleased --bump --strip all --output ${{ runner.temp }}/RELEASE_NOTES.md
+
+      # git-cliff reports the latest tag as the next version when nothing is releasable
+      - name: Check for releasable changes
+        id: check
+        env:
+          NOTES: ${{ runner.temp }}/RELEASE_NOTES.md
+          VERSION: ${{ steps.notes.outputs.version }}
+        run: |
+          if ! grep -q '[^[:space:]]' "$NOTES" || git rev-parse -q --verify "refs/tags/$VERSION" >/dev/null; then
+            echo "No releasable changes since the last release"
+            echo "release=false" >> "$GITHUB_OUTPUT"
+          else
+            { echo "## $VERSION"; echo; cat "$NOTES"; } >> "$GITHUB_STEP_SUMMARY"
+            echo "release=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup pnpm & Node.js
+        if: steps.check.outputs.release == 'true'
         uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
         with:
+          runtime: node@latest
           install: false
 
-      - name: Setup NodeJS
-        uses: actions/setup-node@v7
-        with:
-          node-version: latest
-          registry-url: 'https://registry.npmjs.org'
-
       - name: Install dependencies
+        if: steps.check.outputs.release == 'true'
         run: pnpm i --frozen-lockfile
 
       - name: Build CLI
+        if: steps.check.outputs.release == 'true'
         run: pnpm build
 
+      - name: Set package version
+        if: steps.check.outputs.release == 'true'
+        env:
+          VERSION: ${{ steps.notes.outputs.version }}
+        run: pnpm version "${VERSION#v}" --no-git-tag-version --allow-same-version
+
+      # pnpm publishes via npm trusted publishing (OIDC) itself; the runner's npm is too old for it
+      # Skipping an already published version lets a failed run be retried safely
+      # Waiting for the version to be installable keeps the GitHub release from getting ahead of npm
       - name: Publish package
-        run: npm publish
+        if: steps.check.outputs.release == 'true'
+        env:
+          DRY_RUN: ${{ inputs.dry-run }}
+          VERSION: ${{ steps.notes.outputs.version }}
+        run: |
+          name="$(jq -r .name package.json)"
+          if [[ "$DRY_RUN" == "true" ]]; then
+            pnpm publish --no-git-checks --dry-run
+          elif [[ -n "$(pnpm view "$name@${VERSION#v}" version 2>/dev/null)" ]]; then
+            echo "$name@${VERSION#v} is already published"
+          else
+            pnpm publish --no-git-checks --publish-wait-timeout 600000
+          fi
+
+      - name: Create GitHub release
+        if: steps.check.outputs.release == 'true' && !inputs.dry-run
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NOTES: ${{ runner.temp }}/RELEASE_NOTES.md
+          VERSION: ${{ steps.notes.outputs.version }}
+        run: gh release create "$VERSION" --target "$GITHUB_SHA" --title "$VERSION" --notes-file "$NOTES"

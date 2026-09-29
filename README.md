@@ -114,6 +114,10 @@ EXAMPLES
 
 _See code: [src/commands/splash.ts](https://github.com/forwardsoftware/react-native-toolbox/blob/main/src/commands/splash.ts)_
 
+## Changelog
+
+Release notes for every version are published on the [GitHub Releases](https://github.com/forwardsoftware/react-native-toolbox/releases) page.
+
 ## License
 
 Mozilla Public License 2.0

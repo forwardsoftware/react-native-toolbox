@@ -1,5 +1,7 @@
 # Changelog
 
+> This file is no longer updated. Release notes for newer versions are published on the [GitHub Releases](https://github.com/forwardsoftware/react-native-toolbox/releases) page.
+
 ## [6.0.4](https://github.com/forwardsoftware/react-native-toolbox/compare/v6.0.3...v6.0.4) (2026-09-08)
 
 
